@@ -1,0 +1,30 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "BS4017: High Throughput Bioinformatics"
+  author: "Kevin Fo"
+  date: "05/08/2023"
+  chapters:
+    - index.qmd
+    - part: "**PART I: LECTURE NOTES**"
+      chapters:
+        - chapters/week1.qmd
+  sharing: [twitter, facebook]
+  page-navigation: true
+  repo-url: https://github.com/kevfo/BS4017_Notes
+  repo-actions: [edit, issue]
+  reader-mode: true
+  comments: 
+    hypothesis: true
+
+format:
+  html:
+    toc: true 
+    theme:
+      light: cosmo
+      dark: darkly
+      
+editor: visual
+
