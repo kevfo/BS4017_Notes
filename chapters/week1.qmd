@@ -1,9 +1,11 @@
-# Introduction to Linux and the Command Line
+# Introduction to Linux and the Command Line (untested)
 
 This week's lecture aims to cover the following topics:
 
 1.  Basics of using Linux and Unix systems.
 1.  Understand Unix design principles and why they are good for bioinformatics and software development (generally speaking).
+
+Like the title of chapter implies, the information presented in this chapter will not be tested.
 
 ## A Brief Introduction to Computers
 

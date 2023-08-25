@@ -11,6 +11,7 @@ book:
     - part: "**PART I: LECTURE NOTES**"
       chapters:
         - chapters/week1.qmd
+        - chapters/week2.qmd
   sharing: [twitter, facebook]
   page-navigation: true
   repo-url: https://github.com/kevfo/BS4017_Notes
