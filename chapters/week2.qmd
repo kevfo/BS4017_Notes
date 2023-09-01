@@ -291,7 +291,6 @@ Inside this database, you'll find information about the species' classification,
 
 However, this database usually contains only the main or reference version of the species' DNA, and it comes with annotations that tell you where different genes are located. These annotations are stored in a special kind of file called a ".gff" file, which is like a map showing where different treasures (genes) are hidden in the DNA. So, this database is like a treasure trove of genetic information about different species, helping scientists and researchers understand their DNA better.
 
-
 ### EBI: Ensembl Project
 
 ```{r echo = F, fig.cap = "Ensembl Project Homepage", fig.align = 'center'}
