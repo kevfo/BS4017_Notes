@@ -1,0 +1,867 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>BS4017: High Throughput Bioinformatics - 4&nbsp; De Novo Sequencing</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/week3.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><em>De Novo</em> Sequencing</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">BS4017: High Throughput Bioinformatics</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://github.com/kevfo/BS4017_Notes" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+    <a href="" title="Share" id="sidebar-tool-dropdown-0" class="sidebar-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-share"></i></a>
+    <ul class="dropdown-menu" aria-labelledby="sidebar-tool-dropdown-0">
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+            <i class="bi bi-bi-twitter pe-1"></i>
+          Twitter
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
+            <i class="bi bi-bi-facebook pe-1"></i>
+          Facebook
+          </a>
+        </li>
+    </ul>
+  <a href="" class="quarto-color-scheme-toggle sidebar-tool" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true"><strong>PART I: LECTURE NOTES</strong></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Linux and the Command Line (untested)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Genomic Sequencing and Databases</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week3.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data Preprocessing and Quality Control</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week4.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><em>De Novo</em> Sequencing</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#laws-of-assembly" id="toc-laws-of-assembly" class="nav-link active" data-scroll-target="#laws-of-assembly"><span class="toc-section-number">4.1</span>  Laws of Assembly</a></li>
+  <li><a href="#overlap-graphs" id="toc-overlap-graphs" class="nav-link" data-scroll-target="#overlap-graphs"><span class="toc-section-number">4.2</span>  Overlap Graphs</a>
+  <ul class="collapse">
+  <li><a href="#hamiltonian-paths" id="toc-hamiltonian-paths" class="nav-link" data-scroll-target="#hamiltonian-paths"><span class="toc-section-number">4.2.1</span>  Hamiltonian Paths</a></li>
+  </ul></li>
+  <li><a href="#shortest-common-substring-i.e.-scs" id="toc-shortest-common-substring-i.e.-scs" class="nav-link" data-scroll-target="#shortest-common-substring-i.e.-scs"><span class="toc-section-number">4.3</span>  Shortest Common Substring (i.e., SCS)</a>
+  <ul class="collapse">
+  <li><a href="#greedy-scs-algorithm" id="toc-greedy-scs-algorithm" class="nav-link" data-scroll-target="#greedy-scs-algorithm"><span class="toc-section-number">4.3.1</span>  Greedy SCS Algorithm</a></li>
+  </ul></li>
+  <li><a href="#overlap-layout-consensus-i.e.-olc" id="toc-overlap-layout-consensus-i.e.-olc" class="nav-link" data-scroll-target="#overlap-layout-consensus-i.e.-olc"><span class="toc-section-number">4.4</span>  Overlap Layout Consensus (i.e., OLC)</a>
+  <ul class="collapse">
+  <li><a href="#overlap" id="toc-overlap" class="nav-link" data-scroll-target="#overlap"><span class="toc-section-number">4.4.1</span>  Overlap</a></li>
+  </ul></li>
+  <li><a href="#de-brujin-graphs" id="toc-de-brujin-graphs" class="nav-link" data-scroll-target="#de-brujin-graphs"><span class="toc-section-number">4.5</span>  De Brujin Graphs</a>
+  <ul class="collapse">
+  <li><a href="#eulerian-walks" id="toc-eulerian-walks" class="nav-link" data-scroll-target="#eulerian-walks"><span class="toc-section-number">4.5.1</span>  Eulerian Walks</a></li>
+  <li><a href="#making-a-de-brujin-graph-for-a-genome" id="toc-making-a-de-brujin-graph-for-a-genome" class="nav-link" data-scroll-target="#making-a-de-brujin-graph-for-a-genome"><span class="toc-section-number">4.5.2</span>  Making a De Brujin Graph for a Genome</a></li>
+  <li><a href="#problems-with-de-brujin-graphs" id="toc-problems-with-de-brujin-graphs" class="nav-link" data-scroll-target="#problems-with-de-brujin-graphs"><span class="toc-section-number">4.5.3</span>  Problems with De Brujin Graphs</a></li>
+  </ul></li>
+  <li><a href="#error-correction" id="toc-error-correction" class="nav-link" data-scroll-target="#error-correction"><span class="toc-section-number">4.6</span>  Error Correction</a></li>
+  <li><a href="#how-much-data-for-a-de-novo-assembly" id="toc-how-much-data-for-a-de-novo-assembly" class="nav-link" data-scroll-target="#how-much-data-for-a-de-novo-assembly"><span class="toc-section-number">4.7</span>  How Much Data for a <em>De Novo</em> Assembly?</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/kevfo/BS4017_Notes/edit/main/chapters/week4.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/kevfo/BS4017_Notes/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><em>De Novo</em> Sequencing</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/ngs.png" class="img-fluid figure-img" width="464"></p>
+<p></p><figcaption class="figure-caption">General Bioinformatics Workflow</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Tools such as <strong>MaSurCA</strong> (which will be used during the practical) are used to make genomes from raw data after the data has had its primers (from earlier Illumina sequencing) removed. Then, we use tools like <strong>quast</strong> to perform quality control on it.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/assembly.png" class="img-fluid figure-img" width="482"></p>
+<p></p><figcaption class="figure-caption">General Outline of an Assembly</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>That said, the main point of an assembly is shown in the picture above. Given a ton of overlapping DNA sequences, we want to try to reconstruct the actual genome - like putting together puzzle pieces to make a puzzle<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>.</p>
+<section id="laws-of-assembly" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="laws-of-assembly"><span class="header-section-number">4.1</span> Laws of Assembly</h2>
+<p>There are two main laws:</p>
+<ol type="1">
+<li><p><strong>First Law</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/first_law.png" class="img-fluid figure-img" width="422"></p>
+<p></p><figcaption class="figure-caption">First Law of Genome Assembly</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s say that we have two different reads (i.e., sequences) in our raw data: “A” and “B”. If the last few letters of “A” are similar to the beginning letters of “B”, then we can guess that “A” and “B” probably overlap with one another in the actual genome.</p></li>
+<li><p><strong>Second Law</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/second_law.png" class="img-fluid figure-img" width="288"></p>
+<p></p><figcaption class="figure-caption">Second Law of Genome Assembly</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s say that we have a whole bunch of reads in our raw data. If these reads have a higher coverage (i.e., they’re read many times), then we will have more overlaps in our final genome.</p></li>
+<li><p><strong>Third Law</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/third_law.png" class="img-fluid figure-img" width="278"></p>
+<p></p><figcaption class="figure-caption">Third Law of Genome Assembly</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>How long our reads are and how repetitive those patterns are in the genome can make genome assembly challenging.</p>
+<p>So, the best thing to do in this scenario is to just get a long read that cover(s) the entire repetitive sequence(s).</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/longlong.png" class="img-fluid figure-img" width="335"></p>
+<p></p><figcaption class="figure-caption">Outcomes of Different Resolving Approaches</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Depending on how we choose to go about this issue, we can get different results. Because of this, we tend to just handle repeats that cannot be resolved by leaving them out altogether. But, we must keep in mind that if we do do this, then our assembly will be in fragments or <strong>contigs</strong> for short.</p></li>
+</ol>
+<p>Hence, in <em>de novo</em> assembly, our ultimate goal is to really just find overlapping, short reads and put them into longer, continuous DNA sequences (i.e., like piecing together a puzzle from scratch). We use two different approaches for the most part:</p>
+<ol type="1">
+<li>Shortest Common Substring (i.e., SCS)</li>
+<li>Overlap Layout Concensus</li>
+<li>de Brujin Graphs</li>
+</ol>
+<p>But regardless of which of the above that we end up doing in the end, one thing’s for certain: we use <strong>graph theory</strong> for all of these methods!</p>
+</section>
+<section id="overlap-graphs" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="overlap-graphs"><span class="header-section-number">4.2</span> Overlap Graphs</h2>
+<p>There are two main terminologies to know when it comes to graphs.</p>
+<ol type="1">
+<li><p><strong>Node</strong></p>
+<p>This just means a “read” or a “k-mer” in the raw data.</p></li>
+<li><p><strong>Edge</strong></p>
+<p>This is a line connecting two nodes. If this line is an “arrow”, then we say that this edge is <em>directed</em>.</p></li>
+</ol>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/kmer.png" class="img-fluid figure-img" width="465"></p>
+<p></p><figcaption class="figure-caption">Example of an Overlap Graph</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the above graph (i.e., an example), the graph represents the 6-mers of the DNA sequence: <code>GTACGTACGAT</code>. For simplicity’s sake, we only draw directed edges (i.e., the arrows) between nodes (i.e., the k-mers); the <em>weight</em> or number above the edge shows how many letters each k-mer overlaps with the other.</p>
+<section id="hamiltonian-paths" class="level3" data-number="4.2.1">
+<h3 data-number="4.2.1" class="anchored" data-anchor-id="hamiltonian-paths"><span class="header-section-number">4.2.1</span> Hamiltonian Paths</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/hamiltonina.png" class="img-fluid figure-img" width="460"></p>
+<p></p><figcaption class="figure-caption">Example of a Hamiltonian Path in a 6-mer Graph</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We say that a graph is <strong>Hamiltonian</strong> if and only if we can visit all of its nodes at least once. In this same example, if we try to overlap the different K-mers to form the sequence <code>GTACGTACGAT</code>, we see the path that this sequence takes in the graph visits the 6-mers at least once!</p>
+</section>
+</section>
+<section id="shortest-common-substring-i.e.-scs" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="shortest-common-substring-i.e.-scs"><span class="header-section-number">4.3</span> Shortest Common Substring (i.e., SCS)</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/scs.png" class="img-fluid figure-img" width="446"></p>
+<p></p><figcaption class="figure-caption">Illustration of the Shortest Common Substring Problem</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Here’s how this works in a nutshell:</p>
+<ol type="1">
+<li>We are given a whole bunch of K-mers.</li>
+<li>We then smoosh all of these k-mers together to form one big, long string.</li>
+<li>Our job is to then find the shortest substring of that “big, long string” that contains the original k-mers as substrings. This “shortest substring” is called the <strong>shortest common substring (i.e., SCS)</strong>.</li>
+</ol>
+<p>Prof.&nbsp;Jarkko mentions that finding the SCS is <strong>NP complete</strong>: what this basically means is that the longer the “big, long string”, the more exponential the time to find the SCS becomes (hence making it all the more challenging).</p>
+<section id="greedy-scs-algorithm" class="level3" data-number="4.3.1">
+<h3 data-number="4.3.1" class="anchored" data-anchor-id="greedy-scs-algorithm"><span class="header-section-number">4.3.1</span> Greedy SCS Algorithm</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/greedy.png" class="img-fluid figure-img" width="483"></p>
+<p></p><figcaption class="figure-caption">Illustration of the Greedy Shortest Common Substring Problem</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If an algorithm is <strong>greedy</strong>, this basically means that it aims to maximize <em>something</em> about it.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/greed2.png" class="img-fluid figure-img" width="456"></p>
+<p></p><figcaption class="figure-caption">Second Illustration of the Greedy Shortest Common Substring Problem</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In this greedy SCS problem, we first start with the overlap graphs for the k-mers. Then, we combine the k-mers based on the weights of their edges until we get the substring (taking to get rid of the overlaps in the process).</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/scsgreed.png" class="img-fluid figure-img" width="456"></p>
+<p></p><figcaption class="figure-caption">Illustration of the Greedy SCS Gone Awry</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>However, just because an algorithm is greedy doesn’t always mean that it will lead to the best (i.e., optimal) outcome. If we look at the 6-mers of the overlap graph of the string <code>a_long_long_long_time</code> and try to do the greedy SCS problem for it, we see that we just end up with <code>a_long_long_time</code>. This isn’t the same string!</p>
+<p>Interestingly enough, if we use k-mers with <span class="math inline">\(k = 8\)</span>, we see that the final string that’s formed is actually correct.</p>
+</section>
+</section>
+<section id="overlap-layout-consensus-i.e.-olc" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="overlap-layout-consensus-i.e.-olc"><span class="header-section-number">4.4</span> Overlap Layout Consensus (i.e., OLC)</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/olc.png" class="img-fluid figure-img" width="428"></p>
+<p></p><figcaption class="figure-caption">Illustration of the OLC Process</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The above graphic summarizes the steps involved in OLC.</p>
+<section id="overlap" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="overlap"><span class="header-section-number">4.4.1</span> Overlap</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/overlap.png" class="img-fluid figure-img" width="450"></p>
+<p></p><figcaption class="figure-caption">Illustration of an Overlap</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>An <strong>overlap</strong> refers to the ending of a string having at least a certain amount of matches with the beginning of another string. In the above example, we have two strings “X” and “Y”.</p>
+<p>If we say that we want at least three matches, we start from the beginning of “Y” and see that the sequence “TAG” is found in the middle of “X” - the same could more or less be said for “GCC” too.</p>
+<section id="layout-of-the-overlap-graph" class="level4" data-number="4.4.1.1">
+<h4 data-number="4.4.1.1" class="anchored" data-anchor-id="layout-of-the-overlap-graph"><span class="header-section-number">4.4.1.1</span> Layout of the Overlap Graph</h4>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/graph.png" class="img-fluid figure-img" width="870"></p>
+<p></p><figcaption class="figure-caption">Illustration of the Overlap Graph for 7-Mers of <code>to_every_thing_turn_turn_turn_there_is_a_season</code></figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The above layout graph is super unruly and needs to be simplified.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/infer.png" class="img-fluid figure-img" width="98"></p>
+<p></p><figcaption class="figure-caption">Simplifying the Overlap Graph</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>So, the first thing we need to do is to just simplify this graph. If we take a closer look at the original graph, we see that some edges can be inferred from other edges - in this case, the green arrows can be inferred from the blue ones.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/after.png" class="img-fluid figure-img" width="402"></p>
+<p></p><figcaption class="figure-caption">Further Simplification of the Overlap Graph</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We then remove these green edges - first, the ones that skip a node, and then next, the ones that skip two or more nodes.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/cannot.png" class="img-fluid figure-img" width="684"></p>
+<p></p><figcaption class="figure-caption">Unresolvable Repeats</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>However, we see that the stuff in the red box cannot be resolved further.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/haploid.png" class="img-fluid figure-img" width="604"></p>
+<p></p><figcaption class="figure-caption">Haploid Assembly of a Genome</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>So, what scientists do is to get the contigs, line them up, and take the majority vote of the sequences. So, for example, if one nucleotide has mostly “A”s in a spot, then scientists assume that that particular nucleotide in space is an “A”.</p>
+</section>
+<section id="caution" class="level4" data-number="4.4.1.2">
+<h4 data-number="4.4.1.2" class="anchored" data-anchor-id="caution"><span class="header-section-number">4.4.1.2</span> Caution</h4>
+<p>This entire process (i.e., the one in the preceding sub-sub-subsection) is super slow, especially when you realize that many sequencing datasets have hundreds of millions or billions of reads.</p>
+<p>And even if you could make the overlap graph, the graph would be ginormous!</p>
+</section>
+</section>
+</section>
+<section id="de-brujin-graphs" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="de-brujin-graphs"><span class="header-section-number">4.5</span> De Brujin Graphs</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/tomorrow.png" class="img-fluid figure-img" width="407"></p>
+<p></p><figcaption class="figure-caption">De Brujin Graph for the String <code>tomorrow and tomorrow and tomorrow</code></figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The meaning of an edge hasn’t changed here, but there are new temrs to know:</p>
+<ol type="1">
+<li><p><strong>Multigraph</strong></p>
+<p>This is a graph that has more than one node coming into a node.</p></li>
+<li><p><strong>Indegree</strong></p>
+<p>This refers to the amount of arrows (i.e., directed edges) coming into a node.</p></li>
+<li><p><strong>Outdegree</strong></p>
+<p>This refers to the amount of arrows (i.e., directed edges) coming out of a node.</p></li>
+<li><p><strong>Balanced nodes</strong></p>
+<p>The indegree and the outdegree of a node are the same.</p></li>
+<li><p><strong>Semi-balanced node</strong></p>
+<p>The indegree differs by the outdegree of the node by one.</p></li>
+<li><p><strong>Connected graph</strong></p>
+<p>This just means that all nodes in a graph can be reached by some other node.</p></li>
+</ol>
+<p>As a super short trick, if a directed graph (i.e., graph with arrows for edges) has two semi-balanced nodes at the very most, then that graph is Eulerian.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/degree.png" class="img-fluid figure-img" width="608"></p>
+<p></p><figcaption class="figure-caption">De Brujin Graph for <code>AAABBBBA</code></figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>First, we split the genome <code>AAABBBBA</code> into 3-mers before splitting the 3-mers into 2-mers.</p>
+<section id="eulerian-walks" class="level3" data-number="4.5.1">
+<h3 data-number="4.5.1" class="anchored" data-anchor-id="eulerian-walks"><span class="header-section-number">4.5.1</span> Eulerian Walks</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/eulerian.png" class="img-fluid figure-img" width="324"></p>
+<p></p><figcaption class="figure-caption">Eulerian Walk in the De Brujin Graph for <code>AAABBBBA</code></figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We say that a graph has a <strong>Eulerian walk</strong> if and only if each edge can be crossed exactly once.</p>
+<p>Generally speaking, we can find a Eulerian walk in linear time - meaning that the mode edges we have in a graph, the tougher and longer it is to find an Eulerian walk (obviously).</p>
+</section>
+<section id="making-a-de-brujin-graph-for-a-genome" class="level3" data-number="4.5.2">
+<h3 data-number="4.5.2" class="anchored" data-anchor-id="making-a-de-brujin-graph-for-a-genome"><span class="header-section-number">4.5.2</span> Making a De Brujin Graph for a Genome</h3>
+<p>First things first, we need to assume that each K-mer doesn’t have any errors and is only sequenced once.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/splitting.png" class="img-fluid figure-img" width="227"></p>
+<p></p><figcaption class="figure-caption">Splitting the String <code>a_long_long_long_time</code> into 5-Mers and then 4-Mers</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the above example, we make a de Brujin graph with the string <code>a_long_long_long_time</code> using 5-mers. We then begin by splitting each 5-mer into two pairs of of <span class="math inline">\(k - 1\)</span>-mers - in this case, 4-mers.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/final.png" class="img-fluid figure-img" width="497"></p>
+<p></p><figcaption class="figure-caption">Final Results of the String <code>a_long_long_long_time</code> into 5-Mers and then 4-Mers</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the end, our graph looks something like the one shown above. Also note that the finished graph is Eulerian as it only has two semi-balanced nodes at best.</p>
+</section>
+<section id="problems-with-de-brujin-graphs" class="level3" data-number="4.5.3">
+<h3 data-number="4.5.3" class="anchored" data-anchor-id="problems-with-de-brujin-graphs"><span class="header-section-number">4.5.3</span> Problems with De Brujin Graphs</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/problem.png" class="img-fluid figure-img" width="124"></p>
+<p></p><figcaption class="figure-caption">Possible Outcomes of an Ambiguous De Brujin Graph</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If there is a repeat in a sequence, this can cause issues. Here, we see that there are two equally-likely outcomes.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/bad.png" class="img-fluid figure-img" width="520"></p>
+<p></p><figcaption class="figure-caption">Errors Affecting the Outcome of a De Brujin Graph</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>As in, errors like the following can make the graph not appear good:</p>
+<ol type="1">
+<li>Gaps in coverage (i.e., missing k-mers)</li>
+<li>Coverage differences</li>
+<li>Errors and differences between chromosomes.</li>
+</ol>
+</section>
+</section>
+<section id="error-correction" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="error-correction"><span class="header-section-number">4.6</span> Error Correction</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/errors.png" class="img-fluid figure-img" width="472"></p>
+<p></p><figcaption class="figure-caption">Mapping Errors to a K-mer Histogram</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>If we look at the K-mer histogram, we see that frequent k-mers tend to turn into infrequent ones.</p>
+<p>So, here’s what we can do…</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/correct.png" class="img-fluid figure-img" width="350"></p>
+<p></p><figcaption class="figure-caption">Correcting Errors in a K-mer Histogram</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>For each k-mer in each read, we do the following:</p>
+<ol type="1">
+<li>If the k-mer count is less than some value, we look at the k-mer’s neighbors within some distance.</li>
+<li>If the said neighbors have counts more than that “some value”, we replace the k-mer in question with the neighbor.</li>
+</ol>
+</section>
+<section id="how-much-data-for-a-de-novo-assembly" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="how-much-data-for-a-de-novo-assembly"><span class="header-section-number">4.7</span> How Much Data for a <em>De Novo</em> Assembly?</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week4/stuff.png" class="img-fluid figure-img" width="461"></p>
+<p></p><figcaption class="figure-caption">Theoretical Analyses of Gene Lengths for <em>De Novo</em> Assembly</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The problem is that the entire assembly is probably longer than the repeats in the genome. We could sequence and also re-sequence a bacterial genome with read lengths of 20 to 30 base pairs or nucleotides.</p>
+<p>However, with longer genomes, significant proportions of the genome are uncovered.</p>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Though - in practice - this is something that is difficult to do as the reads from the machine don’t always overlap so nicely.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/week3.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data Preprocessing and Quality Control</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

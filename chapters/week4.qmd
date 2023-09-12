@@ -1,0 +1,299 @@
+# *De Novo* Sequencing
+
+```{r echo = F, fig.cap = 'General Bioinformatics Workflow', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/ngs.png")
+```
+
+Tools such as **MaSurCA** (which will be used during the practical) are used to make genomes from raw data after the data has had its primers (from earlier Illumina sequencing) removed.  Then, we use tools like **quast** to perform quality control on it.
+
+```{r echo = F, fig.cap = 'General Outline of an Assembly', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/assembly.png")
+```
+
+That said, the main point of an assembly is shown in the picture above.  Given a ton of overlapping DNA sequences, we want to try to reconstruct the actual genome - like putting together puzzle pieces to make a puzzle^[Though - in practice - this is something that is difficult to do as the reads from the machine don't always overlap so nicely.].
+
+## Laws of Assembly
+
+There are two main laws:
+
+1.  **First Law**
+
+    ```{r echo = F, fig.cap = 'First Law of Genome Assembly', fig.align = 'center'}
+    knitr::include_graphics("../imgs/week4/first_law.png")
+    ```
+    
+    Let's say that we have two different reads (i.e., sequences) in our raw data: "A" and "B".  If the last few letters of "A" are similar to the beginning letters of "B", then we can guess that "A" and "B" probably overlap with one another in the actual genome.
+
+1.  **Second Law**
+
+    ```{r echo = F, fig.cap = 'Second Law of Genome Assembly', fig.align = 'center'}
+    knitr::include_graphics("../imgs/week4/second_law.png")
+    ```
+    
+    Let's say that we have a whole bunch of reads in our raw data.  If these reads have a higher coverage (i.e., they're read many times), then we will have more overlaps in our final genome.
+    
+1.  **Third Law**
+
+    ```{r echo = F, fig.cap = 'Third Law of Genome Assembly', fig.align = 'center'}
+    knitr::include_graphics("../imgs/week4/third_law.png")
+    ```
+    
+    How long our reads are and how repetitive those patterns are in the genome can make genome assembly challenging.
+    
+    So, the best thing to do in this scenario is to just get a long read that cover(s) the entire repetitive sequence(s).
+    
+    ```{r echo = F, fig.cap = 'Outcomes of Different Resolving Approaches', fig.align = 'center'}
+    knitr::include_graphics("../imgs/week4/longlong.png")
+    ```
+    
+    Depending on how we choose to go about this issue, we can get different results.  Because of this, we tend to just handle repeats that cannot be resolved by leaving them out altogether.  But, we must keep in mind that if we do do this, then our assembly will be in fragments or **contigs** for short.
+    
+Hence, in *de novo* assembly, our ultimate goal is to really just find overlapping, short reads and put them into longer, continuous DNA sequences (i.e., like piecing together a puzzle from scratch).  We use two different approaches for the most part:
+
+1.  Shortest Common Substring (i.e., SCS)
+1.  Overlap Layout Concensus 
+1.  de Brujin Graphs
+
+But regardless of which of the above that we end up doing in the end, one thing's for certain: we use **graph theory** for all of these methods!
+
+## Overlap Graphs
+
+There are two main terminologies to know when it comes to graphs.
+
+1.  **Node**
+
+    This just means a "read" or a "k-mer" in the raw data.
+    
+1.  **Edge**
+
+    This is a line connecting two nodes.  If this line is an "arrow", then we say that this edge is *directed*.
+    
+```{r echo = F, fig.cap = 'Example of an Overlap Graph', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/kmer.png")
+```
+
+In the above graph (i.e., an example), the graph represents the 6-mers of the DNA sequence: `GTACGTACGAT`.  For simplicity's sake, we only draw directed edges (i.e., the arrows) between nodes (i.e., the k-mers); the *weight* or number above the edge shows how many letters each k-mer overlaps with the other.
+
+### Hamiltonian Paths  
+
+```{r echo = F, fig.cap = 'Example of a Hamiltonian Path in a 6-mer Graph', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/hamiltonina.png")
+```
+
+We say that a graph is **Hamiltonian** if and only if we can visit all of its nodes at least once.  In this same example, if we try to overlap the different K-mers to form the sequence `GTACGTACGAT`, we see the path that this sequence takes in the graph visits the 6-mers at least once!
+
+## Shortest Common Substring (i.e., SCS)
+
+```{r echo = F, fig.cap = 'Illustration of the Shortest Common Substring Problem', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/scs.png")
+```
+
+Here's how this works in a nutshell:
+
+1.  We are given a whole bunch of K-mers.
+1.  We then smoosh all of these k-mers together to form one big, long string.
+1.  Our job is to then find the shortest substring of that "big, long string" that contains the original k-mers as substrings.  This "shortest substring" is called the **shortest common substring (i.e., SCS)**.
+
+Prof. Jarkko mentions that finding the SCS is **NP complete**: what this basically means is that the longer the "big, long string", the more exponential the time to find the SCS becomes (hence making it all the more challenging).
+
+### Greedy SCS Algorithm
+
+```{r echo = F, fig.cap = 'Illustration of the Greedy Shortest Common Substring Problem', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/greedy.png")
+```
+
+If an algorithm is **greedy**, this basically means that it aims to maximize *something* about it.
+
+```{r echo = F, fig.cap = 'Second Illustration of the Greedy Shortest Common Substring Problem', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/greed2.png")
+```
+
+In this greedy SCS problem, we first start with the overlap graphs for the k-mers.  Then, we combine the k-mers based on the weights of their edges until we get the substring (taking to get rid of the overlaps in the process).
+
+```{r echo = F, fig.cap = 'Illustration of the Greedy SCS Gone Awry', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/scsgreed.png")
+```
+
+However, just because an algorithm is greedy doesn't always mean that it will lead to the best (i.e., optimal) outcome.  If we look at the 6-mers of the overlap graph of the string `a_long_long_long_time` and try to do the greedy SCS problem for it, we see that we just end up with `a_long_long_time`.  This isn't the same string!
+
+Interestingly enough, if we use k-mers with $k = 8$, we see that the final string that's formed is actually correct.
+
+## Overlap Layout Consensus (i.e., OLC)
+
+```{r echo = F, fig.cap = 'Illustration of the OLC Process', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/olc.png")
+```   
+
+The above graphic summarizes the steps involved in OLC.
+
+### Overlap
+
+```{r echo = F, fig.cap = 'Illustration of an Overlap', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/overlap.png")
+```   
+
+An **overlap** refers to the ending of a string having at least a certain amount of matches with the beginning of another string.  In the above example, we have two strings "X" and "Y".  
+
+If we say that we want at least three matches, we start from the beginning of "Y" and see that the sequence "TAG" is found in the middle of "X" - the same could more or less be said for "GCC" too.
+
+#### Layout of the Overlap Graph
+
+```{r echo = F, fig.cap = 'Illustration of the Overlap Graph for 7-Mers of `to_every_thing_turn_turn_turn_there_is_a_season`', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/graph.png")
+```   
+
+The above layout graph is super unruly and needs to be simplified.
+
+```{r echo = F, fig.cap = 'Simplifying the Overlap Graph', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/infer.png")
+```   
+
+So, the first thing we need to do is to just simplify this graph.  If we take a closer look at the original graph, we see that some edges can be inferred from other edges - in this case, the green arrows can be inferred from the blue ones.  
+
+```{r echo = F, fig.cap = 'Further Simplification of the Overlap Graph', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/after.png")
+```  
+
+We then remove these green edges - first, the ones that skip a node, and then next, the ones that skip two or more nodes.
+
+```{r echo = F, fig.cap = 'Unresolvable Repeats', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/cannot.png")
+```  
+
+However, we see that the stuff in the red box cannot be resolved further.
+
+```{r echo = F, fig.cap = 'Haploid Assembly of a Genome', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/haploid.png")
+```  
+
+So, what scientists do is to get the contigs, line them up, and take the majority vote of the sequences.  So, for example, if one nucleotide has mostly "A"s in a spot, then scientists assume that that particular nucleotide in space is an "A".
+
+#### Caution
+
+This entire process (i.e., the one in the preceding sub-sub-subsection) is super slow, especially when you realize that many sequencing datasets have hundreds of millions or billions of reads.
+
+And even if you could make the overlap graph, the graph would be ginormous!
+
+## De Brujin Graphs
+
+```{r echo = F, fig.cap = 'De Brujin Graph for the String `tomorrow and tomorrow and tomorrow`', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/tomorrow.png")
+```  
+
+The meaning of an edge hasn't changed here, but there are new temrs to know:
+
+1.  **Multigraph**
+
+    This is a graph that has more than one node coming into a node.
+    
+1.  **Indegree**
+
+    This refers to the amount of arrows (i.e., directed edges) coming into a node.
+    
+1.  **Outdegree**
+
+    This refers to the amount of arrows (i.e., directed edges) coming out of a node.
+    
+1.  **Balanced nodes**
+
+    The indegree and the outdegree of a node are the same.
+    
+1.  **Semi-balanced node**
+
+    The indegree differs by the outdegree of the node by one.
+    
+1.  **Connected graph**
+    
+    This just means that all nodes in a graph can be reached by some other node.
+    
+As a super short trick, if a directed graph (i.e., graph with arrows for edges) has two semi-balanced nodes at the very most, then that graph is Eulerian.
+    
+```{r echo = F, fig.cap = 'De Brujin Graph for `AAABBBBA`', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/degree.png")
+```  
+
+First, we split the genome `AAABBBBA` into 3-mers before splitting the 3-mers into 2-mers.
+
+### Eulerian Walks
+
+```{r echo = F, fig.cap = 'Eulerian Walk in the De Brujin Graph for `AAABBBBA`', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/eulerian.png")
+```  
+
+We say that a graph has a **Eulerian walk** if and only if each edge can be crossed exactly once.
+
+Generally speaking, we can find a Eulerian walk in linear time - meaning that the mode edges we have in a graph, the tougher and longer it is to find an Eulerian walk (obviously).
+
+### Making a De Brujin Graph for a Genome
+
+First things first, we need to assume that each K-mer doesn't have any errors and is only sequenced once.
+
+```{r echo = F, fig.cap = 'Splitting the String `a_long_long_long_time` into 5-Mers and then 4-Mers', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/splitting.png")
+```  
+
+In the above example, we make a de Brujin graph with the string `a_long_long_long_time` using 5-mers.  We then begin by splitting each 5-mer into two pairs of of $k - 1$-mers - in this case, 4-mers.
+
+```{r echo = F, fig.cap = 'Final Results of the String `a_long_long_long_time` into 5-Mers and then 4-Mers', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/final.png")
+```  
+
+In the end, our graph looks something like the one shown above.  Also note that the finished graph is Eulerian as it only has two semi-balanced nodes at best.
+
+### Problems with De Brujin Graphs
+
+```{r echo = F, fig.cap = 'Possible Outcomes of an Ambiguous De Brujin Graph', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/problem.png")
+```  
+
+If there is a repeat in a sequence, this can cause issues.  Here, we see that there are two equally-likely outcomes.
+
+```{r echo = F, fig.cap = 'Errors Affecting the Outcome of a De Brujin Graph', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/bad.png")
+``` 
+
+As in, errors like the following can make the graph not appear good:
+
+1.  Gaps in coverage (i.e., missing k-mers)
+1.  Coverage differences
+1.  Errors and differences between chromosomes.
+
+## Error Correction
+
+```{r echo = F, fig.cap = 'Mapping Errors to a K-mer Histogram', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/errors.png")
+``` 
+
+If we look at the K-mer histogram, we see that frequent k-mers tend to turn into infrequent ones.
+
+So, here's what we can do...
+
+```{r echo = F, fig.cap = 'Correcting Errors in a K-mer Histogram', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/correct.png")
+``` 
+
+For each k-mer in each read, we do the following:
+
+1.  If the k-mer count is less than some value, we look at the k-mer's neighbors within some distance.
+1.  If the said neighbors have counts more than that "some value", we replace the k-mer in question with the neighbor.
+
+## How Much Data for a *De Novo* Assembly?
+
+```{r echo = F, fig.cap = 'Theoretical Analyses of Gene Lengths for *De Novo* Assembly', fig.align = 'center'}
+knitr::include_graphics("../imgs/week4/stuff.png")
+``` 
+
+The problem is that the entire assembly is probably longer than the repeats in the genome.  We could sequence and also re-sequence a bacterial genome with read lengths of 20 to 30 base pairs or nucleotides.
+
+However, with longer genomes, significant proportions of the genome are uncovered.
+
+
+
+
+
+
+
+
+
+    
+
