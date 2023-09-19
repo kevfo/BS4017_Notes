@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>BS4017: High Throughput Bioinformatics - 5&nbsp; Annotation</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/week4.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Annotation</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">BS4017: High Throughput Bioinformatics</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://github.com/kevfo/BS4017_Notes" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+    <a href="" title="Share" id="sidebar-tool-dropdown-0" class="sidebar-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-share"></i></a>
+    <ul class="dropdown-menu" aria-labelledby="sidebar-tool-dropdown-0">
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+            <i class="bi bi-bi-twitter pe-1"></i>
+          Twitter
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
+            <i class="bi bi-bi-facebook pe-1"></i>
+          Facebook
+          </a>
+        </li>
+    </ul>
+  <a href="" class="quarto-color-scheme-toggle sidebar-tool" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true"><strong>PART I: LECTURE NOTES</strong></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Linux and the Command Line (untested)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Genomic Sequencing and Databases</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week3.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data Preprocessing and Quality Control</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week4.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><em>De Novo</em> Sequencing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week5.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Annotation</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#whole-genome-duplications" id="toc-whole-genome-duplications" class="nav-link active" data-scroll-target="#whole-genome-duplications"><span class="toc-section-number">5.1</span>  Whole Genome Duplications</a>
+  <ul class="collapse">
+  <li><a href="#genome-duplication-in-organisms" id="toc-genome-duplication-in-organisms" class="nav-link" data-scroll-target="#genome-duplication-in-organisms"><span class="toc-section-number">5.1.1</span>  Genome Duplication in Organisms</a></li>
+  <li><a href="#comparing-genomes" id="toc-comparing-genomes" class="nav-link" data-scroll-target="#comparing-genomes"><span class="toc-section-number">5.1.2</span>  Comparing Genomes</a></li>
+  <li><a href="#exploring-whole-genome-duplications-with-synteny" id="toc-exploring-whole-genome-duplications-with-synteny" class="nav-link" data-scroll-target="#exploring-whole-genome-duplications-with-synteny"><span class="toc-section-number">5.1.3</span>  Exploring Whole Genome Duplications with Synteny</a></li>
+  <li><a href="#functional-biases-on-gene-origins" id="toc-functional-biases-on-gene-origins" class="nav-link" data-scroll-target="#functional-biases-on-gene-origins"><span class="toc-section-number">5.1.4</span>  Functional Biases on Gene Origins</a></li>
+  <li><a href="#implications-for-genome-annotation" id="toc-implications-for-genome-annotation" class="nav-link" data-scroll-target="#implications-for-genome-annotation"><span class="toc-section-number">5.1.5</span>  Implications for Genome Annotation</a></li>
+  </ul></li>
+  <li><a href="#quality-control-of-assembly" id="toc-quality-control-of-assembly" class="nav-link" data-scroll-target="#quality-control-of-assembly"><span class="toc-section-number">5.2</span>  Quality Control of Assembly</a>
+  <ul class="collapse">
+  <li><a href="#n50-value" id="toc-n50-value" class="nav-link" data-scroll-target="#n50-value"><span class="toc-section-number">5.2.1</span>  N50 Value</a></li>
+  <li><a href="#conserved-single-copy-genes" id="toc-conserved-single-copy-genes" class="nav-link" data-scroll-target="#conserved-single-copy-genes"><span class="toc-section-number">5.2.2</span>  Conserved Single-Copy Genes</a></li>
+  <li><a href="#busco" id="toc-busco" class="nav-link" data-scroll-target="#busco"><span class="toc-section-number">5.2.3</span>  BUSCO</a></li>
+  </ul></li>
+  <li><a href="#genome-annotation" id="toc-genome-annotation" class="nav-link" data-scroll-target="#genome-annotation"><span class="toc-section-number">5.3</span>  Genome Annotation</a>
+  <ul class="collapse">
+  <li><a href="#coding-regions" id="toc-coding-regions" class="nav-link" data-scroll-target="#coding-regions"><span class="toc-section-number">5.3.1</span>  Coding Regions</a></li>
+  </ul></li>
+  <li><a href="#repeat-analysis-and-making" id="toc-repeat-analysis-and-making" class="nav-link" data-scroll-target="#repeat-analysis-and-making"><span class="toc-section-number">5.4</span>  Repeat Analysis and Making</a>
+  <ul class="collapse">
+  <li><a href="#repetitive-and-transposable-elements" id="toc-repetitive-and-transposable-elements" class="nav-link" data-scroll-target="#repetitive-and-transposable-elements"><span class="toc-section-number">5.4.1</span>  Repetitive and Transposable Elements</a></li>
+  <li><a href="#transcriptomic-evidence" id="toc-transcriptomic-evidence" class="nav-link" data-scroll-target="#transcriptomic-evidence"><span class="toc-section-number">5.4.2</span>  Transcriptomic Evidence</a></li>
+  <li><a href="#prediction-from-sequence-i.e.-ab-initio" id="toc-prediction-from-sequence-i.e.-ab-initio" class="nav-link" data-scroll-target="#prediction-from-sequence-i.e.-ab-initio"><span class="toc-section-number">5.4.3</span>  Prediction from Sequence (i.e., <em>ab initio</em>)</a></li>
+  <li><a href="#gene-models-in-other-species" id="toc-gene-models-in-other-species" class="nav-link" data-scroll-target="#gene-models-in-other-species"><span class="toc-section-number">5.4.4</span>  Gene Models in Other Species</a></li>
+  </ul></li>
+  <li><a href="#combining-evidence" id="toc-combining-evidence" class="nav-link" data-scroll-target="#combining-evidence"><span class="toc-section-number">5.5</span>  Combining Evidence</a></li>
+  <li><a href="#final-verification" id="toc-final-verification" class="nav-link" data-scroll-target="#final-verification"><span class="toc-section-number">5.6</span>  Final Verification</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/kevfo/BS4017_Notes/edit/main/chapters/week5.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/kevfo/BS4017_Notes/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Annotation</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<p>Genome evolution, which is how the genetic information in living things changes over time, happens in two main ways. These ways are like two different strategies that genes use to change and adapt.</p>
+<p>The first way is called <strong>whole genome multiplication</strong>. Imagine if you had a favorite book, and you made a copy of the entire book. Then, you made another copy, so you had three identical books. In the same way, sometimes in genomes, the whole set of genes gets duplicated or even triplicated. This means there are extra copies of all the genes.</p>
+<p>The second way is <strong>small scale duplication</strong>, and it’s a bit like making copies of individual chapters or pages from your favorite book. There are two types of small scale duplication: “segmental duplication” and “tandem duplication.”</p>
+<p><strong>Segmental duplication</strong> is when certain sections of the genome, like chapters in a book, are copied more than once. This can lead to having extra copies of specific genes, which can be useful for evolution.</p>
+<p><strong>Tandem duplication</strong> is a little different. It’s like having two or more paragraphs on the same page that are exactly the same. In this case, genes are duplicated one right after the other in a row.</p>
+<section id="whole-genome-duplications" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="whole-genome-duplications"><span class="header-section-number">5.1</span> Whole Genome Duplications</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week5/whole_genome_multiplication.png" class="img-fluid figure-img" width="638"></p>
+<p></p><figcaption class="figure-caption">Illustration of a Whole Genome Duplication Event</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the above example, we have a genome from two different organisms - one blue and one orange.</p>
+<p>If the genomes of two organisms come together, this is called an <strong>autopolyploid</strong>. Otherwise, this is called an <strong>alloalyploid</strong>.</p>
+<p>When genome evolution happens through whole genome duplications, it’s like making an identical copy of the entire set of genes. Imagine you have a long list of items, and you make an exact duplicate of that list. Here’s what happens:</p>
+<p>Right after the duplication, the genes in both copies are in the same order, which scientists call “synteny.” It’s like having the same items in the same order on both lists.</p>
+<p>But, as time goes by, some changes occur:</p>
+<ol type="1">
+<li><p><strong>Fractionation</strong></p>
+<p>This is when the genome starts to change. Some genes get lost because they become redundant (like having two identical items on your list), and random mutations can also affect genes.</p></li>
+<li><p><strong>Genome rearrangements</strong></p>
+<p>Think of this as reshuffling the items on your list. The order of genes can change.</p></li>
+<li><p><strong>Syntenic blocks</strong></p>
+<p>Even after a long time, there are still some parts of the genome where a bunch of genes look very similar to another bunch. It’s like having sections of your list that are almost the same as sections in the duplicate list.</p></li>
+<li><p><strong>Diploid form</strong></p>
+<p>Eventually, the genome organizes itself back into a diploid form. This means it goes back to having two sets of genes, like you have one original list and one duplicate list, but with some changes.</p></li>
+</ol>
+<section id="genome-duplication-in-organisms" class="level3" data-number="5.1.1">
+<h3 data-number="5.1.1" class="anchored" data-anchor-id="genome-duplication-in-organisms"><span class="header-section-number">5.1.1</span> Genome Duplication in Organisms</h3>
+<section id="plants" class="level4" data-number="5.1.1.1">
+<h4 data-number="5.1.1.1" class="anchored" data-anchor-id="plants"><span class="header-section-number">5.1.1.1</span> Plants</h4>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week5/plant+whole.png" class="img-fluid figure-img" width="436"></p>
+<p></p><figcaption class="figure-caption">Whole Genome Duplication in Plants</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Genome duplications happen quite often in the evolution of plants. It’s like when you have a favorite plant and it suddenly makes extra copies of all its genetic instructions. Here are some examples:</p>
+<pre><code>Ancient Hexaploid Event in Eudicots: About 150 million years ago, a group of plants called Eudicots had a special event where their entire set of genes got duplicated not just once, but three times! It's like having three identical instruction manuals for a plant.</code></pre>
+<ol type="1">
+<li><p><strong>Grape</strong></p>
+<p>After that ancient event, some plants like grapes didn’t have any more big duplications. So, they just kept the three copies they had and didn’t make any new ones.</p></li>
+<li><p><strong>Poplar</strong></p>
+<p>On the other hand, poplar, which is another type of plant, recently had a whole genome duplication event. This means it made a fresh copy of all its genes, so it now has two sets of instructions.</p></li>
+<li><p><strong>Arabidopsis</strong></p>
+<p>Arabidopsis, yet another type of plant, had two whole genome duplication events in its history. So, it’s like having three instruction manuals originally, then copying them twice more, for a total of six!</p></li>
+</ol>
+</section>
+<section id="fish" class="level4" data-number="5.1.1.2">
+<h4 data-number="5.1.1.2" class="anchored" data-anchor-id="fish"><span class="header-section-number">5.1.1.2</span> Fish</h4>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week5/fishes.png" class="img-fluid figure-img" width="453"></p>
+<p></p><figcaption class="figure-caption">Whole Genome Duplication in Fish</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the world of minnows and carps, which belong to a group called <em>Cyprininae</em>, there are around 1,300 different species. Now, here’s something interesting: approximately 400 of these species are what we call “polyploid.”</p>
+<p><strong>Polyploid</strong> is a special term that tells us these species have more than the usual set of genetic instructions. It’s like having extra copies of a recipe book. In the case of these minnows and carps, having extra genetic copies can sometimes be a helpful adaptation. It’s a bit like having extra tools in your toolbox—they can be useful for different situations.</p>
+</section>
+</section>
+<section id="comparing-genomes" class="level3" data-number="5.1.2">
+<h3 data-number="5.1.2" class="anchored" data-anchor-id="comparing-genomes"><span class="header-section-number">5.1.2</span> Comparing Genomes</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week5/dot_plot.png" class="img-fluid figure-img" width="353"></p>
+<p></p><figcaption class="figure-caption">Comparing Two Genomes Using a Dot Plot</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A <strong>dot plot</strong> is like a cool tool scientists use to compare different genomes, which are like the instruction manuals for living things. Here’s how it works:</p>
+<p>First, imagine you have a bunch of genes from two different organisms, and you want to see how similar they are. The dot plot helps you visualize this by showing dots where genes are similar.</p>
+<p>At first, it looks a bit messy with lots of dots. But, at a basic level, it helps us find pairs of genes that are kind of like neighbors in the instruction manuals. These are called <strong>syntenic gene pairs</strong>, and they might be important for understanding how organisms are related.</p>
+<p>If we want to get even more detailed, we can study these syntenic gene pairs more closely. It’s like zooming in on those neighbor genes to see exactly how they match up.</p>
+<p>One way to find these syntenic blocks, which are groups of similar genes, is to use a special program called <strong>DAGchainer</strong>. It’s like a detective that helps us find these important blocks in the instruction manuals.</p>
+<p>DAGchainer uses a smart method called <strong>dynamic programming</strong> to do this. Think of it like a super organized way to solve puzzles and find important patterns in the genes. So, dot plots and programs like DAGchainer are tools scientists use to uncover the secrets hidden in genomes!</p>
+</section>
+<section id="exploring-whole-genome-duplications-with-synteny" class="level3" data-number="5.1.3">
+<h3 data-number="5.1.3" class="anchored" data-anchor-id="exploring-whole-genome-duplications-with-synteny"><span class="header-section-number">5.1.3</span> Exploring Whole Genome Duplications with Synteny</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week5/synteny_plots.png" class="img-fluid figure-img" width="454"></p>
+<p></p><figcaption class="figure-caption">Synteny Plots</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Imagine you have two sets of genes from different organisms, and you want to figure out when they had a big duplication event. Synteny is like a tool that helps us with this detective work.</p>
+<p>First, scientists do something called <strong>pairwise alignment</strong>, which is like comparing the two sets of genes to see which ones match up. These matching gene pairs are called <strong>syntenic gene pairs</strong>.</p>
+<p>Now, here’s the cool part: we can look at how many “synonymous substitutions” have happened in these gene pairs. <strong>Synonymous substitutions</strong> are like small changes in the genes that don’t really affect how the protein is made or its building blocks (amino acids).</p>
+<p>By counting these mutations, it’s kind of like using a <strong>molecular clock</strong>. This clock tells us how much time has passed since the big gene duplication happened. Just like a clock helps us keep track of time, counting these mutations helps scientists figure out when the duplication event took place.</p>
+</section>
+<section id="functional-biases-on-gene-origins" class="level3" data-number="5.1.4">
+<h3 data-number="5.1.4" class="anchored" data-anchor-id="functional-biases-on-gene-origins"><span class="header-section-number">5.1.4</span> Functional Biases on Gene Origins</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week5/functional_biases.png" class="img-fluid figure-img" width="228"></p>
+<p></p><figcaption class="figure-caption">Prof.&nbsp;Jarkko’s Graph</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When we talk about how genes work and where they come from, there are two main ways genes can be duplicated: Whole Genome Duplication (WGD) and Tandem Duplication. These two processes can affect how genes function.</p>
+<p>In the case of <strong>Whole Genome Duplication (WGD)</strong>, there’s something called the <strong>dosage-balance hypothesis</strong>. This means that genes that are really important and highly connected in the cell are usually kept around when gene duplication happens. Think of it like keeping the most important players on your sports team. These important genes often include things like transcription factors and regulators, which are like the coaches and referees of the cell.</p>
+<p>On the other hand, with <strong>Tandem Duplication</strong>, it’s more about recent adaptations. Imagine if you have a group of friends, and you suddenly need to deal with a new challenge, like a surprise test. You might quickly form a study group with the friends who are best at that subject. Similarly, genes that are duplicated in tandem, one after the other, often include genes that help an organism cope with immediate changes in its environment. For example, if there’s a sudden threat from a pathogen, genes related to defense might get duplicated to help the organism adapt quickly.</p>
+<section id="why-is-this-important" class="level4" data-number="5.1.4.1">
+<h4 data-number="5.1.4.1" class="anchored" data-anchor-id="why-is-this-important"><span class="header-section-number">5.1.4.1</span> Why is this Important?</h4>
+<p>After a special kind of gene duplication called Whole Genome Duplications (WGDs), the genes that stay around are usually super important. They’re like the VIPs of the cell—genes that help control things like when to grow, when to stop, and how to respond to signals. We call this idea the “dosage-balance hypothesis.”</p>
+<p>The cool thing is that similar VIP genes can be found in almost all species, and they work in pretty similar ways. It’s like finding the same important tools in everyone’s toolbox. This makes it easier for scientists to find similar genes in different species, and we call these similar genes “orthologs.”</p>
+<p>Now, when genes are copied one after the other, like in Tandem Duplication, they often help an organism deal with changes in its environment. These are like the genes that help you adapt when something unexpected happens, like a sudden change in weather. These newly copied genes are very similar in their instructions.</p>
+<p>But here’s where it gets tricky: these copied genes can be a bit different between individuals of the same species, and this can cause problems when scientists are trying to match up short pieces of genetic information (short reads) with the gene instructions.</p>
+</section>
+</section>
+<section id="implications-for-genome-annotation" class="level3" data-number="5.1.5">
+<h3 data-number="5.1.5" class="anchored" data-anchor-id="implications-for-genome-annotation"><span class="header-section-number">5.1.5</span> Implications for Genome Annotation</h3>
+<p>First, think about the number of gene copies. It’s like saying that in some species, there might be more copies of a certain gene, while in others, there are fewer. It’s kind of like how some people have more toys than others. This variation in gene copies can make things a bit complicated.</p>
+<p>Now, when it comes to species, those that are more closely related, like siblings, tend to be more similar to each other in terms of their genes. But species that are very different, like distant cousins, might have genes that look quite different. It’s a bit like how you might look more like your brother or sister than a cousin you’ve never met.</p>
+<p>Polyploidy events are like times when a species had too many copies of its entire set of genes. Imagine if you suddenly had two toy chests filled with toys instead of one. It can be a bit tricky to figure out which toys are exactly the same in both chests, and this is kind of like the challenge scientists face when finding orthologs in species that have experienced polyploidy.</p>
+<p>Lastly, with tandem duplications, it’s like having the same toy repeated in a row in your toy chest. When this happens with genes, it can be hard to predict because it looks like there’s just one type of toy in your chest, even though there are actually many copies of the same toy. So, for scientists trying to understand gene models, it can be a bit tricky to tell what’s going on.</p>
+</section>
+</section>
+<section id="quality-control-of-assembly" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="quality-control-of-assembly"><span class="header-section-number">5.2</span> Quality Control of Assembly</h2>
+<section id="n50-value" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="n50-value"><span class="header-section-number">5.2.1</span> N50 Value</h3>
+<p>When scientists are putting together the puzzle pieces of a genome, one of the most important things to check is how well those pieces fit together. This is called <strong>contiguity</strong>.</p>
+<p>Contiguity is like looking at a jigsaw puzzle and making sure all the pieces are lined up nicely. You want to see how many separate pieces, called <strong>contigs</strong> or <strong>scaffolds</strong>, make up the genome.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week5/n50.png" class="img-fluid figure-img" width="560"></p>
+<p></p><figcaption class="figure-caption">Illustration of the N50 Value</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now, to tell how good the assembly is, we use a special number called the <strong>N50 value</strong>. This number tells us something really important: it shows the length where 50% of the genome assembly is made up of contigs or scaffolds longer than this length.</p>
+<p>Think of it like this: if you have a bunch of puzzle pieces, and you find the N50 value, it means that half of the puzzle pieces are at least that big. So, the higher the N50 value, the better the quality of the genome assembly because it means larger and more complete pieces are used to put together the genome.</p>
+</section>
+<section id="conserved-single-copy-genes" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="conserved-single-copy-genes"><span class="header-section-number">5.2.2</span> Conserved Single-Copy Genes</h3>
+<p>When scientists are working on putting together a genome, one of the most crucial things they want to make sure of is that they capture all the important parts of the genes. Imagine if you were building a car, and you needed to make sure you had all the essential parts like the engine, wheels, and brakes. In genome assembly, those important parts are the genes.</p>
+<p>Now, here’s the tricky part: figuring out if you’ve got all the genes in their proper places can be hard without some extra help. It’s like trying to build a car without an instruction manual.</p>
+<p>But scientists have a clever trick. They’ve looked at lots of different species and found a special group of genes that are found in nearly all genomes as single copies. This means there’s usually just one of each of these genes in the genome. It’s like finding common tools that are used in many different types of cars.</p>
+<p>These single-copy genes are super important because they’re often the first ones to disappear if there are extra copies or if genes get shuffled around during evolution.</p>
+<p>To help scientists check if they’ve got these essential genes in their genome assembly, they use software like CEGMA (which is a bit outdated now) and BUSCO. These programs act like detectives to see if all the crucial genes are present and in good shape, kind of like making sure you have all the essential car parts before you start driving.</p>
+</section>
+<section id="busco" class="level3" data-number="5.2.3">
+<h3 data-number="5.2.3" class="anchored" data-anchor-id="busco"><span class="header-section-number">5.2.3</span> BUSCO</h3>
+<p>Imagine you have a big jigsaw puzzle, and you want to make sure you’re putting all the right pieces in the right places. In the world of genomes, those puzzle pieces are genes, and they need to be correctly identified and placed. This is where <strong>B</strong>enchmarking <strong>U</strong>niversal <strong>S</strong>ingle-<strong>C</strong>opy <strong>O</strong>rthologs (i.e., <strong>BUSCO</strong>) comes in.</p>
+<p>BUSCO helps with genome annotation, which is like labeling and understanding the genes in a genome. It does this using a two-step approach:</p>
+<p>First, it uses something called <strong>tblastn</strong> to search for known single-copy protein sequences within the genome. Think of this as looking for specific shapes in your puzzle pieces that you know should be there.</p>
+<p>Once it finds these matches, it uses them to teach a special tool called “Augustus” how to predict where other genes are in the genome. It’s like showing someone a few pieces of the puzzle so they can guess where the rest of the pieces should go.</p>
+<p>Then, Augustus starts predicting the genes and looks for matches to a set of genes that are known to be present as single copies in most genomes. These genes are kind of like the most important pieces of the puzzle.</p>
+<p>BUSCO gives a report that tells you the number of found full-length genes (genes that are complete and correct), duplicated full-length genes (genes that have extra copies), fractionated genes (genes that are split up), and missing genes (genes that are nowhere to be found).</p>
+<p>The “Busco score” is a handy percentage that tells you how well your genome assembly is doing. If it’s over 95%, that’s really good and means you have a high-quality assembly. If it’s between 90-95%, that’s still good. But if it’s below 80%, it’s a sign that there might be issues with your genome assembly.</p>
+<section id="pros-and-cons" class="level4" data-number="5.2.3.1">
+<h4 data-number="5.2.3.1" class="anchored" data-anchor-id="pros-and-cons"><span class="header-section-number">5.2.3.1</span> Pros and Cons</h4>
+<p>Using BUSCO is like taking a quick test to check how well you’ve done a big job, like building a complex model. It’s become a standard method in genomics because it helps scientists figure out if they did a good job in understanding the genes of an organism quickly.</p>
+<p>Now, there are a few things to keep in mind when using BUSCO:</p>
+<ol type="1">
+<li><p><strong>Not the Whole Picture</strong></p>
+<p>The results from BUSCO might not tell you everything about the quality of the entire set of genes in the organism. It’s like if you looked at only a few parts of a car and assumed the whole car was in perfect shape.</p></li>
+<li><p><strong>Predicting Easy Genes</strong></p>
+<p>BUSCO focuses on finding genes that are considered “easy” to predict because they’re pretty much the same across many species. This means it might miss some of the more unique or hard-to-predict genes.</p></li>
+<li><p><strong>Reference Species</strong></p>
+<p>BUSCO defines these “easy” genes based on a set of species used as a reference. However, not all organisms have the exact same genes, and in some cases, the genes might be so different that BUSCO can’t spot them.</p></li>
+<li><p><strong>Duplicate Genes</strong></p>
+<p>Sometimes BUSCO might find extra copies of genes. This can happen because of problems with how the genome was put together (assembly problems) or because the organism naturally has extra copies due to recent genome duplications.</p></li>
+</ol>
+</section>
+</section>
+</section>
+<section id="genome-annotation" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="genome-annotation"><span class="header-section-number">5.3</span> Genome Annotation</h2>
+<p>Let’s break down three types of annotation tasks:</p>
+<ol type="1">
+<li><p><strong>Genome Annotation</strong></p>
+<p>Imagine you have a huge book with lots of words but no titles or chapters. Genome annotation is like giving titles to chapters in this book. Scientists try to figure out where the important genes are hiding in the DNA sequence of an organism’s genome. It’s like identifying the main characters in a story.</p></li>
+<li><p><strong>Structural Annotation</strong></p>
+<p>This is about looking closer at the genes you’ve identified. It’s like studying the characters in a book and finding out if they have any special traits or abilities. In genetics, scientists try to spot specific patterns or “domains” in genes that are similar across different species. These domains are like superpowers for genes, and they help scientists understand what the genes do.</p></li>
+<li><p><strong>Functional Annotation</strong></p>
+<p>Once you know what the genes look like and what patterns they have, you want to figure out what they actually do. It’s like reading the book to learn about the characters’ roles. Scientists try to guess the function of a gene based on its patterns and shapes. They do this by finding genes in other species that are very similar in structure or sequence (like finding characters in other books that are a lot like the ones you already know). Then, they assume that these similar genes have similar functions. To be really sure, they might do experiments, like RNA sequencing or mutant tests, to check if their guess is right.</p></li>
+</ol>
+<p>So, in a nutshell, genome annotation<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a> is like naming characters in a book (identifying genes), structural annotation is like discovering special traits of these characters (identifying patterns in genes), and functional annotation is like figuring out what these characters do in the story (identifying gene functions). It’s all about understanding the genetic story of an organism!</p>
+<section id="coding-regions" class="level3" data-number="5.3.1">
+<h3 data-number="5.3.1" class="anchored" data-anchor-id="coding-regions"><span class="header-section-number">5.3.1</span> Coding Regions</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week5/sequence.png" class="img-fluid figure-img" width="560"></p>
+<p></p><figcaption class="figure-caption">Illustration of Introns and Exons</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When scientists study a genome, they’re like detectives trying to find important clues. They want to identify the functional parts of the genome, which are like the chapters and important details in a story. These functional parts include things like the promoter (which tells genes when to start), exons (which are the important coding parts of genes), and introns (which are like extra, non-coding sections within genes).</p>
+<p>Now, introns are like tricky puzzles in this genome story. They make the job of predicting or figuring out where genes start and stop a bit harder. It’s like trying to read a book with extra sentences that don’t make much sense. These introns can confuse scientists because they don’t contain the actual instructions for making proteins, so it’s like having extra pages in a recipe book that you don’t need.</p>
+</section>
+</section>
+<section id="repeat-analysis-and-making" class="level2" data-number="5.4">
+<h2 data-number="5.4" class="anchored" data-anchor-id="repeat-analysis-and-making"><span class="header-section-number">5.4</span> Repeat Analysis and Making</h2>
+<section id="repetitive-and-transposable-elements" class="level3" data-number="5.4.1">
+<h3 data-number="5.4.1" class="anchored" data-anchor-id="repetitive-and-transposable-elements"><span class="header-section-number">5.4.1</span> Repetitive and Transposable Elements</h3>
+<p>In genomes, there are parts that repeat themselves, like when a song chorus repeats several times. These repeating patterns in the genome come in different types:</p>
+<ol type="1">
+<li><p><strong>Simple Repeats</strong></p>
+<p>These are like when you say the same word over and over. They don’t have a lot of information.</p></li>
+<li><p><strong>Transposable Elements</strong></p>
+<p>These are like special sequences that can move around in the genome. They come in two flavors: autonomous (like the main boss) and non-autonomous (like the helpers).</p></li>
+</ol>
+<p>To find these repeating patterns, scientists use computer programs. These programs are like detectives with a set of tools. They follow a step-by-step process, sort of like how you might go through a recipe to cook something. These tools help them find the repeating patterns in the genome.</p>
+<p>One of the most commonly used detective programs is called RepeatMasker. It’s like a superstar detective because it combines the powers of different tools to get the job done. Think of it as having multiple gadgets in a detective’s toolkit. RepeatMasker uses two de novo repeat-finding tools (RECON and RepeatScout) to identify new repeats, a tandem repeat finder to spot specific kinds of repeats, and a database called <strong>Repbase</strong> that holds information about known repeats from other species. It’s like using a reference book to help with the detective work.</p>
+<p>Apart from RepeatMasker, there are some other detective software programs like <strong>PiRATE</strong> and <strong>Repet</strong>. They work in similar ways but might have their own unique tricks and features to find repeating patterns in the genome.</p>
+</section>
+<section id="transcriptomic-evidence" class="level3" data-number="5.4.2">
+<h3 data-number="5.4.2" class="anchored" data-anchor-id="transcriptomic-evidence"><span class="header-section-number">5.4.2</span> Transcriptomic Evidence</h3>
+<p>Scientists use a special technique called RNA-sequencing to learn which genes are active in a cell or organism at a particular time. It’s like listening in on a conversation to see who’s talking.</p>
+<p>This technique helps create something called a <strong>transcriptome</strong>, which is like a detailed list of all the genes that are “talking” or being used by the cell. It’s the most accurate way to know which genes are active.</p>
+<p>But here’s the catch: just because you’re listening in on a conversation doesn’t mean you hear everyone talking. Similarly, not all genes will be “talking” or active at the same time, so the transcriptome will be incomplete. Some genes are like shy individuals who only speak up in certain situations.</p>
+<p>RNA-sequencing can also tell us about different types of genes. Some genes are only active in specific tissues (like heart genes in heart tissue), some follow a daily schedule (diurnal genes), and some are only used during certain stages of growth (developmental state-specific genes). It’s like finding out who talks only in the library, who talks only in the morning, and who talks only at a party!</p>
+<p>And sometimes, genes can have different versions, like how a story can be told in different ways. These are called <strong>splice variants</strong>, and they can be specific to certain tissues.</p>
+<p>Scientists use RNA-sequencing data in two main ways:</p>
+<ol type="1">
+<li>They can match the “conversations” (reads) they hear to a known “script” (the genome) to figure out which genes are active. It’s like finding out who’s talking by checking a script.</li>
+<li>Or they can piece together a new “script” (de novo assembly) from the conversations and then figure out which genes are active. It’s like creating a script from scratch based on what people are saying.</li>
+</ol>
+</section>
+<section id="prediction-from-sequence-i.e.-ab-initio" class="level3" data-number="5.4.3">
+<h3 data-number="5.4.3" class="anchored" data-anchor-id="prediction-from-sequence-i.e.-ab-initio"><span class="header-section-number">5.4.3</span> Prediction from Sequence (i.e., <em>ab initio</em>)</h3>
+<p>To learn patterns from genes, Bioinformaticians can turn to machine learning to make something called a <strong>hidden Markov model</strong> (i.e., <strong>HHM</strong>).</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week5/hmm.png" class="img-fluid figure-img" width="195"></p>
+<p></p><figcaption class="figure-caption">Layout of a Hidden Markov Model</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A HHM is a kind of computer model that was first created back in the late 1970s. It wasn’t originally meant for genetics or biology, though. Instead, it was designed for something quite different: speech recognition.</p>
+<p>The idea behind an HMM is to break down a process into two main parts: hidden states and observations. In the case of speech recognition, the hidden states represent different sounds or letters that make up spoken words, while the observations are like the actual sound signals.</p>
+<p>Each hidden state in the model is connected to a specific acoustic signal. So, when there’s a change in the hidden state, it’s like switching to a different letter or sound. When you put all these changes together, you get a sequence, or a path, of hidden states that make up a word.</p>
+<p>In speech recognition, the goal is to figure out the most likely path of hidden states based on the sounds we hear. So, HMMs help computers understand spoken words by finding the best match between what they “hear” (the observations) and the most likely sequence of sounds (the hidden states). It’s like trying to guess the word someone is saying based on the sounds you hear.</p>
+<section id="in-genetics" class="level4" data-number="5.4.3.1">
+<h4 data-number="5.4.3.1" class="anchored" data-anchor-id="in-genetics"><span class="header-section-number">5.4.3.1</span> In Genetics?</h4>
+<p>In the world of genetics, scientists also use Hidden Markov Models (HMMs), but for a different purpose: understanding genes.</p>
+<p>Just like in speech recognition, HMMs for genes have hidden states and observations. In this case, the hidden states represent different parts of a gene, such as exons (the important coding sections), splice donors/acceptors (which are like gene punctuation marks), introns (non-coding parts within a gene), and intergenic regions (spaces between genes).</p>
+<p>The observations, in this context, are the sequences of DNA letters (A, T, C, G) that make up the gene. It’s like looking at the genetic “code” to understand how genes are put together.</p>
+<p>A gene, in this model, is like a path that starts at the first exon and goes through all the hidden states, following the rules of the model.</p>
+</section>
+<section id="why-use-ab-initio-predictions" class="level4" data-number="5.4.3.2">
+<h4 data-number="5.4.3.2" class="anchored" data-anchor-id="why-use-ab-initio-predictions"><span class="header-section-number">5.4.3.2</span> Why Use <em>ab initio</em> Predictions?</h4>
+<p>First, it’s important to understand that not all genes are active or “expressed” in the samples being studied. Think of it like a library where not all the books are being read at the same time. RNA sequencing only tells us about the genes that are actively “reading” or expressing themselves.</p>
+<p>Another reason is that some genes don’t follow the usual rules of gene splicing. It’s like having a few books in the library that are written in a different style, and these books might be missed by the RNA sequencing approach.</p>
+<p>Let’s take the example of birch, a type of tree. When scientists used RNAseq for birch, they found about 20,000 sequences (isotigs). However, to get a more complete picture, they still needed to predict around 10,000 genes computationally. This is because RNA sequencing doesn’t always capture all the genes.</p>
+<p>Now, when it comes to picking which gene prediction tools to use, there are a few top contenders in the field, like Augustus and BRAKER. But there are also many other software options available, making it a bit like choosing between different tools for a job.</p>
+<p>In practice, scientists often use a combination of these tools. For birch, they tried out about 10 different gene predictors and ended up using the four that worked the best. This is because different predictors have different ways of modeling genes, so some might be better at detecting certain types of genes compared to others.</p>
+</section>
+</section>
+<section id="gene-models-in-other-species" class="level3" data-number="5.4.4">
+<h3 data-number="5.4.4" class="anchored" data-anchor-id="gene-models-in-other-species"><span class="header-section-number">5.4.4</span> Gene Models in Other Species</h3>
+<p>One of the key ways to make sure gene predictions are accurate is by looking at external evidence. Think of it like checking your work with a trusted source.</p>
+<p>One of the most reliable sources of external evidence is RNA sequencing data. This data is like a gold standard because it tells us exactly which genes are active and how they’re structured. It’s a bit like having the answers to a test. Scientists can compare their gene predictions with RNA sequencing data to see if they match up.</p>
+<p>There are two ways to use RNA sequencing data. One is called de novo transcriptome assembly, which is like putting together a puzzle without a picture on the box. It’s useful when you don’t have a complete genome to work with. But sometimes, it’s a bit like solving a puzzle with missing pieces, and it can be hard to tell similar genes apart.</p>
+<p>Another good source of evidence is old collections of Expressed Sequence Tags (ESTs). These are like clues left behind by genes. Scientists can use these clues to confirm their gene predictions.</p>
+<p>It’s also helpful to look at genes in well-studied or closely related species. It’s like asking someone who’s good at a subject for help. If these genes are similar to the ones you’re predicting, it adds confidence to your predictions.</p>
+<p>However, predicting genes in gene families that are right next to each other (tandem repeats) can still be a tricky puzzle. It’s like trying to tell identical twins apart. Sometimes, even with external evidence, it’s hard to be certain.</p>
+<section id="aligning-protein-evidence-to-genome" class="level4" data-number="5.4.4.1">
+<h4 data-number="5.4.4.1" class="anchored" data-anchor-id="aligning-protein-evidence-to-genome"><span class="header-section-number">5.4.4.1</span> Aligning Protein Evidence to Genome</h4>
+<p>Imagine you have a jigsaw puzzle, and you want to find where certain pieces fit. When scientists have pieces of evidence like proteins or transcripts and want to see where they match in a genome, it’s a bit like finding the right spot for puzzle pieces.</p>
+<p>One way to do this is using a tool called <strong>tblastn</strong>. Think of it as a detective tool. What it does is take the genome and look at it in different ways, kind of like trying to read a book from different angles. It’s searching for matches to a protein or transcript.</p>
+<p>However, there’s a limitation with tblastn. It doesn’t take into account something important called splicing, which is like how sentences are rearranged in a book to make sense. So, tblastn might miss some of the edges or boundaries of where the protein or transcript matches the genome. It’s like finding parts of a sentence but not realizing where one sentence ends and another begins.</p>
+<p>To get the whole picture, scientists use other tools like Exonerate, PASA, and GeMoMa. These are like detective tools with special glasses that help them see the splicing parts better. They pay attention to the spots where the sentences (or genes) are joined together with special signals called donor and acceptor sites.</p>
+<p>These splicing-aware tools also do something clever. They look for regions in the genome where there’s a high match to the protein or transcript evidence and then join these regions together. It’s like finding pieces of a puzzle that fit really well and realizing they belong together.</p>
+</section>
+</section>
+</section>
+<section id="combining-evidence" class="level2" data-number="5.5">
+<h2 data-number="5.5" class="anchored" data-anchor-id="combining-evidence"><span class="header-section-number">5.5</span> Combining Evidence</h2>
+<p>When scientists want to figure out what a gene does, they turn to a tool called <strong>Interproscan</strong>. It’s like using a detective kit with different tools to uncover the gene’s secrets. Interproscan does two important jobs at once. It’s a bit like looking at both the shape and function of a key to understand what it can unlock. For genes, it checks their structure and function.</p>
+<p>One thing it checks is something called “conserved protein domains.” Think of these as like the building blocks or patterns that genes are made of. Interproscan compares these patterns to a big database that includes PFAM, protein superfamilies, and PANTHER.</p>
+<p>Another tool in its kit is BLAST, which is like a gene family tree detective. It helps find genes that are similar to the one being studied. These similar genes can give clues about what the gene does. Interproscan also looks at metabolic pathways (like the chemical processes in a cell) using tools like KEGG and Metacyc. It’s like figuring out how ingredients are used in a recipe. It also predicts Gene Ontology (GO) categories, which are like labels that describe what a gene is involved in.</p>
+<p>To assign a gene’s function, Interproscan uses something called the <strong>guilt-by-association</strong> principle. It’s like assuming that if someone is often seen with a group of people doing a particular activity, they’re likely involved in that activity too. In genes, if a gene is similar to others in a certain pathway or category, it’s probably involved in the same kind of job.</p>
+</section>
+<section id="final-verification" class="level2" data-number="5.6">
+<h2 data-number="5.6" class="anchored" data-anchor-id="final-verification"><span class="header-section-number">5.6</span> Final Verification</h2>
+<p>Prof.&nbsp;Jarkko lists a sample checklist for this bit - just to ensure that the genome in question is a good one:</p>
+<ol type="1">
+<li><p><strong>Start with the Gene Model</strong></p>
+<p>Begin with the predicted gene model as your reference. It’s like having a blueprint for a building.</p></li>
+<li><p><strong>Compare with RNAseq and EST Data</strong></p>
+<p>Check if the RNA sequencing (RNAseq) and EST data match the gene model. It’s similar to making sure the building looks like the blueprint.</p></li>
+<li><p><strong>Examine Protein Matches in Other Species</strong></p>
+<p>See if proteins from related species match your gene. It’s like comparing your building to others in the neighborhood.</p></li>
+<li><p><strong>BLAST the Protein Sequence</strong></p>
+<p>Use a tool called BLAST to compare your gene’s protein sequence to a big database of genetic information. This helps you find similar genes in various species and might give hints about gene function.</p></li>
+<li><p><strong>Gather Good Hit Sequences</strong></p>
+<p>Collect the sequences that closely match your gene, especially from well-studied model species. Think of it as getting advice from experts.</p></li>
+<li><p><strong>Multiple Sequence Alignment</strong></p>
+<p>Line up the protein sequences and see if they match well. It’s like checking if puzzle pieces fit together. Look out for mistakes like frame shifts, incorrect splicing, or missing start/stop signals.</p></li>
+<li><p><strong>Watch Out for “Ns”</strong></p>
+<p>If you see “N” in the sequence, it means there’s missing information. It’s like having a blank spot on the blueprint.</p></li>
+<li><p><strong>Manual Adjustments</strong></p>
+<p>If needed, make manual adjustments to the gene model to improve accuracy. It’s like fine-tuning the building plans to make everything fit perfectly.</p></li>
+<li><p><strong>Experimental Verification</strong></p>
+<p>Finally, validate the gene model with experimental data. This involves using RNAseq and targeted experiments to confirm that the gene functions as predicted. It’s like testing the building to ensure it works as intended.</p></li>
+</ol>
+
+
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>Note that this also identifies a boatload of other stuff - like repeat regions, non-coding RNAs, and even stuff like introns, exons, and methylation sites.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/week4.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><em>De Novo</em> Sequencing</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
