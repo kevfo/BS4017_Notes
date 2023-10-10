@@ -15,6 +15,8 @@ book:
         - chapters/week3.qmd
         - chapters/week4.qmd
         - chapters/week5.qmd
+        - chapters/week6.qmd
+        - chapters/week7.qmd
   sharing: [twitter, facebook]
   page-navigation: true
   repo-url: https://github.com/kevfo/BS4017_Notes

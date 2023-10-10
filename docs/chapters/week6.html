@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>BS4017: High Throughput Bioinformatics - 6&nbsp; Transcriptomes: Experiment Design and RNA Sequence Data Processing</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/week7.html" rel="next">
+<link href="../chapters/week5.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Transcriptomes: Experiment Design and RNA Sequence Data Processing</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">BS4017: High Throughput Bioinformatics</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://github.com/kevfo/BS4017_Notes" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+    <a href="" title="Share" id="sidebar-tool-dropdown-0" class="sidebar-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-share"></i></a>
+    <ul class="dropdown-menu" aria-labelledby="sidebar-tool-dropdown-0">
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+            <i class="bi bi-bi-twitter pe-1"></i>
+          Twitter
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
+            <i class="bi bi-bi-facebook pe-1"></i>
+          Facebook
+          </a>
+        </li>
+    </ul>
+  <a href="" class="quarto-color-scheme-toggle sidebar-tool" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true"><strong>PART I: LECTURE NOTES</strong></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Linux and the Command Line (untested)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Genomic Sequencing and Databases</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week3.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data Preprocessing and Quality Control</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week4.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><em>De Novo</em> Sequencing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week5.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Annotation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week6.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Transcriptomes: Experiment Design and RNA Sequence Data Processing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week7.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Transcriptomes: Differential Expression to Enrichment Analyses</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#experimental-design" id="toc-experimental-design" class="nav-link active" data-scroll-target="#experimental-design"><span class="toc-section-number">6.1</span>  Experimental Design</a>
+  <ul class="collapse">
+  <li><a href="#principles-of-experimental-design" id="toc-principles-of-experimental-design" class="nav-link" data-scroll-target="#principles-of-experimental-design"><span class="toc-section-number">6.1.1</span>  Principles of Experimental Design</a></li>
+  <li><a href="#experiment-designs-for-rna-sequencing-data" id="toc-experiment-designs-for-rna-sequencing-data" class="nav-link" data-scroll-target="#experiment-designs-for-rna-sequencing-data"><span class="toc-section-number">6.1.2</span>  Experiment Designs for RNA Sequencing Data</a></li>
+  </ul></li>
+  <li><a href="#de-novo-rna-sequence-assembly" id="toc-de-novo-rna-sequence-assembly" class="nav-link" data-scroll-target="#de-novo-rna-sequence-assembly"><span class="toc-section-number">6.2</span>  <em>De novo</em> RNA-Sequence Assembly</a>
+  <ul class="collapse">
+  <li><a href="#some-issues-to-consider" id="toc-some-issues-to-consider" class="nav-link" data-scroll-target="#some-issues-to-consider"><span class="toc-section-number">6.2.1</span>  Some Issues to Consider</a></li>
+  </ul></li>
+  <li><a href="#rna-sequencing-data-processing" id="toc-rna-sequencing-data-processing" class="nav-link" data-scroll-target="#rna-sequencing-data-processing"><span class="toc-section-number">6.3</span>  RNA Sequencing Data Processing</a>
+  <ul class="collapse">
+  <li><a href="#read-mapping" id="toc-read-mapping" class="nav-link" data-scroll-target="#read-mapping"><span class="toc-section-number">6.3.1</span>  Read Mapping</a></li>
+  <li><a href="#splicing-aware-aligners" id="toc-splicing-aware-aligners" class="nav-link" data-scroll-target="#splicing-aware-aligners"><span class="toc-section-number">6.3.2</span>  Splicing Aware Aligners</a></li>
+  <li><a href="#quantification-for-rna-sequence-analyses" id="toc-quantification-for-rna-sequence-analyses" class="nav-link" data-scroll-target="#quantification-for-rna-sequence-analyses"><span class="toc-section-number">6.3.3</span>  Quantification for RNA Sequence Analyses</a></li>
+  </ul></li>
+  <li><a href="#pseudoalignment" id="toc-pseudoalignment" class="nav-link" data-scroll-target="#pseudoalignment"><span class="toc-section-number">6.4</span>  Pseudoalignment</a>
+  <ul class="collapse">
+  <li><a href="#quantification" id="toc-quantification" class="nav-link" data-scroll-target="#quantification"><span class="toc-section-number">6.4.1</span>  Quantification</a></li>
+  </ul></li>
+  <li><a href="#normalization" id="toc-normalization" class="nav-link" data-scroll-target="#normalization"><span class="toc-section-number">6.5</span>  Normalization</a>
+  <ul class="collapse">
+  <li><a href="#transcripts-per-million-i.e.-tpm" id="toc-transcripts-per-million-i.e.-tpm" class="nav-link" data-scroll-target="#transcripts-per-million-i.e.-tpm"><span class="toc-section-number">6.5.1</span>  Transcripts per Million (i.e., TPM)</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/kevfo/BS4017_Notes/edit/main/chapters/week6.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/kevfo/BS4017_Notes/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Transcriptomes: Experiment Design and RNA Sequence Data Processing</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week6/rna_overall.png" class="img-fluid figure-img" width="182"></p>
+<p></p><figcaption class="figure-caption">Overall Workflow for Working with RNA Sequence Data</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The above graphic shows the general flow of actions when it comes to working with RNA sequencing data (i.e., from the wet lab stuff to the actual data analysis later on).</p>
+<section id="experimental-design" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="experimental-design"><span class="header-section-number">6.1</span> Experimental Design</h2>
+<p>Experimental design is like setting up a plan for a science experiment. It’s super important because it helps us get the right kind of information to answer our questions. Imagine you’re trying to figure out something cool in biology – well, you need a good plan for your experiment.</p>
+<p>First, you start with your big question, the one you really want to answer. This is called your “research question.” It’s like the main thing you want to find out. Once you know your question, you need to make sure you do the experiment in the right way.</p>
+<p>That’s where experimental design comes in. It’s like making a game plan for your experiment. You figure out what kind of data you need and how much of it. This is crucial because if you collect the wrong data or not enough, you might not get good answers.</p>
+<section id="principles-of-experimental-design" class="level3" data-number="6.1.1">
+<h3 data-number="6.1.1" class="anchored" data-anchor-id="principles-of-experimental-design"><span class="header-section-number">6.1.1</span> Principles of Experimental Design</h3>
+<p>There are a total of six to take note of:</p>
+<ol type="1">
+<li><p><strong>Comparison</strong></p>
+<p>Comparison is like the main reason we do a science experiment. It’s the big “why” behind everything we’re testing. Imagine you want to know if something really works or if it’s different from how things normally are.</p>
+<p>In science, we often compare two groups. It’s like having a “before” group and an “after” group. We call these groups different names, like “case vs.&nbsp;control,” “treatment vs.&nbsp;control,” or “mutant vs.&nbsp;wild-type.” These names tell us what we’re comparing.</p>
+<p>The whole point of this comparison is to answer our main question. For example, let’s say we want to know if a new medicine really helps people get better. The “case” group would be the people getting the medicine, and the “control” group would be people not getting the medicine, so we can see if the medicine makes a big difference.</p></li>
+<li><p><strong>Replication</strong></p>
+<p>Replication is like a way to make sure our science experiments are trustworthy. When we measure things in experiments, there can be some mistakes or random errors. It’s kind of like when you play darts, and sometimes your throws are a bit off target even if you’re trying your best.</p>
+<p>To deal with these errors, we do something called <strong>replication</strong>. It’s a bit like having a backup plan. We do the same experiment multiple times to see if we get similar results each time. We assume that each time we do the experiment, it’s like picking samples randomly from a big bag of marbles. This way, we can make sure our results aren’t just by chance.</p>
+<p>Replication is super important because it helps us figure out if the differences we see in our experiments are for real or if they could have happened just because of random stuff. The more times we repeat the experiment (we call these repeats “replicates”), the more sure we can be about our results.</p>
+<p>But here’s the tricky part: doing replication, especially in some types of experiments like sequencing, can be a bit expensive. So, scientists often aim to do three or more replicates per condition to strike a balance between cost and getting reliable results.</p></li>
+<li><p><strong>Blocking</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week6/blocking.png" class="img-fluid figure-img" width="339"></p>
+<p></p><figcaption class="figure-caption">Example of a Blocking Experiment</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Blocking in science is like a clever way to make our experiments more accurate. Imagine you’re doing an experiment, and there are some things that you know can affect the results but aren’t really what you’re studying. Blocking helps you deal with those things.</p>
+<p>Here’s how it works: You group together similar things or “units” into special groups called “blocks.” These blocks are like teams of players in a game, and each team is as similar to each other as possible. So, if you’re studying plants, you might have one block of plants that are all the same age, another block of plants that have the same amount of sunlight, and so on.</p>
+<p>The cool part is that by doing this, you’re making sure that any differences in your results are more likely to be because of the thing you’re actually studying. It’s like playing a game of soccer on a field with no bumps or slopes – it helps you focus on the game without worrying about uneven ground.</p></li>
+<li><p><strong>Randomization</strong></p>
+<p>Randomization in science is a bit like mixing things up randomly. Imagine you’re sharing candies with your friends, and you want it to be fair. So, instead of giving candies to your friends in a specific order, you close your eyes and give them candies randomly.</p>
+<p>In experiments, randomization means doing things without any particular order or plan. It’s like flipping a coin to decide where each part of the experiment goes. For example, if you’re testing a new medicine, you don’t want to give it to one group of people just because they’re your friends. You want to make sure it’s all fair. So, you randomly choose who gets the medicine and who doesn’t.</p>
+<p>Why is this important? Well, sometimes there are hidden things that can affect the results, things we might not even know about. Randomization helps us break any sneaky patterns or dependencies in the data. It’s like making sure everyone has an equal chance to be in any group, so we can be more sure that our results are because of what we’re testing, not because of something else.</p></li>
+<li><p><strong>Orthogonality</strong></p>
+<p>Orthogonality in science is a bit like doing different things in an experiment without them getting all mixed up. Imagine you’re painting a picture with different colors, and you want to know how much each color adds to your artwork. You don’t want the colors to blend together and make it hard to figure out their impact.</p>
+<p>So, what scientists do is make sure that each thing they’re testing in an experiment can be measured separately, like having separate paintbrushes for each color. This way, they can figure out the effect of one thing without it being influenced by the others.</p>
+<p>Let’s say you’re testing three different types of fertilizers on plants. You want to know how each fertilizer affects the plant’s growth. Orthogonality means you can figure out the impact of each fertilizer without them interfering with each other. It’s like saying, “Okay, I’ll test fertilizer A, see the results, and it won’t mess with the results of fertilizer B or C.”</p></li>
+<li><p><strong>Factorial Experiments</strong></p>
+<p>Imagine you’re in a science experiment where you want to know how different things, like temperature and humidity, affect plant growth. Instead of changing only one thing at a time, like just temperature or just humidity, you decide to change both things together. That’s what we call a <strong>factorial experiment</strong>.</p>
+<p>Factorial experiments are like doing science experiments with multiple things happening at once. It’s like trying different combinations of factors to see how they all work together. So, in our plant experiment, you might try high temperature with low humidity, low temperature with high humidity, and so on.</p>
+<p>The cool thing about factorial experiments is that they help us figure out not only how each factor affects things but also how they interact. It’s like saying, “When we change both temperature and humidity, do they work together to affect plant growth in a special way?”</p></li>
+</ol>
+<section id="why-are-these-principles-important" class="level4" data-number="6.1.1.1">
+<h4 data-number="6.1.1.1" class="anchored" data-anchor-id="why-are-these-principles-important"><span class="header-section-number">6.1.1.1</span> Why Are These Principles Important?</h4>
+<p>These principles are super important in science because they help us do experiments in a smart and reliable way. Think of them as rules that scientists follow to make sure their experiments are accurate and make sense.</p>
+<ol type="1">
+<li><p><strong>Models for Analyzing Data</strong></p>
+<p>When we collect data from experiments, we need to analyze it to understand what’s happening. These principles help us build models or methods for analyzing the data. It’s like having a special tool to figure out the answers from all the numbers we collect.</p></li>
+<li><p><strong>t-test and Two-way ANOVA</strong></p>
+<p>These are fancy names for methods we use to see if the results of our experiments are meaningful. The t-test helps us compare two groups to see if they are really different. The two-way ANOVA is like a tool to compare more than two groups. They help us know if what we see in our experiments is likely to be true or just random.</p></li>
+<li><p><strong>Estimating Statistical Power</strong></p>
+<p>This is like having a magic crystal ball to tell us how many times we need to do an experiment to be sure of our results. It helps us plan ahead. For example, it tells us how many times we should flip a coin to be sure if it’s really fair or not.</p></li>
+</ol>
+</section>
+</section>
+<section id="experiment-designs-for-rna-sequencing-data" class="level3" data-number="6.1.2">
+<h3 data-number="6.1.2" class="anchored" data-anchor-id="experiment-designs-for-rna-sequencing-data"><span class="header-section-number">6.1.2</span> Experiment Designs for RNA Sequencing Data</h3>
+<p>When conducting RNA sequencing experiments, it’s important to plan things carefully. You need to make sure you have the right kind of data to answer your scientific questions effectively. To do this, there are some basic things you should keep in mind.</p>
+<p>Firstly, you need to collect enough data points, which we call <strong>replicates</strong>. It’s generally recommended to have at least three replicates to ensure the results are reliable. Think of it like taking multiple measurements to be more certain of an answer.</p>
+<p>Secondly, you should have sensible controls in your experiment. These controls help you compare what happens when you change something (like a treatment) to what happens when nothing changes (the control group). Controls are like a reference point to understand your results better.</p>
+<p>Now, let’s talk about the amount of data you need. It’s essential to have enough sequencing coverage. Think of sequencing coverage as how many times you read each piece of RNA. More coverage can give you a clearer picture of what’s happening in your samples.</p>
+<p>Next, consider the type of RNA you’re interested in. There are different methods to extract RNA, like total RNA or poly-A enrichment. Depending on your research question, you’ll choose the method that suits you best. For instance, in mammalian cells, most of the RNA is ribosomal RNA (rRNA), transfer RNA (tRNA), and only a small part is protein-coding mRNA. But if you’re interested in non-coding RNA, like microRNA, poly-A enrichment may not capture those.</p>
+<section id="biological-and-technical-replication" class="level4" data-number="6.1.2.1">
+<h4 data-number="6.1.2.1" class="anchored" data-anchor-id="biological-and-technical-replication"><span class="header-section-number">6.1.2.1</span> Biological and Technical Replication</h4>
+<p>Data can vary in one of two ways:</p>
+<ol type="1">
+<li><p><strong>Biological Variations</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week6/biological_variations.png" class="img-fluid figure-img" width="192"></p>
+<p></p><figcaption class="figure-caption">Example of a Biological Replication</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This just refers to variations in the data because of the test subjects themselves. This is the stuff that we’re interested in.</p></li>
+<li><p><strong>Technical Variations</strong></p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week6/technical_variations.png" class="img-fluid figure-img" width="108"></p>
+<p></p><figcaption class="figure-caption">Example of a Technical Replication</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This is variation because of <em>how</em> the data was collected (i.e., the experiment’s methodology). This is usually stuff that we don’t want (i.e., or <strong>unwanted noise</strong> in fancy speak).</p></li>
+</ol>
+</section>
+<section id="rna-samples-in-the-laboratory" class="level4" data-number="6.1.2.2">
+<h4 data-number="6.1.2.2" class="anchored" data-anchor-id="rna-samples-in-the-laboratory"><span class="header-section-number">6.1.2.2</span> RNA Samples in the Laboratory</h4>
+<p>When it comes to the performance of experiments in the lab, there are a few crucial things to consider, especially when dealing with biological samples.</p>
+<p>Firstly, it’s important to keep in mind that once you’ve collected your cell samples, you often can’t separate different types of cells from each other later on. So, it’s best to have the purest samples possible from the start. Imagine trying to unmix colors once they’ve been mixed together – it’s quite challenging.</p>
+<p>Another important factor is the potential degradation of mRNA, which is a type of genetic material. To prevent this, you need to be careful when collecting your samples. It’s essential to harvest the cells and store them quickly. Think of it like putting perishable food in the refrigerator to keep it fresh. Using things like liquid nitrogen or special RNA-preserving solutions (like RNAlater) can help protect the mRNA from breaking down.</p>
+<p>Lastly, everyone in the lab needs to follow proper procedures and guidelines. This is like having a recipe when you’re cooking – you need to follow the steps precisely to get the best results. Proper guidance and training for lab personnel ensure that experiments are done correctly and reliably.</p>
+</section>
+</section>
+</section>
+<section id="de-novo-rna-sequence-assembly" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="de-novo-rna-sequence-assembly"><span class="header-section-number">6.2</span> <em>De novo</em> RNA-Sequence Assembly</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week6/rna_assembly.png" class="img-fluid figure-img" width="308"></p>
+<p></p><figcaption class="figure-caption">Example of an RNA Assembly</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When you’re tasked with something called <strong>de novo assembly</strong>, it’s a bit like putting together a jigsaw puzzle without the picture on the box to guide you. But in this case, it’s not about puzzles; it’s about assembling genetic information, which is similar to what scientists do when they put together a genome, which is like a biological instruction manual.</p>
+<p>To help with this task, scientists use tools that are like special equipment for assembling genetic information. These tools are actually variations of the ones used for genome assembly, kind of like how you might use different tools to build different types of things. One important thing to know is that all of these tools use de Bruijn graphs, which are like diagrams that help organize the genetic pieces.</p>
+<p>Now, here’s a tricky part: when you’re doing de novo assembly for RNA, the result can be more fragmented compared to assembling a genome. Think of it like trying to put together a map of a city where the roads are broken into smaller pieces; it can be a bit more challenging. But scientists are continually improving these tools to make the process as accurate as possible.</p>
+<section id="some-issues-to-consider" class="level3" data-number="6.2.1">
+<h3 data-number="6.2.1" class="anchored" data-anchor-id="some-issues-to-consider"><span class="header-section-number">6.2.1</span> Some Issues to Consider</h3>
+<p>Firstly, just like assembling genomes, RNA de novo assembly is quite computationally demanding. It requires a lot of computer power, including parallel processing and a substantial amount of memory. Think of it like needing a powerful computer to handle complex tasks, like running high-end video games.</p>
+<p>To tackle this task, scientists use specific software tools designed for RNA assembly, such as Trans-ABySS, Trinity, Oases, and SOAPdenovo-trans. These tools are like specialized software programs created to help with the assembly process, much like using software for video editing or graphic design.</p>
+<p>One challenging aspect of RNA de novo assembly is that it can be difficult to separate different types of splice variants when you don’t have a complete genome available for reference. Splice variants are like different versions of a gene’s instructions, and without the full genome, it’s harder to tell them apart.</p>
+<p>After the assembly, researchers often cluster the results into gene models. This is like organizing different puzzle pieces into groups that belong together, helping make sense of the genetic information.</p>
+<p>Lastly, there are versions of RNA de novo assembly that are guided by a known genome. These versions use information from a reference genome to estimate the transcriptome, which is like having a map to help put the genetic puzzle together more accurately. It’s like using a reference book to solve a tricky crossword puzzle.</p>
+</section>
+</section>
+<section id="rna-sequencing-data-processing" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="rna-sequencing-data-processing"><span class="header-section-number">6.3</span> RNA Sequencing Data Processing</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week6/rna_workflow.png" class="img-fluid figure-img" width="446"></p>
+<p></p><figcaption class="figure-caption">General Workflow for Dealing with RNA Sequencing Data</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The first steps to this are all super similar to the previous weeks’ lecture on quality control and read trimming (i.e., lecture 3).</p>
+<section id="read-mapping" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="read-mapping"><span class="header-section-number">6.3.1</span> Read Mapping</h3>
+<p>When we talk about aligning reads to a genome, it’s like trying to find the right spot for puzzle pieces in a jigsaw puzzle, but with a twist. The problem is that the puzzle pieces (the reads) might have some mistakes or differences, and the puzzle board (the genome) can also have variations.</p>
+<p>The big challenge here is finding the best, most accurate spot for lots and lots of puzzle pieces (reads) when they might not fit perfectly because of errors or differences in the genetic code. Imagine doing this with thousands of pieces – it can get pretty complicated!</p>
+<p>To solve this puzzle, scientists use a general solution. They know that the puzzle board (genome) stays the same for every piece they’re trying to place. So, they create something like an index or a map that helps them find the right spots quickly. It’s similar to having a map of a city, and no matter how many people are looking for different places, they can all use the same map because the city doesn’t change.</p>
+<section id="aligning-reads-to-the-genome" class="level4" data-number="6.3.1.1">
+<h4 data-number="6.3.1.1" class="anchored" data-anchor-id="aligning-reads-to-the-genome"><span class="header-section-number">6.3.1.1</span> Aligning Reads to the Genome</h4>
+<p>hen we talk about aligning reads to a genome, it’s like trying to match pieces from one puzzle (the reads) to another (the genome). There are a few ways to do this, like using a tool called <strong>BLAST</strong>, which is similar to trying to match puzzle pieces by hand. However, BLAST can be quite slow when dealing with a large number of reads, making it impractical for many scientific purposes.</p>
+<p>To speed up the process, scientists have come up with a better solution, like using something called the <strong>Burrows-Wheeler transform</strong>. This is like having a special machine that can quickly and efficiently find the best matches between the puzzle pieces (reads) and the puzzle board (genome).</p>
+<p>Scientists have implemented this Burrows-Wheeler transform in software tools such as BWA-mem, Bowtie2, and SOAP. These tools are like computer programs that use the special machine to find matches between the reads and the genome, making the process much faster and more practical for scientific research.</p>
+</section>
+</section>
+<section id="splicing-aware-aligners" class="level3" data-number="6.3.2">
+<h3 data-number="6.3.2" class="anchored" data-anchor-id="splicing-aware-aligners"><span class="header-section-number">6.3.2</span> Splicing Aware Aligners</h3>
+<p>The thing about tools that directly map reads to the genome is that they don’t really work for RNA sequencing (at least not when it comes to RNA sequencing data that hasn’t been processed in some way). So, there are tools like HISAT2, Tophat2, and STAR aligners.</p>
+<section id="tophat" class="level4" data-number="6.3.2.1">
+<h4 data-number="6.3.2.1" class="anchored" data-anchor-id="tophat"><span class="header-section-number">6.3.2.1</span> Tophat</h4>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week6/tophat_workings.png" class="img-fluid figure-img" width="276"></p>
+<p></p><figcaption class="figure-caption">Inner Workings of Tophat</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Tophat is like a detective for your genetic data. Its main idea is to figure out which parts of your genetic material, called “reads,” can be matched to the genome. Think of the genome as a big instruction manual, and the reads are like pieces of text from that manual.</p>
+<p>What Tophat does is it finds the reads that perfectly match the genome. These matching reads represent the “exons” of genes, which are like specific paragraphs in the instruction manual. Tophat identifies these exons and helps scientists understand which parts of the genome are being actively used by the cell.</p>
+<p>But here’s where it gets interesting. Tophat also looks at the reads that don’t match the genome. These unmatched reads are like clues in a mystery novel. They suggest that something special is happening, called <strong>splicing</strong>. Splicing is like rearranging paragraphs in the instruction manual to create different versions of the gene’s instructions. Tophat helps identify these splicing sites, which are crucial for understanding how genes work.</p>
+</section>
+<section id="star" class="level4" data-number="6.3.2.2">
+<h4 data-number="6.3.2.2" class="anchored" data-anchor-id="star"><span class="header-section-number">6.3.2.2</span> STAR</h4>
+<p>STAR works in several ways:</p>
+<ol type="1">
+<li><p><strong>Indexing</strong></p>
+<p>Imagine you have a giant book, which is like the genome. STAR’s first step is to create an index for this book. This index is like a quick reference guide that helps you find specific information in the book much faster.</p>
+<p>Now, think of the genetic reads as sentences from the book. STAR’s job is to find the best match for these sentences in the book. It does this by looking for the longest sequence of words in the sentences that match something in the book.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week6/star_unmapping.png" class="img-fluid figure-img" width="398"></p>
+<p></p><figcaption class="figure-caption">Unmapping Parts of STAR</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>But here’s where STAR does something clever. It doesn’t just stop at finding the best matches; it also looks at the parts of the sentences that don’t match anything in the book. It’s like finding sentences that are partly in another language or from a different book. These unmatched parts can tell you something important, like hints or clues.</p></li>
+<li><p><strong>Clustering and Stitching</strong></p>
+<p>Imagine you have a bag of puzzle pieces, and each piece is like a small part of a picture. STAR’s job is to group these pieces together in a smart way.</p>
+<p>First, STAR looks at the pieces that are close to each other, like putting together pieces that are next to each other in the puzzle. This is called clustering. It’s like collecting all the sky pieces, all the grass pieces, and so on, so you can start building sections of the puzzle.</p>
+<p>But not all puzzle pieces fit perfectly right away. Some might have a small gap or a piece missing, similar to how genetic reads might have small differences. STAR doesn’t give up; it’s like a puzzle master who can adjust and fill in the gaps, even when there are mistakes or missing parts. This process of adjusting and matching is called stitching.</p></li>
+</ol>
+</section>
+</section>
+<section id="quantification-for-rna-sequence-analyses" class="level3" data-number="6.3.3">
+<h3 data-number="6.3.3" class="anchored" data-anchor-id="quantification-for-rna-sequence-analyses"><span class="header-section-number">6.3.3</span> Quantification for RNA Sequence Analyses</h3>
+<p>Think of this process as putting together a jigsaw puzzle with some special helpers.</p>
+<p>First, you have your genetic reads, which are like puzzle pieces. Tools like TopHat, HISAT, or STAR are like expert puzzle solvers. Their job is to figure out how these reads match up with the reference genome, similar to how puzzle solvers match pieces to the picture on the puzzle box.</p>
+<p>Once these tools have aligned the reads, they not only assign the reads to specific parts of genes (exons), but they also figure out how these gene parts connect, kind of like finding the links between pieces in a puzzle.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week6/cufflinks.png" class="img-fluid figure-img" width="347"></p>
+<p></p><figcaption class="figure-caption">Workflow in Cufflinks</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Now, think of Cufflinks or Stringtie as the experts who take these partially solved puzzles and complete them. They estimate what the complete gene models should look like based on the connections found by the alignment tools. It’s like creating a full picture from the partially assembled puzzle.</p>
+<p>Moreover, Cufflinks or Stringtie also quantify how active each gene is, sort of like measuring how bright different parts of the puzzle are. This helps scientists understand which genes are working hard and which ones are not as active.</p>
+</section>
+</section>
+<section id="pseudoalignment" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="pseudoalignment"><span class="header-section-number">6.4</span> Pseudoalignment</h2>
+<p>Imagine you have a library of books, and each book represents a gene in the transcriptome. Instead of reading every word in the books (which can be time-consuming), this method is like flipping through the pages quickly to see which books are a good match for a specific sentence (the genetic read).</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week6/kallisto_index.png" class="img-fluid figure-img" width="446"></p>
+<p></p><figcaption class="figure-caption">Illustration of What Kallisto Index Does</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The advantage of this approach is speed. It’s much faster because it doesn’t require reading every word in every book (gene) like traditional methods. Instead, it quickly figures out which books (transcripts) the sentence (read) might belong to.</p>
+<p>However, there are some downsides to this speedier approach. One drawback is that it may not provide as detailed information as the traditional method. It tells you which books (transcripts) the sentence (read) could belong to, but it doesn’t pinpoint the exact location within each book (transcript). So, you lose some precision.</p>
+<p>To make this rapid searching possible, these tools employ something called de Bruijn graphs. Think of this as a clever way of organizing information for quick searches, like using an efficient filing system to find documents in a library.</p>
+<p>Two popular tools for this approach are kallisto and salmon. They take two main steps: First, they create an index, which is like building a fast-reference guide for the library of books. Then, they perform the search, quickly identifying which books (transcripts) match the sentences (reads).</p>
+<section id="quantification" class="level3" data-number="6.4.1">
+<h3 data-number="6.4.1" class="anchored" data-anchor-id="quantification"><span class="header-section-number">6.4.1</span> Quantification</h3>
+<p>Imagine you have a bunch of puzzle pieces (genetic reads) and you’ve already figured out which parts of the puzzle (genes) these pieces belong to using a fast mapping method. However, there’s a bit of complexity here. Sometimes, one puzzle piece (read) can fit into multiple puzzles (gene models).</p>
+<p>This is where pseudoalignment comes in, and it’s somewhat similar to what tools like Cufflinks do. It’s like trying to figure out how many pieces of each puzzle you have, but with a twist. Instead of directly counting the pieces, you use a sophisticated approach, kind of like a detective trying to solve a mystery.</p>
+<p>In this approach, you create a probabilistic model, which is like a set of rules that help you estimate how many pieces of each puzzle you have. These rules are based on the idea of maximum likelihood, which means finding the most likely answer given the data you have. It’s a bit like making an educated guess about the number of pieces for each puzzle based on the clues you’ve gathered.</p>
+<p>In practical terms, you want to find the best estimates for transcript abundances, which is like figuring out how many pieces belong to each puzzle. You do this by making sure that the observed coverage of gene parts (exons) in your reads matches the model’s predictions as closely as possible.</p>
+</section>
+</section>
+<section id="normalization" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="normalization"><span class="header-section-number">6.5</span> Normalization</h2>
+<p>Imagine you have two baskets, and each basket contains different types of fruits. The goal is to compare the number of fruits in each basket, but there are two challenges:</p>
+<ol type="1">
+<li><p><strong>Different Library Sizes</strong></p>
+<p>In one basket, there may be more fruits, and in the other, there could be fewer. This difference in the total number of fruits in each basket makes it tricky to compare them directly. It’s like trying to figure out which basket has more without considering their sizes.</p></li>
+<li><p><strong>Different Gene Lengths</strong></p>
+<p>Not all fruits are the same size; some are larger, and some are smaller. Similarly, genes in genetic data can have varying lengths. This complicates comparisons because you need to account for these differences in gene sizes when comparing the two baskets.</p></li>
+</ol>
+<p>Normalization in RNA-seq is like a magic tool that helps you address these problems. It’s like resizing the baskets and the fruits so that you can make a fair comparison.</p>
+<p>For the first issue, normalization adjusts the basket sizes so that they’re the same, making it easier to compare the number of fruits in each. This way, you’re not unfairly favoring one basket over the other just because it started with more or fewer fruits.</p>
+<p>For the second issue, normalization scales the size of the fruits (gene lengths) so that they are comparable. It’s like resizing the fruits to a common standard, ensuring that you’re not giving more weight to larger fruits when comparing the two baskets.</p>
+<section id="transcripts-per-million-i.e.-tpm" class="level3" data-number="6.5.1">
+<h3 data-number="6.5.1" class="anchored" data-anchor-id="transcripts-per-million-i.e.-tpm"><span class="header-section-number">6.5.1</span> Transcripts per Million (i.e., TPM)</h3>
+<p>Imagine you have a collection of different-sized recipe books (genes), and you want to know how popular each recipe book is in terms of the number of recipes inside (reads). However, the recipe books vary in size, making it challenging to compare them directly.</p>
+<p>TPM normalization is like a clever way of standardizing and making these numbers “prettier” for easy comparison.</p>
+<p>Here’s how it works:</p>
+<ol type="1">
+<li><p><strong>Divide Read Counts by Gene Length</strong></p>
+<p>First, you count the number of reads that belong to each recipe book (gene). To make things fair, you divide these counts by the length of each recipe book in kilobases (KB). This gives you “reads per kilobase” (RPK), which is like figuring out how many recipes are in each kilobase of the book.</p></li>
+<li><p><strong>Sum RPK and Scale to a Million</strong></p>
+<p>You add up all the RPK values for all the recipe books (genes). This sum represents the total number of “recipes per kilobase” (sum RPK). To make the numbers look neater, you divide this sum by a million, creating a scaling factor (S).</p></li>
+<li><p><strong>Calculate TPM</strong></p>
+<p>Finally, to find the Transcripts per Million (TPM) for each recipe book (gene), you divide the RPK value for that gene by the scaling factor S. This normalization tells you how abundant each gene is relative to the total number of recipes per million kilobases.</p></li>
+</ol>
+<p>In simpler terms, TPM is like a way of comparing how popular each recipe book is, taking into account their sizes. It’s the preferred method for RNA-seq normalization nowadays because it helps describe the relative abundance of reads assigned to each gene in a library. So, it’s like getting a clear picture of which recipe books are the most popular in your collection, considering their different sizes.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/week5.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Annotation</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/week7.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Transcriptomes: Differential Expression to Enrichment Analyses</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
