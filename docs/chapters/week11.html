@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>BS4017: High Throughput Bioinformatics - 8&nbsp; Transcriptomes: Network Analysis</title>
+<title>BS4017: High Throughput Bioinformatics - 11&nbsp; Transcriptomes: Network Analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -30,8 +30,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../chapters/week9.html" rel="next">
-<link href="../chapters/week7.html" rel="prev">
+<link href="../chapters/week12.html" rel="next">
+<link href="../chapters/week10.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -73,7 +73,7 @@ ul.task-list li input[type="checkbox"] {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -170,7 +170,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/week8.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></a>
+  <a href="../chapters/week8.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -185,7 +185,7 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/week11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></a>
+  <a href="../chapters/week11.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -204,24 +204,24 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#ways-of-detecting-gene-function" id="toc-ways-of-detecting-gene-function" class="nav-link active" data-scroll-target="#ways-of-detecting-gene-function"><span class="toc-section-number">8.1</span>  Ways of Detecting Gene Function</a></li>
-  <li><a href="#co-expression-and-co-expression-networks" id="toc-co-expression-and-co-expression-networks" class="nav-link" data-scroll-target="#co-expression-and-co-expression-networks"><span class="toc-section-number">8.2</span>  Co-Expression and Co-Expression Networks</a>
+  <li><a href="#ways-of-detecting-gene-function" id="toc-ways-of-detecting-gene-function" class="nav-link active" data-scroll-target="#ways-of-detecting-gene-function"><span class="toc-section-number">11.1</span>  Ways of Detecting Gene Function</a></li>
+  <li><a href="#co-expression-and-co-expression-networks" id="toc-co-expression-and-co-expression-networks" class="nav-link" data-scroll-target="#co-expression-and-co-expression-networks"><span class="toc-section-number">11.2</span>  Co-Expression and Co-Expression Networks</a>
   <ul class="collapse">
-  <li><a href="#k-means-clustering" id="toc-k-means-clustering" class="nav-link" data-scroll-target="#k-means-clustering"><span class="toc-section-number">8.2.1</span>  K-Means Clustering</a></li>
-  <li><a href="#hierarchical-clustering" id="toc-hierarchical-clustering" class="nav-link" data-scroll-target="#hierarchical-clustering"><span class="toc-section-number">8.2.2</span>  Hierarchical Clustering</a></li>
-  <li><a href="#interpreting-co-expression-networks" id="toc-interpreting-co-expression-networks" class="nav-link" data-scroll-target="#interpreting-co-expression-networks"><span class="toc-section-number">8.2.3</span>  Interpreting Co-Expression Networks</a></li>
-  <li><a href="#possible-workflow" id="toc-possible-workflow" class="nav-link" data-scroll-target="#possible-workflow"><span class="toc-section-number">8.2.4</span>  Possible Workflow</a></li>
-  <li><a href="#advanced-models-for-gene-regulation" id="toc-advanced-models-for-gene-regulation" class="nav-link" data-scroll-target="#advanced-models-for-gene-regulation"><span class="toc-section-number">8.2.5</span>  Advanced Models for Gene Regulation</a></li>
+  <li><a href="#k-means-clustering" id="toc-k-means-clustering" class="nav-link" data-scroll-target="#k-means-clustering"><span class="toc-section-number">11.2.1</span>  K-Means Clustering</a></li>
+  <li><a href="#hierarchical-clustering" id="toc-hierarchical-clustering" class="nav-link" data-scroll-target="#hierarchical-clustering"><span class="toc-section-number">11.2.2</span>  Hierarchical Clustering</a></li>
+  <li><a href="#interpreting-co-expression-networks" id="toc-interpreting-co-expression-networks" class="nav-link" data-scroll-target="#interpreting-co-expression-networks"><span class="toc-section-number">11.2.3</span>  Interpreting Co-Expression Networks</a></li>
+  <li><a href="#possible-workflow" id="toc-possible-workflow" class="nav-link" data-scroll-target="#possible-workflow"><span class="toc-section-number">11.2.4</span>  Possible Workflow</a></li>
+  <li><a href="#advanced-models-for-gene-regulation" id="toc-advanced-models-for-gene-regulation" class="nav-link" data-scroll-target="#advanced-models-for-gene-regulation"><span class="toc-section-number">11.2.5</span>  Advanced Models for Gene Regulation</a></li>
   </ul></li>
   </ul>
-<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/kevfo/BS4017_Notes/edit/main/chapters/week8.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/kevfo/BS4017_Notes/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/kevfo/BS4017_Notes/edit/main/chapters/week11.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/kevfo/BS4017_Notes/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></h1>
 </div>
 
 
@@ -250,16 +250,16 @@ ul.task-list li input[type="checkbox"] {
 <p>If a protein can attach itself to these promoter and enhancer areas, it means it has the power to control that gene. It’s like having control over a remote that decides whether the TV turns on or not. This protein becomes the boss of that gene.</p>
 <p>Now, things get a bit more abstract. Scientists talk about how changes in the boss’s mood can affect the story of the gene. If the boss protein gets more or less active, it can make the gene go from quiet to loud or vice versa. It’s like having a dimmer switch for the lights in a room – you can adjust how bright or dim they are.</p>
 <p>But here’s the tricky part: in the lab, scientists still need to verify whether a protein can actually attach itself to these promoter and enhancer areas. It’s like having a bunch of keys, but you’re not entirely sure if they fit the locks. This is a crucial step in understanding how our genes are controlled, and scientists are working hard to solve this genetic puzzle.</p>
-<section id="ways-of-detecting-gene-function" class="level2" data-number="8.1">
-<h2 data-number="8.1" class="anchored" data-anchor-id="ways-of-detecting-gene-function"><span class="header-section-number">8.1</span> Ways of Detecting Gene Function</h2>
+<section id="ways-of-detecting-gene-function" class="level2" data-number="11.1">
+<h2 data-number="11.1" class="anchored" data-anchor-id="ways-of-detecting-gene-function"><span class="header-section-number">11.1</span> Ways of Detecting Gene Function</h2>
 <p><strong>Forward genetics</strong> starts from the phenotype and goes back to the genome. <strong>Reverse genetics</strong> starts from the genome and works its way back to the phenotype.</p>
 </section>
-<section id="co-expression-and-co-expression-networks" class="level2" data-number="8.2">
-<h2 data-number="8.2" class="anchored" data-anchor-id="co-expression-and-co-expression-networks"><span class="header-section-number">8.2</span> Co-Expression and Co-Expression Networks</h2>
+<section id="co-expression-and-co-expression-networks" class="level2" data-number="11.2">
+<h2 data-number="11.2" class="anchored" data-anchor-id="co-expression-and-co-expression-networks"><span class="header-section-number">11.2</span> Co-Expression and Co-Expression Networks</h2>
 <p>In genetics, there’s another interesting concept called <strong>co-expression</strong>. When scientists don’t know the exact regulatory network, they have to rely on a different approach. They can’t peek inside the genes’ instruction manual, so they start looking for patterns in how genes are turned on or off together, like a team of friends doing the same dance moves.</p>
 <p>The idea here is pretty simple. Imagine you’re in a big group of people trying to follow a dance routine. If you and your buddy are close to each other in the group, you’re more likely to do the same dance steps at the same time. In the genetic world, this means that when different experimental conditions are applied, genes that are “close” to each other in the way they’re controlled tend to act in a similar way. We say they “correlate.” These genes also tend to associate with one another during clustering (e.g., K-means clustering).</p>
-<section id="k-means-clustering" class="level3" data-number="8.2.1">
-<h3 data-number="8.2.1" class="anchored" data-anchor-id="k-means-clustering"><span class="header-section-number">8.2.1</span> K-Means Clustering</h3>
+<section id="k-means-clustering" class="level3" data-number="11.2.1">
+<h3 data-number="11.2.1" class="anchored" data-anchor-id="k-means-clustering"><span class="header-section-number">11.2.1</span> K-Means Clustering</h3>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -282,8 +282,8 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>2. Avoiding Local Minima:</strong> When you use K-means, you might end up with different results depending on where you start. It’s like solving a maze where you could get stuck in a corner. To overcome this, you can run the K-means algorithm multiple times and pick the best result. It’s like trying different paths in the maze to find your way out.</p>
 <p><strong>3. Message Passing Algorithms:</strong> There’s another cool trick – K-means clustering algorithms that use something called “message passing.” This can help find better solutions. It’s like using a secret code or special clues to navigate the maze more effectively. For instance, there’s a method called “affinity propagation” developed by Frey and his team in 2007, which is like having a map to escape the maze.</p>
 </section>
-<section id="hierarchical-clustering" class="level3" data-number="8.2.2">
-<h3 data-number="8.2.2" class="anchored" data-anchor-id="hierarchical-clustering"><span class="header-section-number">8.2.2</span> Hierarchical Clustering</h3>
+<section id="hierarchical-clustering" class="level3" data-number="11.2.2">
+<h3 data-number="11.2.2" class="anchored" data-anchor-id="hierarchical-clustering"><span class="header-section-number">11.2.2</span> Hierarchical Clustering</h3>
 <p>Hierarchical clustering is a way to group things together in a very organized manner, and it works like building a tree from the ground up. Here’s how it goes:</p>
 <p>In this approach, we always start by putting the two most similar things together into a new cluster. Imagine you have a bunch of marbles, and you want to organize them by color. You’d begin by pairing the two marbles that look the most alike.</p>
 <p>Now, when we’re making these clusters, there are a few ways we can decide which marble represents the whole group:</p>
@@ -293,8 +293,8 @@ ul.task-list li input[type="checkbox"] {
 <li>Alternatively, we could choose the marble that stands out the most, the one that’s least like the rest.</li>
 </ol>
 <p>Here’s where it gets interesting: depending on how we choose this representative and the method we use, we get different results. It’s like if we asked a few people to organize the marbles by color, they might come up with slightly different groups.</p>
-<section id="pros-and-cons-with-hierarchical-clustering" class="level4" data-number="8.2.2.1">
-<h4 data-number="8.2.2.1" class="anchored" data-anchor-id="pros-and-cons-with-hierarchical-clustering"><span class="header-section-number">8.2.2.1</span> Pros and Cons with Hierarchical Clustering</h4>
+<section id="pros-and-cons-with-hierarchical-clustering" class="level4" data-number="11.2.2.1">
+<h4 data-number="11.2.2.1" class="anchored" data-anchor-id="pros-and-cons-with-hierarchical-clustering"><span class="header-section-number">11.2.2.1</span> Pros and Cons with Hierarchical Clustering</h4>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -311,8 +311,8 @@ ul.task-list li input[type="checkbox"] {
 <p>But there’s a challenge with this approach: how do we decide when to stop making clusters? We have a tree of clusters, but we need to know where to cut it. It’s like having a tree with many branches and trying to figure out where to make the final cuts to create the groups we want. That’s the tricky part in hierarchical clustering.</p>
 </section>
 </section>
-<section id="interpreting-co-expression-networks" class="level3" data-number="8.2.3">
-<h3 data-number="8.2.3" class="anchored" data-anchor-id="interpreting-co-expression-networks"><span class="header-section-number">8.2.3</span> Interpreting Co-Expression Networks</h3>
+<section id="interpreting-co-expression-networks" class="level3" data-number="11.2.3">
+<h3 data-number="11.2.3" class="anchored" data-anchor-id="interpreting-co-expression-networks"><span class="header-section-number">11.2.3</span> Interpreting Co-Expression Networks</h3>
 <p>When it comes to co-expression clusters, understanding what they mean can be like solving a puzzle. One way to look at it is through the *<strong>Guilt by Association</strong> principle. This means that if genes are co-expressed, they might be working together or at least involved in similar processes. It’s a bit like assuming that if you often see two friends together, they might be doing something fun or related, like playing the same video game.</p>
 <p>Now, if genes are co-expressed, it’s like they’re on the same team. They might be working together in the same biological pathway. Think of this as a group of friends joining forces to win a game or solve a big problem together.</p>
 <div class="cell" data-layout-align="center">
@@ -328,8 +328,8 @@ ul.task-list li input[type="checkbox"] {
 <p>To understand co-expression clusters (i.e., related genes) better, we can also check for <strong>gene ontology enrichments</strong>. This is like checking if our group of friends shares common interests. It helps us figure out what kind of activities they enjoy together.</p>
 <p>Another thing to consider is <strong>tissue/condition specificity</strong>. It’s like looking at when and where our friends like to hang out the most. In this case, we examine the experiments where the cluster’s gene expression is at its peak, which can tell us where these genes are most active.</p>
 <p>Sometimes, we might also discover that co-expression clusters have something in common. This can be because they share <strong>enriched promoter motifs</strong>, which are like special symbols that tell us they belong to the same club. Additionally, if you find “transcription factors” in the same cluster, it’s like identifying key players or leaders in the group. These are the friends who organize the activities or call the shots in their little club of co-expressed genes.</p>
-<section id="problems-with-networks" class="level4" data-number="8.2.3.1">
-<h4 data-number="8.2.3.1" class="anchored" data-anchor-id="problems-with-networks"><span class="header-section-number">8.2.3.1</span> Problems with Networks</h4>
+<section id="problems-with-networks" class="level4" data-number="11.2.3.1">
+<h4 data-number="11.2.3.1" class="anchored" data-anchor-id="problems-with-networks"><span class="header-section-number">11.2.3.1</span> Problems with Networks</h4>
 <p>Exploring co-expression networks can be a bit like hunting for hidden treasures, but there are some challenges we need to tackle along the way. Here are some of the issues we encounter:</p>
 <p>First, the data can be noisy. This means there are lots of false alarms or “false positives.” It’s like searching for secret clues, but sometimes you find things that aren’t really connected to your treasure hunt. To deal with this, scientists use clever tricks like bootstrapping, randomization, or cross-validation. These methods help them estimate how often these false alarms happen and make their results more reliable.</p>
 <p>Another tricky thing is that co-expression networks can’t always tell us if the connection between genes is a direct one or if it’s indirect. It’s like figuring out if your friend’s friend is your friend too, or if they’re just a friendly acquaintance. This direct or indirect link can make a big difference in understanding how genes work together.</p>
@@ -346,8 +346,8 @@ ul.task-list li input[type="checkbox"] {
 <p>So, how do we uncover the secret codes that reveal the regulatory structure, like who’s in charge or who’s following whom? Well, scientists have a couple of strategies. In the “wet lab,” they carry out experiments by making changes, like knocking out a gene, to see how it affects the others. It’s like doing experiments in a chemistry lab to see what happens when you mix different ingredients.</p>
 <p>Alternatively, they use more advanced statistical models to find these hidden connections. Think of it as using a super detective’s magnifying glass to spot the subtle clues in the data. By overcoming these challenges, we can unlock the mysteries of co-expression networks and understand how genes influence each other.</p>
 </section>
-<section id="extra-information" class="level4" data-number="8.2.3.2">
-<h4 data-number="8.2.3.2" class="anchored" data-anchor-id="extra-information"><span class="header-section-number">8.2.3.2</span> Extra Information</h4>
+<section id="extra-information" class="level4" data-number="11.2.3.2">
+<h4 data-number="11.2.3.2" class="anchored" data-anchor-id="extra-information"><span class="header-section-number">11.2.3.2</span> Extra Information</h4>
 <p>When it comes to understanding genes and how they work, having some extra pieces of information can be incredibly helpful. Here are a few key things that come in handy:</p>
 <p><strong>1. Identity of Transcription Factors and Their Binding Motifs:</strong> Imagine transcription factors as the directors of the genetic orchestra. They control which genes play their music. Knowing which transcription factors are in action and what kind of musical notes (or binding motifs) they follow helps us understand how genes are orchestrated.</p>
 <p><strong>2. Knowledge About Functional and Structural Similarity of Genes:</strong> Genes are like puzzle pieces in a big genetic puzzle. If we know which pieces fit together because of their shape or function, it makes solving the puzzle easier. Understanding the similarities between genes – whether they perform similar functions or have similar structures – can reveal a lot about how they interact.</p>
@@ -355,8 +355,8 @@ ul.task-list li input[type="checkbox"] {
 <p><strong>4. Measurements About Protein-DNA Binding:</strong> Proteins, like transcription factors, often team up with DNA to make things happen. By measuring these protein-DNA interactions, it’s like capturing the moments when the genetic actors step onto the stage. This helps us understand who’s taking part in the genetic play and how they’re influencing the script.</p>
 </section>
 </section>
-<section id="possible-workflow" class="level3" data-number="8.2.4">
-<h3 data-number="8.2.4" class="anchored" data-anchor-id="possible-workflow"><span class="header-section-number">8.2.4</span> Possible Workflow</h3>
+<section id="possible-workflow" class="level3" data-number="11.2.4">
+<h3 data-number="11.2.4" class="anchored" data-anchor-id="possible-workflow"><span class="header-section-number">11.2.4</span> Possible Workflow</h3>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
@@ -368,8 +368,8 @@ ul.task-list li input[type="checkbox"] {
 </div>
 </div>
 </section>
-<section id="advanced-models-for-gene-regulation" class="level3" data-number="8.2.5">
-<h3 data-number="8.2.5" class="anchored" data-anchor-id="advanced-models-for-gene-regulation"><span class="header-section-number">8.2.5</span> Advanced Models for Gene Regulation</h3>
+<section id="advanced-models-for-gene-regulation" class="level3" data-number="11.2.5">
+<h3 data-number="11.2.5" class="anchored" data-anchor-id="advanced-models-for-gene-regulation"><span class="header-section-number">11.2.5</span> Advanced Models for Gene Regulation</h3>
 <p>In the fascinating world of gene regulation, there are some advanced models that scientists use to understand how genes are controlled. These models are like powerful tools in their toolkit. Here are a few of them:</p>
 <ol type="1">
 <li><p><strong>Graphical Gaussian Models:</strong> Think of these models as building a web of connections. Scientists create this web by testing how genes are related and whether they depend on each other. It’s like drawing lines between friends who influence each other in some way.</p></li>
@@ -597,13 +597,13 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="../chapters/week7.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Transcriptomes: Differential Expression to Enrichment Analyses</span></span>
+      <a href="../chapters/week10.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Re-Sequencing and SNP Calling</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../chapters/week9.html" class="pagination-link">
-        <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">SNPs, Structural Variations, and Pan-Genomes</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../chapters/week12.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

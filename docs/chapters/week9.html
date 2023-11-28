@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>BS4017: High Throughput Bioinformatics - 9&nbsp; SNPs, Structural Variations, and Pan-Genomes</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/week10.html" rel="next">
+<link href="../chapters/week8.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">SNPs, Structural Variations, and Pan-Genomes</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">BS4017: High Throughput Bioinformatics</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://github.com/kevfo/BS4017_Notes" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+    <a href="" title="Share" id="sidebar-tool-dropdown-0" class="sidebar-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-share"></i></a>
+    <ul class="dropdown-menu" aria-labelledby="sidebar-tool-dropdown-0">
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+            <i class="bi bi-bi-twitter pe-1"></i>
+          Twitter
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
+            <i class="bi bi-bi-facebook pe-1"></i>
+          Facebook
+          </a>
+        </li>
+    </ul>
+  <a href="" class="quarto-color-scheme-toggle sidebar-tool" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true"><strong>PART I: LECTURE NOTES</strong></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Linux and the Command Line (untested)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Genomic Sequencing and Databases</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week3.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data Preprocessing and Quality Control</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week4.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><em>De Novo</em> Sequencing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week5.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Annotation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week6.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Transcriptomes: Experiment Design and RNA Sequence Data Processing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week7.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Transcriptomes: Differential Expression to Enrichment Analyses</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week8.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week9.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">SNPs, Structural Variations, and Pan-Genomes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week10.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Re-Sequencing and SNP Calling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#background-information" id="toc-background-information" class="nav-link active" data-scroll-target="#background-information"><span class="toc-section-number">9.1</span>  Background Information</a>
+  <ul class="collapse">
+  <li><a href="#hardy-weinberg-equilibrium" id="toc-hardy-weinberg-equilibrium" class="nav-link" data-scroll-target="#hardy-weinberg-equilibrium"><span class="toc-section-number">9.1.1</span>  Hardy-Weinberg Equilibrium</a></li>
+  </ul></li>
+  <li><a href="#main-processes-of-evolution" id="toc-main-processes-of-evolution" class="nav-link" data-scroll-target="#main-processes-of-evolution"><span class="toc-section-number">9.2</span>  Main Processes of Evolution</a>
+  <ul class="collapse">
+  <li><a href="#mutations" id="toc-mutations" class="nav-link" data-scroll-target="#mutations"><span class="toc-section-number">9.2.1</span>  Mutations</a></li>
+  <li><a href="#drift" id="toc-drift" class="nav-link" data-scroll-target="#drift"><span class="toc-section-number">9.2.2</span>  Drift</a></li>
+  <li><a href="#selection" id="toc-selection" class="nav-link" data-scroll-target="#selection"><span class="toc-section-number">9.2.3</span>  Selection</a></li>
+  <li><a href="#migration" id="toc-migration" class="nav-link" data-scroll-target="#migration"><span class="toc-section-number">9.2.4</span>  Migration</a></li>
+  </ul></li>
+  <li><a href="#coalescent-theory" id="toc-coalescent-theory" class="nav-link" data-scroll-target="#coalescent-theory"><span class="toc-section-number">9.3</span>  Coalescent Theory</a>
+  <ul class="collapse">
+  <li><a href="#bottlenecks-and-coalescence" id="toc-bottlenecks-and-coalescence" class="nav-link" data-scroll-target="#bottlenecks-and-coalescence"><span class="toc-section-number">9.3.1</span>  Bottlenecks and Coalescence</a></li>
+  <li><a href="#structural-variants" id="toc-structural-variants" class="nav-link" data-scroll-target="#structural-variants"><span class="toc-section-number">9.3.2</span>  Structural Variants</a></li>
+  </ul></li>
+  <li><a href="#pan-genomes" id="toc-pan-genomes" class="nav-link" data-scroll-target="#pan-genomes"><span class="toc-section-number">9.4</span>  Pan-Genomes</a></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/kevfo/BS4017_Notes/edit/main/chapters/week9.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/kevfo/BS4017_Notes/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">SNPs, Structural Variations, and Pan-Genomes</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="background-information" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="background-information"><span class="header-section-number">9.1</span> Background Information</h2>
+<section id="hardy-weinberg-equilibrium" class="level3" data-number="9.1.1">
+<h3 data-number="9.1.1" class="anchored" data-anchor-id="hardy-weinberg-equilibrium"><span class="header-section-number">9.1.1</span> Hardy-Weinberg Equilibrium</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week9/hw_principle.png" class="img-fluid figure-img" width="492"></p>
+<p></p><figcaption class="figure-caption">Math Behind the Hardy-Weinberg Principle</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The <strong>Hardy-Weinberg principle</strong>, established in 1908, helps us understand genotype frequencies in a population under specific conditions. Imagine a population where individuals choose mates randomly, there’s an infinite number of individuals, no genetic mutations occur, there’s no migration in or out, and there’s no natural selection favoring specific traits.</p>
+<p>Let <span class="math inline">\(p(A)\)</span> be the probability of genotype <span class="math inline">\(aa\)</span> happening, <span class="math inline">\(p(AA)\)</span> the probabilty of genotype <span class="math inline">\(AA\)</span> happening, and <span class="math inline">\(p(Aa)\)</span> and <span class="math inline">\(p(aA)\)</span> the probability of genotype of <span class="math inline">\(Aa\)</span> happening. We can say the following given the above information (i.e., something similar to the quadratic formula):</p>
+<p><span class="math display">\[\begin{equation}
+  p(A)^2 + 2p(Aa) + p(a)^2 = 1
+\end{equation}\]</span></p>
+<p>In this equilibrium, there are two alleles, let’s call them A and a, and their frequencies are represented by the symbols p and q. The key relationship is that p + q always equals 1. Furthermore, the frequencies of the possible genotypes, which are AA, Aa, and aa in a diploid organism, are represented by the equations p², 2pq, and q² respectively.</p>
+<p>To break it down further, p and q are like the percentages of the major (A) and minor (a) alleles in the population. The possible genotypes are combinations of these alleles: AA means having two copies of the major allele, Aa means having one copy of each, and aa means having two copies of the minor allele.</p>
+<p>In an ideal situation where the Hardy-Weinberg equilibrium holds, the expected frequencies of these genotypes can be calculated using the equations mentioned earlier. If the observed frequencies in a real population do not match these expected frequencies, it suggests that the conditions assumed by the Hardy-Weinberg equilibrium are not being met. This discrepancy can indicate factors such as non-random mating, a finite population size, mutation, migration, or natural selection affecting the gene pool.</p>
+</section>
+</section>
+<section id="main-processes-of-evolution" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="main-processes-of-evolution"><span class="header-section-number">9.2</span> Main Processes of Evolution</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week9/evolutions.png" class="img-fluid figure-img" width="428"></p>
+<p></p><figcaption class="figure-caption">Main Processes of Evolution</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<section id="mutations" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="mutations"><span class="header-section-number">9.2.1</span> Mutations</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week9/mutations.png" class="img-fluid figure-img" width="473"></p>
+<p></p><figcaption class="figure-caption">Illustration of a Mutation</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Genomic mutations</strong>, or changes in our genetic material, are a common and ongoing process. These mutations can arise from various sources, including errors that happen during the replication of DNA, exposure to radiation, and interactions with certain chemical compounds. When we have mutations, these mutations are passed down to our offspring (should we have any).</p>
+<p>One common type of mutation is known as a <strong>single nucleotide polymorphism</strong>, or <strong>SNP</strong>. These mutations involve the replacement of a single building block, or nucleotide, in the DNA sequence. SNPs are significant because they represent a single change in the genetic code and can contribute to the natural variation observed among individuals.</p>
+<p>In essence, our DNA is dynamic, and changes can occur due to a variety of factors. These mutations, especially SNPs, play a role in shaping the diversity seen within populations and contribute to the genetic differences among individuals.</p>
+<section id="molecular-clock-hypothesis" class="level4" data-number="9.2.1.1">
+<h4 data-number="9.2.1.1" class="anchored" data-anchor-id="molecular-clock-hypothesis"><span class="header-section-number">9.2.1.1</span> Molecular Clock Hypothesis</h4>
+<p>The <strong>Molecular Clock Hypothesis</strong>, proposed by Zuckerkandl and Pauling in 1962, suggests a fascinating concept in evolutionary biology. They observed that the number of amino acid differences in a protein called <strong>hemoglobin</strong> between different lineages changes in a roughly linear manner with time, as estimated from fossil evidence.</p>
+<p>To make this hypothesis work, they assumed that the number of mutations occurring per unit of time and per base pair (the building blocks of DNA) remains steady via the formula: <span class="math display">\[\displaystyle \frac{\text{Number of Mutations}}{\text{Base Pairs} \times \text{Number of Years}}\]</span>In other words, they suggested a constant rate of change, like a ticking clock, where the number of mutations happening per base pair per year stays roughly the same.</p>
+<p>Because of the above, the genome in question is also assumed to evolve over time.</p>
+</section>
+<section id="mutation-rate" class="level4" data-number="9.2.1.2">
+<h4 data-number="9.2.1.2" class="anchored" data-anchor-id="mutation-rate"><span class="header-section-number">9.2.1.2</span> Mutation Rate</h4>
+<p>The <strong>mutation rate</strong> is a measure of how many genetic changes, or mutations, occur on average per year or per generation. Scientists use two main methods to estimate this rate.</p>
+<p>One way is through <strong>direct estimation</strong>, where researchers sequence the DNA of parents and their offspring, forming what’s called <strong>parent-child trios</strong>. By comparing the genetic makeup of parents and children, they can calculate the average number of mutations that accumulate over a certain period, either per year or per generation.</p>
+<p>The second method is <strong>indirect estimation</strong>. Scientists compare the nucleotide differences between the genomes of two species and then scale this information using fossil evidence that indicates the time since these species diverged. This approach yields two different rates: the number of mutations per base pair per generation, directly estimated from parent-child trios, and the number of mutations per base pair per generation, indirectly estimated from fossil evidence.</p>
+<p>However, it’s crucial to note that these rates are meaningful only when they are comparable. To achieve this, scientists need to account for the generation time, which is the time it takes for one generation to replace the next. This adjustment ensures that both rates are on the same scale and can be accurately compared, allowing researchers to better understand and interpret mutation rates across different species or populations.</p>
+</section>
+<section id="generation-time" class="level4" data-number="9.2.1.3">
+<h4 data-number="9.2.1.3" class="anchored" data-anchor-id="generation-time"><span class="header-section-number">9.2.1.3</span> Generation Time</h4>
+<p><strong>Generation time</strong> refers to the average duration between successive generations within a population. It encompasses the period from infancy to the point when an individual becomes capable of producing offspring. This concept assumes a constant duration over extended periods and is averaged across the entire population.</p>
+<p>Estimating generation time can be challenging, even for humans. In our species, males can father children between the ages of approximately 14 to 100 years, while females can bear offspring from around 14 to 50 years. The variability in reproductive ages adds complexity to determining an exact average for the generation time.</p>
+<p>For plants, the situation is even more intricate. Plants can produce seeds at any age after reaching maturity. However, not all seedlings survive to reach the age of sexual reproduction. Interestingly, older plants often produce more seeds. Moreover, many ecosystems maintain a seed bank in the soil, which means seeds can persist in a dormant state, potentially leading to the growth of new plants in the future.</p>
+</section>
+<section id="site-frequency-spectrums" class="level4" data-number="9.2.1.4">
+<h4 data-number="9.2.1.4" class="anchored" data-anchor-id="site-frequency-spectrums"><span class="header-section-number">9.2.1.4</span> Site Frequency Spectrums</h4>
+<p>SNPs can be examined by considering how many individuals share the same allele. If a particular allele is found in only one individual, it suggests a very recent mutation. On the other hand, if an allele is widespread and present in many individuals, it indicates that the mutation has existed in the population for a longer period, allowing several individuals to inherit it.</p>
+<p>When all individuals in a population share the same allele, it is described as “<strong>fixed</strong>.” This implies that the mutation has become a permanent part of the population’s genetic makeup.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week9/spectrum.png" class="img-fluid figure-img" width="238"></p>
+<p></p><figcaption class="figure-caption">Example of a Site Frequency Spectrum</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Scientists use a tool called a <strong>site frequency spectrum</strong>, which is essentially a histogram. This histogram illustrates how common different SNPs are in a population. By examining this spectrum, researchers can gain insights into the distribution of genetic variations within a population and understand the history and dynamics of mutations over time. It provides a visual representation of the frequencies of different alleles, helping researchers explore the genetic diversity and evolution of a population.</p>
+</section>
+<section id="site-frequency-and-genealogy-trees" class="level4" data-number="9.2.1.5">
+<h4 data-number="9.2.1.5" class="anchored" data-anchor-id="site-frequency-and-genealogy-trees"><span class="header-section-number">9.2.1.5</span> Site Frequency and Genealogy Trees</h4>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week9/freq.png" class="img-fluid figure-img" width="450"></p>
+<p></p><figcaption class="figure-caption">Converting a Genealogy Tree into a Site Frequency Spectrum</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A <strong>genealogy tree</strong> represents the ancestral relationships among a set of genes in a population. There is a direct mapping between a gene tree and a probability distribution, meaning that a specific genealogy tree corresponds to a particular probability of observing certain genetic variants in the population.</p>
+<p>However, it’s important to note that the mapping doesn’t work in reverse. This means that there can be multiple possible genealogy trees that lead to the same site frequency spectrum. In other words, different ancestral histories can result in the same distribution of genetic variants among individuals in a population.</p>
+<p>Despite this limitation, the site frequency spectrum still serves as a valuable tool for describing the population’s history. It provides insights into how common different genetic variants are in a population and helps researchers understand the dynamics of population size changes, migration events, and other factors that shape genetic diversity over time. While there may be multiple genealogy trees that can lead to the same site frequency spectrum, the spectrum remains a useful summary of the genetic variation within a population.</p>
+</section>
+</section>
+<section id="drift" class="level3" data-number="9.2.2">
+<h3 data-number="9.2.2" class="anchored" data-anchor-id="drift"><span class="header-section-number">9.2.2</span> Drift</h3>
+<p><strong>Random drift</strong> refers to the changes in populations that occur as a result of random events. These events can have a significant impact on the genetic makeup of a population over time.</p>
+<p>One instance of random drift is <strong>founder effects</strong>, which happen when a small group of individuals establishes a new population in a different area. The genetic characteristics of this small founding group can disproportionately influence the traits of the entire population, leading to a distinct genetic profile.</p>
+<p>Population size can also vary due to changes in environmental conditions. Fluctuations in population size can result in random changes in the prevalence of certain genetic traits. This is because smaller populations are more susceptible to the effects of chance.</p>
+<p><strong>Migration</strong>, or the movement of individuals between populations, is another factor contributing to random drift. When individuals migrate, they bring their genetic material with them, potentially influencing the genetic diversity of both the source and destination populations.</p>
+<section id="neutral-theory-of-evolution" class="level4" data-number="9.2.2.1">
+<h4 data-number="9.2.2.1" class="anchored" data-anchor-id="neutral-theory-of-evolution"><span class="header-section-number">9.2.2.1</span> Neutral Theory of Evolution</h4>
+<p>The neutral theory of evolution, proposed by Motoo Kimura in 1968, suggests that a significant portion of the genetic variation within and between species arises from the random genetic drift of mutant alleles that are selectively neutral. In other words, these mutations don’t confer a survival advantage or disadvantage to individuals carrying them.</p>
+<p>According to this theory, <strong>deleterious mutations</strong>, or those that are harmful to an organism’s survival, are quickly eliminated by natural selection. On the other hand, mutations that are neither harmful nor beneficial (neutral mutations) are more likely to persist over time.</p>
+<p>Given that a large portion of the genome is non-coding, meaning it does not directly contribute to the formation of proteins, most mutations occur in non-coding regions and are therefore neutral. Beneficial mutations, if they occur, have a higher likelihood of becoming fixed in a population rapidly, meaning that eventually, all individuals within that population will carry the beneficial mutation.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week9/marbles.png" class="img-fluid figure-img" width="290"></p>
+<p></p><figcaption class="figure-caption">Marbles in a Jar as an Example of Genetic Drift</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Genetic drift, a process influenced by chance rather than selection, plays a crucial role in this theory. A mutant allele can arise within a population and reach fixation (meaning all individuals in the population have that allele) due to random chance, rather than being driven by a selective advantage.</p>
+<p>Furthermore, the probability of a mutant allele reaching fixation is higher in smaller populations. This is because, in smaller populations, genetic drift has a more pronounced effect, influencing the frequency of alleles regardless of their selective advantage.</p>
+</section>
+<section id="population-bottleneck" class="level4" data-number="9.2.2.2">
+<h4 data-number="9.2.2.2" class="anchored" data-anchor-id="population-bottleneck"><span class="header-section-number">9.2.2.2</span> Population Bottleneck</h4>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week9/bottleneck.png" class="img-fluid figure-img" width="450"></p>
+<p></p><figcaption class="figure-caption">Illustration of a Bottleneck</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="founder-effect" class="level4" data-number="9.2.2.3">
+<h4 data-number="9.2.2.3" class="anchored" data-anchor-id="founder-effect"><span class="header-section-number">9.2.2.3</span> Founder Effect</h4>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week9/founder.png" class="img-fluid figure-img" width="298"></p>
+<p></p><figcaption class="figure-caption">Illustration of the Founder Effect</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The <strong>founder effect</strong> is a specific type of population bottleneck that occurs when a small group of individuals, known as founders, establishes a new colony or population. This small founding group carries only a subset of the genetic diversity present in the larger original population.</p>
+<p>As these founders reproduce and their descendants continue to interbreed within the new colony, there is a tendency for heavy inbreeding. Inbreeding involves mating between close relatives and can result in a reduction in genetic diversity.</p>
+<p>The consequence of the founder effect is that the allele frequencies in the new population can differ significantly from those in the larger original population. Certain alleles may become more prevalent in the new population simply because they were present in the small group of founders.</p>
+<p>Due to the limited genetic diversity introduced by the founders, subsequent generations may experience reduced overall genetic diversity. This reduction can make the new population more susceptible to genetic disorders and less adaptable to changing environmental conditions.</p>
+</section>
+</section>
+<section id="selection" class="level3" data-number="9.2.3">
+<h3 data-number="9.2.3" class="anchored" data-anchor-id="selection"><span class="header-section-number">9.2.3</span> Selection</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week9/selection.png" class="img-fluid figure-img" width="218"></p>
+<p></p><figcaption class="figure-caption">Illustration of Selection and Fitness</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In real-life populations, mate selection is not a random process. Instead, individuals with certain beneficial traits tend to have higher fitness, meaning they have a greater probability of producing more offspring that survive to reproductive age.</p>
+<p>The concept of fitness in this context refers to the <strong>reproductive success</strong> of an individual, determined by the likelihood of passing on its genes to the next generation. Individuals with advantageous traits, whether in terms of survival, reproduction, or other factors, are more likely to contribute their genes to subsequent generations.</p>
+<p>As a result, the genotypes represented by individuals with higher fitness become more prevalent in the population over time. Through natural selection, which favors traits that enhance an organism’s ability to survive and reproduce, these beneficial traits can increase in frequency within the population.</p>
+<p>Over many generations, the frequency of these advantageous traits may reach a point where they become fixed in the population, meaning that all individuals in the population carry those traits.</p>
+<section id="at-a-genetic-level" class="level4" data-number="9.2.3.1">
+<h4 data-number="9.2.3.1" class="anchored" data-anchor-id="at-a-genetic-level"><span class="header-section-number">9.2.3.1</span> At a Genetic Level?</h4>
+<p>Selection at the genome level leaves discernible patterns in the sequence of an organism’s genetic material. When new mutations arise that confer a benefit, natural selection can lead to the rapid fixation of these advantageous alleles in the population. This occurs because individuals carrying these beneficial traits tend to have higher fitness, producing more offspring and increasing the frequency of the advantageous alleles in subsequent generations.</p>
+<p>It’s important to note that similar patterns can also be produced by genetic drift, which includes events like population bottlenecks or founder effects. In genetic drift, certain individuals or genotypes survive and become more prevalent in the population purely by chance, rather than due to any selective advantage.</p>
+</section>
+<section id="kinds-of-selection" class="level4" data-number="9.2.3.2">
+<h4 data-number="9.2.3.2" class="anchored" data-anchor-id="kinds-of-selection"><span class="header-section-number">9.2.3.2</span> Kinds of Selection</h4>
+<p>Different types of selection play pivotal roles in influencing the genetic diversity and composition of populations. <strong>Purifying or negative selection</strong> acts as a quality control mechanism, selectively removing new alleles that are deleterious or harmful to an organism’s fitness. This stabilizing selection ensures the preservation of a population’s overall well-adapted genetic makeup by eliminating mutations that could compromise fitness.</p>
+<p>On the contrary, <strong>balancing selection</strong> introduces a dynamic element by allowing alternative alleles to persist at higher frequencies than expected from genetic drift alone. This phenomenon often arises when heterozygotes, individuals with two different alleles for a specific gene, exhibit a higher fitness than homozygotes. Balancing selection contributes to the maintenance of genetic diversity within a population, showcasing the importance of heterogeneity in certain genetic traits.</p>
+<p><strong>Directional or positive selection</strong> propels evolutionary change by favoring a specific phenotype or allele state. This type of selection can be driven by environmental changes or adaptations that provide a selective advantage. Over time, the allele associated with the favored trait experiences an increase in frequency within the population, reflecting the dynamic nature of evolutionary forces.</p>
+</section>
+<section id="genomic-hitchhiking" class="level4" data-number="9.2.3.3">
+<h4 data-number="9.2.3.3" class="anchored" data-anchor-id="genomic-hitchhiking"><span class="header-section-number">9.2.3.3</span> Genomic Hitchhiking</h4>
+<p><strong>Genomic hitchhiking</strong> is a phenomenon observed in the context of genetic evolution, particularly when examining the site frequency spectrum. In the examples discussed earlier, alleles beyond the initial 1:10 ratio were found to reach fixation. This occurrence stems from individuals, and their descendants, who experienced increased fitness due to beneficial mutations. In simpler terms, genomic hitchhiking is when an allele reaches fixation along with the advantageous alleles by chance.</p>
+<p>However, not all alleles reaching fixation necessarily contribute to the fitness increase. Some alleles may reach fixation purely by chance, a process known as genetic drift. This incidental fixation of alleles due to chance rather than selection is what defines genomic hitchhiking.</p>
+<p>It’s important to note that in reality, genomic hitchhiking is constrained to alleles in close proximity to the beneficial mutation. This limitation arises from the process of recombination, where genetic material is exchanged during the formation of reproductive cells. Recombination tends to break up the associations between nearby alleles, preventing distant alleles from hitchhiking along with the beneficial mutation.</p>
+</section>
+</section>
+<section id="migration" class="level3" data-number="9.2.4">
+<h3 data-number="9.2.4" class="anchored" data-anchor-id="migration"><span class="header-section-number">9.2.4</span> Migration</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week9/migration.png" class="img-fluid figure-img" width="198"></p>
+<p></p><figcaption class="figure-caption">Illustration of Migration</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Migration</strong>, in the context of population genetics, refers to the movement of individuals between populations, leading to the exchange of genetic material. While a founder event, such as the establishment of a new colony by a small group of individuals, is one form of migration, the term migration more broadly encompasses the continuous gene flow between distinct populations.</p>
+<p>Populations can evolve independently over time, and the frequencies of alleles may undergo different trajectories. Migration becomes a crucial factor in maintaining genetic diversity and influencing the genetic makeup of populations. When individuals migrate from one population to another, they bring with them the genetic diversity present in their source population.</p>
+<p>This influx of new genetic material can have significant consequences for the target population. It introduces novel alleles and variations, potentially altering the allele frequencies and genetic characteristics of the population. Migration acts as a dynamic force that connects populations, preventing them from becoming genetically isolated and contributing to the ongoing evolution of species.</p>
+</section>
+</section>
+<section id="coalescent-theory" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="coalescent-theory"><span class="header-section-number">9.3</span> Coalescent Theory</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week9/theory.png" class="img-fluid figure-img" width="474"></p>
+<p></p><figcaption class="figure-caption">Illustration of Coalescence Theory</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The concept of <strong>coalescence</strong> is a key idea in population genetics, particularly when studying the relationships among individual genomes. When mutations occur at a constant rate, analyzing the observed SNPs between two genomes can provide insights into the time to their most recent common ancestor.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week9/mrca.png" class="img-fluid figure-img" width="414"></p>
+<p></p><figcaption class="figure-caption">Illustration of the Most Recent Common Ancestor</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This approach assumes a constant mutation rate, allowing researchers to make inferences about the historical relationships between individuals or populations based on the observed genetic variations.</p>
+<p><strong>Coalescent theory</strong> is a model in population genetics that provides insights into the shared ancestry of gene variants sampled from a population. Unlike traditional evolutionary models that look forward in time, coalescent theory reverses the perspective and examines the process of merging alleles backward in time. This model traces the genetic history of a population by simulating coalescence events, where alleles merge into a single ancestral copy.</p>
+<p>In this theoretical framework, a coalescent event represents the common ancestry of gene variants. The model simulates a random process, allowing researchers to reconstruct the historical relationships between alleles in a population. By studying coalescent events, scientists can estimate the time, measured in generations, since gene variants shared a common ancestor.</p>
+<section id="bottlenecks-and-coalescence" class="level3" data-number="9.3.1">
+<h3 data-number="9.3.1" class="anchored" data-anchor-id="bottlenecks-and-coalescence"><span class="header-section-number">9.3.1</span> Bottlenecks and Coalescence</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week9/coa_bottle.png" class="img-fluid figure-img" width="434"></p>
+<p></p><figcaption class="figure-caption">Coalesence During Bottlenecks</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>A <strong>bottleneck</strong> occurs when a population undergoes a significant reduction in size, often due to environmental factors or other events. During a bottleneck, the number of individuals contributing to the next generation is small, and this has implications for coalescence events.</p>
+<p>In the case of bottlenecks, where the population size is dramatically reduced, there are fewer potential ancestors for the next generation. This means that individuals from the bottlenecked population are more likely to share recent common ancestors compared to a non-bottlenecked population.</p>
+</section>
+<section id="structural-variants" class="level3" data-number="9.3.2">
+<h3 data-number="9.3.2" class="anchored" data-anchor-id="structural-variants"><span class="header-section-number">9.3.2</span> Structural Variants</h3>
+<p>The advent of genome sequencing has revealed that genetic variation between individuals is not solely driven by point mutations (Single Nucleotide Polymorphisms or SNPs). Structural variants represent another layer of genomic diversity, involving changes larger than 1 kilobase (kb) in the genome.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week9/structural_variants.png" class="img-fluid figure-img" width="398"></p>
+<p></p><figcaption class="figure-caption">Kinds of Structural Variants</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Structural variants</strong> encompass various alterations, including insertions, deletions, duplications, and inversions. These modifications can significantly impact the genetic landscape and contribute to the diversity observed among individuals.</p>
+<p>Several mechanisms underlie the generation of structural variants. Errors during DNA replication, where inaccuracies occur in copying genetic information, can result in structural changes. <strong>Transposable elements</strong>, which are sequences of DNA capable of moving around the genome, can also induce structural variation by inserting or removing segments of genetic material. Additionally, double-strand breaks in the DNA, often caused by external factors or internal cellular processes, can lead to structural changes when the breaks are repaired.</p>
+</section>
+</section>
+<section id="pan-genomes" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="pan-genomes"><span class="header-section-number">9.4</span> Pan-Genomes</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week9/pan-genome.png" class="img-fluid figure-img" width="226"></p>
+<p></p><figcaption class="figure-caption">Pan-Genome Framework</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The <strong>pan-genome framework</strong> categorizes the genetic makeup of a species into three distinct components. First, the <strong>core genome</strong> encompasses genetic elements that are shared universally among all individuals within a species. These core components define the fundamental traits and characteristics that are common to the entire population, forming the genetic foundation of the species.</p>
+<p>In addition to the core genome, the <strong>dispensable genome</strong>, often referred to as the cloud, comprises genetic elements shared by at least two individuals but not present universally across the entire population. These dispensable elements contribute to the diversity observed within the species, allowing for variability in genetic content among individuals.</p>
+<p>Lastly, the <strong>unique genome</strong>, known as the shell, consists of genetic elements specific to and present in only one individual. These unique elements contribute to individual variability and distinctiveness within the population, highlighting the personalized nature of certain genetic traits.</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/week8.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/week10.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Re-Sequencing and SNP Calling</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

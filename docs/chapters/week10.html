@@ -1,0 +1,762 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.1.189">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>BS4017: High Throughput Bioinformatics - 10&nbsp; Re-Sequencing and SNP Calling</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../chapters/week11.html" rel="next">
+<link href="../chapters/week9.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark.min.css" rel="prefetch" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+<script async="" src="https://hypothes.is/embed.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Re-Sequencing and SNP Calling</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">BS4017: High Throughput Bioinformatics</a> 
+        <div class="sidebar-tools-main tools-wide">
+    <a href="https://github.com/kevfo/BS4017_Notes" title="Source Code" class="sidebar-tool px-1"><i class="bi bi-github"></i></a>
+    <a href="" title="Share" id="sidebar-tool-dropdown-0" class="sidebar-tool dropdown-toggle px-1" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-share"></i></a>
+    <ul class="dropdown-menu" aria-labelledby="sidebar-tool-dropdown-0">
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://twitter.com/intent/tweet?url=|url|">
+            <i class="bi bi-bi-twitter pe-1"></i>
+          Twitter
+          </a>
+        </li>
+        <li>
+          <a class="dropdown-item sidebar-tools-main-item" href="https://www.facebook.com/sharer/sharer.php?u=|url|">
+            <i class="bi bi-bi-facebook pe-1"></i>
+          Facebook
+          </a>
+        </li>
+    </ul>
+  <a href="" class="quarto-color-scheme-toggle sidebar-tool" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+  <a href="" class="quarto-reader-toggle sidebar-tool" onclick="window.quartoToggleReader(); return false;" title="Toggle reader mode">
+  <div class="quarto-reader-toggle-btn">
+  <i class="bi"></i>
+  </div>
+</a>
+</div>
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">Preface</a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true"><strong>PART I: LECTURE NOTES</strong></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" aria-expanded="true">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week1.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction to Linux and the Command Line (untested)</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week2.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Genomic Sequencing and Databases</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week3.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Data Preprocessing and Quality Control</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week4.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title"><em>De Novo</em> Sequencing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week5.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Annotation</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week6.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Transcriptomes: Experiment Design and RNA Sequence Data Processing</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week7.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Transcriptomes: Differential Expression to Enrichment Analyses</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week8.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week9.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">SNPs, Structural Variations, and Pan-Genomes</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week10.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Re-Sequencing and SNP Calling</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../chapters/week12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#re-sequencing" id="toc-re-sequencing" class="nav-link active" data-scroll-target="#re-sequencing"><span class="toc-section-number">10.1</span>  Re-Sequencing</a>
+  <ul class="collapse">
+  <li><a href="#goals-and-requirements" id="toc-goals-and-requirements" class="nav-link" data-scroll-target="#goals-and-requirements"><span class="toc-section-number">10.1.1</span>  Goals and Requirements</a></li>
+  <li><a href="#sequencing-issues" id="toc-sequencing-issues" class="nav-link" data-scroll-target="#sequencing-issues"><span class="toc-section-number">10.1.2</span>  Sequencing Issues</a></li>
+  <li><a href="#single-nucleotide-polymorphisms-i.e.-snps" id="toc-single-nucleotide-polymorphisms-i.e.-snps" class="nav-link" data-scroll-target="#single-nucleotide-polymorphisms-i.e.-snps"><span class="toc-section-number">10.1.3</span>  Single Nucleotide Polymorphisms (i.e., SNPs)</a></li>
+  </ul></li>
+  <li><a href="#broad-institute-and-ngs-analysis" id="toc-broad-institute-and-ngs-analysis" class="nav-link" data-scroll-target="#broad-institute-and-ngs-analysis"><span class="toc-section-number">10.2</span>  Broad Institute and NGS Analysis</a>
+  <ul class="collapse">
+  <li><a href="#read-mapping" id="toc-read-mapping" class="nav-link" data-scroll-target="#read-mapping"><span class="toc-section-number">10.2.1</span>  Read Mapping</a></li>
+  <li><a href="#prepration-for-snp-calling" id="toc-prepration-for-snp-calling" class="nav-link" data-scroll-target="#prepration-for-snp-calling"><span class="toc-section-number">10.2.2</span>  Prepration for SNP Calling</a></li>
+  <li><a href="#estimating-genotype-likelihoods" id="toc-estimating-genotype-likelihoods" class="nav-link" data-scroll-target="#estimating-genotype-likelihoods"><span class="toc-section-number">10.2.3</span>  Estimating Genotype Likelihoods</a></li>
+  <li><a href="#vcf-file-format" id="toc-vcf-file-format" class="nav-link" data-scroll-target="#vcf-file-format"><span class="toc-section-number">10.2.4</span>  VCF File Format</a></li>
+  </ul></li>
+  <li><a href="#variant-and-hard-filtering" id="toc-variant-and-hard-filtering" class="nav-link" data-scroll-target="#variant-and-hard-filtering"><span class="toc-section-number">10.3</span>  Variant and Hard Filtering</a>
+  <ul class="collapse">
+  <li><a href="#variant-filtering" id="toc-variant-filtering" class="nav-link" data-scroll-target="#variant-filtering"><span class="toc-section-number">10.3.1</span>  Variant Filtering</a></li>
+  <li><a href="#excluding-filtered-snps" id="toc-excluding-filtered-snps" class="nav-link" data-scroll-target="#excluding-filtered-snps"><span class="toc-section-number">10.3.2</span>  Excluding Filtered SNPs</a></li>
+  <li><a href="#annotating-snps" id="toc-annotating-snps" class="nav-link" data-scroll-target="#annotating-snps"><span class="toc-section-number">10.3.3</span>  Annotating SNPs</a></li>
+  </ul></li>
+  </ul>
+<div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/kevfo/BS4017_Notes/edit/main/chapters/week10.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/kevfo/BS4017_Notes/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title d-none d-lg-block"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Re-Sequencing and SNP Calling</span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="re-sequencing" class="level2" data-number="10.1">
+<h2 data-number="10.1" class="anchored" data-anchor-id="re-sequencing"><span class="header-section-number">10.1</span> Re-Sequencing</h2>
+<p><strong>Re-sequencing</strong> is a genomic sequencing approach that involves sequencing new individuals from a species for which there already exists a reference genome. This method allows researchers to identify variations, such as single nucleotide polymorphisms (SNPs) and insertions or deletions (indels), in the genomes of new individuals when compared to the established reference genome.</p>
+<p>To align the sequence reads obtained from re-sequencing to the reference genome, read alignment methods are employed. These methods utilize data structures like suffix tries, which efficiently store and retrieve substrings of the reference genome. Examples of popular read alignment tools include <strong>Bowtie2</strong> and <code>bwa mem</code>. These tools aid in accurately mapping the sequenced reads to the reference genome, enabling the identification of genetic variations.</p>
+<p>In addition to traditional read alignment methods, there are pseudo alignment-based methods like <code>minimap2</code>. <strong>Pseudo alignment</strong> refers to the rapid mapping of reads to a reference without explicitly aligning each base. Such methods are particularly well-suited for handling long sequencing reads.</p>
+<section id="goals-and-requirements" class="level3" data-number="10.1.1">
+<h3 data-number="10.1.1" class="anchored" data-anchor-id="goals-and-requirements"><span class="header-section-number">10.1.1</span> Goals and Requirements</h3>
+<p>One of its primary goals is to unveil patterns and trends in genetic variation, contributing valuable insights into diverse aspects of population genetics and evolutionary biology. By identifying genetic adaptations and regions under natural selection, re-sequencing helps researchers understand how populations adapt to different environments.</p>
+<p>Furthermore, this technique provides a means to investigate gene flow between populations, offering crucial information about the connectivity and exchange of genetic material. The analysis of patterns of dispersal, including differences between sexes and historical migration histories, enhances our understanding of the demographic dynamics of populations over time. Moreover, re-sequencing plays a vital role in estimating the effective population size and its historical fluctuations, providing valuable data for unraveling the population’s demographic history.</p>
+<p>Beyond evolutionary and population biology, re-sequencing finds applications in forensics, where it is employed for individual identification and genetic profiling. Practical considerations for re-sequencing include a sufficient sample size, typically involving tens of individuals, and an appropriate coverage level, such as 16x. Although not as high as required for de novo genome assembly, this coverage ensures the reliable estimation of genetic differences between individuals and the accurate identification of genetic variations within the studied population.</p>
+</section>
+<section id="sequencing-issues" class="level3" data-number="10.1.2">
+<h3 data-number="10.1.2" class="anchored" data-anchor-id="sequencing-issues"><span class="header-section-number">10.1.2</span> Sequencing Issues</h3>
+<p>Re-sequencing, while a powerful technique, encounters challenges, especially in the context of heterozygous positions within diploid genomes. Adequate coverage is essential to sample both alleles at heterozygous positions, ensuring a comprehensive representation of genetic diversity. The probability of correctly sampling one allele is akin to a coin toss, with a 50% chance of sampling either the maternal or paternal allele.</p>
+<p>For instance, consider a heterozygous position: with just four reads, the probability of all reads sampling only one allele is 0.125. As coverage increases to eight reads, the probability decreases to 0.0078125, and with 16 reads, it drops significantly to 3.051758e-05. Scaling this challenge to a real-world scenario, such as 10 million SNPs at 16x coverage, the probability of sampling all heterozygous positions with at least one read per allele is remarkably low at 2.9e-133.</p>
+<p>Moreover, when the average coverage is low, random variation can lead to larger parts of the genome having lower coverage. This variability across different regions in different individuals results in many sites having missing values, complicating the accurate assessment of genetic diversity.</p>
+</section>
+<section id="single-nucleotide-polymorphisms-i.e.-snps" class="level3" data-number="10.1.3">
+<h3 data-number="10.1.3" class="anchored" data-anchor-id="single-nucleotide-polymorphisms-i.e.-snps"><span class="header-section-number">10.1.3</span> Single Nucleotide Polymorphisms (i.e., SNPs)</h3>
+<p><strong>Single Nucleotide Polymorphisms (SNPs)</strong> are a central focus in re-sequencing efforts, representing loci where an individual differs from the reference genome at a single nucleotide. The primary goal is to assess point mutations, and the subsequent identification and interpretation of SNPs involve specific procedures and data formats.</p>
+<p>In the nomenclature of SNPs, the major allele is the more prevalent variant within a population, while the minor allele is less common. Understanding the evolutionary context of SNPs requires distinguishing between ancestral and derived alleles. The ancestral allele is the original variant present in the common ancestor of a population, a determination that often necessitates information from outgroup species. In contrast, the derived allele is the variant that has mutated from the ancestral state.</p>
+<p>Reference alleles are those present in the haploid reference assembly, but it’s crucial to note that the allele in the reference can be any of the major, minor, ancestral, or derived alleles. This ambiguity emphasizes the importance of considering population data and outgroup information to discern the specific nature of the reference allele.</p>
+</section>
+</section>
+<section id="broad-institute-and-ngs-analysis" class="level2" data-number="10.2">
+<h2 data-number="10.2" class="anchored" data-anchor-id="broad-institute-and-ngs-analysis"><span class="header-section-number">10.2</span> Broad Institute and NGS Analysis</h2>
+<p>The <strong>Broad Institute</strong> has played a pivotal role in genomics research by developing a suite of Java-based software tools tailored for the analysis of resequencing data. Among these tools is the Preprocessing Toolkit, Picard, which has been seamlessly integrated into GATK (Genome Analysis ToolKit) from version 4 onward. Picard serves as a comprehensive preprocessing toolkit, addressing tasks related to data preparation and manipulation to ensure the quality and integrity of sequencing data.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week10/gatk.png" class="img-fluid figure-img" width="444"></p>
+<p></p><figcaption class="figure-caption">GATK Workflow</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>GATK</strong>, a key offering from the Broad Institute, specializes in variant analysis, focusing on the identification of genetic variations such as SNPs and indels. Its sophisticated algorithms enhance the accuracy of variant calling, making it a widely utilized tool in genomics research. For the analysis of structural variants, the Broad Institute provides <strong>GenomeSTRiP</strong>, a dedicated tool that enables the identification and exploration of larger-scale genomic variations, including insertions, deletions, and duplications.</p>
+<p>Facilitating the visualization of genomic data, the Integrated Genome Viewer (IGV) is another notable tool developed by the Broad Institute. IGV offers an interactive platform for researchers to explore and analyze various genomic features, including sequence data, variants, and annotations, providing a comprehensive understanding of genomic landscapes.</p>
+<section id="read-mapping" class="level3" data-number="10.2.1">
+<h3 data-number="10.2.1" class="anchored" data-anchor-id="read-mapping"><span class="header-section-number">10.2.1</span> Read Mapping</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week10/read_mapping.png" class="img-fluid figure-img" width="210"></p>
+<p></p><figcaption class="figure-caption">Read Mapping in GATK Workflow</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Quality control (QC), trimming, and mapping to the genome are crucial steps in the analysis of Next-Generation Sequencing (NGS) data, ensuring the accuracy and reliability of downstream analyses.</p>
+<p>For QC, tools like fastQC and fastp are commonly employed to assess the quality of raw sequencing data. These tools provide valuable insights into various quality metrics, aiding researchers in identifying potential issues and making informed decisions for data processing.</p>
+<p>Trimming, an essential preprocessing step, is carried out using tools like Trimmomatic or fastp. Trimming helps remove low-quality bases and sequencing adapters, enhancing the overall quality of the data and improving downstream analysis accuracy.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week10/sam_headers.png" class="img-fluid figure-img" width="473"></p>
+<p></p><figcaption class="figure-caption">Headers in a SAM File</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Read alignment, the process of mapping sequenced reads to a reference genome, is typically performed using tools like <code>bwa mem</code> or <code>Bowtie2.</code> While both are popular choices, bwa mem is often preferred in practice. Additionally, pseudo alignment-based methods like minimap2 are gaining popularity, especially for handling long reads. Pseudo alignment allows rapid mapping without explicitly aligning every base, making it suitable for datasets with longer read lengths.</p>
+<p>The outcome of the alignment process is typically a file in <strong>SAM (Sequence Alignment/Map)</strong> format, which is often converted to <strong>BAM (Binary Alignment/Map)</strong> for more efficient storage and manipulation.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week10/samtools_info.png" class="img-fluid figure-img" width="489"></p>
+<p></p><figcaption class="figure-caption">Information on SamTools Headers</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The <span class="citation" data-cites="HD">@HD</span> (Header) line within the SAM header contains vital information about the header itself, including the version number (VN) specifying the SAM format version and the sort order (SO) indicating how alignments are sorted within the file. This ensures clarity and compatibility in handling the data.</p>
+<p>The <span class="citation" data-cites="SQ">@SQ</span> (Sequence Dictionary) lines in the SAM header define the sequence dictionary, presenting information about the reference sequences or contigs used in the alignment. Each <span class="citation" data-cites="SQ">@SQ</span> line provides details such as sequence name, length, and optional attributes. This sequence dictionary establishes the order of sequences in the alignment, facilitating accurate interpretation.</p>
+<p>Furthermore, the <span class="citation" data-cites="RG">@RG</span> (Read Group) lines in the SAM header convey information about read groups, allowing the grouping of reads with similar properties. Multiple <span class="citation" data-cites="RG">@RG</span> lines can be present, each specifying details like ID, sample name, library name, and platform information. This read group information is valuable for associating reads from the same sample, library, or sequencing run.</p>
+<section id="sam-flags" class="level4" data-number="10.2.1.1">
+<h4 data-number="10.2.1.1" class="anchored" data-anchor-id="sam-flags"><span class="header-section-number">10.2.1.1</span> SAM Flags</h4>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week10/flags.png" class="img-fluid figure-img" width="314"></p>
+<p></p><figcaption class="figure-caption">SAM Flags</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Flags</strong> are really just pieces of binary information that tell you more about how the read mapping went. For instance, a binary flag of “1001” would mean that the flag in question is an un-mapped one; a flag of “1001” - on the contrary - would be an unmapped read with multiple sequences.</p>
+</section>
+<section id="bam-files" class="level4" data-number="10.2.1.2">
+<h4 data-number="10.2.1.2" class="anchored" data-anchor-id="bam-files"><span class="header-section-number">10.2.1.2</span> BAM Files</h4>
+<p>A <strong>Binary Mapping File</strong> (i.e., <strong>BAM</strong>) is the same file as a SAM file, but in binary format. BAM files are used because they are smaller and lead to faster results.</p>
+<p>BAM/SAM files play a pivotal role in genomics research, encompassing a wealth of information about both mapped and unmapped reads from sequencing data. This dual representation provides a comprehensive view of the alignment status of short DNA sequences to a reference genome, allowing researchers to explore the entirety of the sequencing dataset.</p>
+<p>One notable feature of BAM/SAM files is the ability to extract information about reads specific to a particular genomic region of interest. This selective extraction facilitates targeted analyses, enabling researchers to focus on and explore detailed characteristics within specific genomic regions, enhancing the precision and depth of genomic investigations.</p>
+<p>In addition to region-specific analyses, BAM/SAM files afford the flexibility to extract either all mapping reads or all unmapped reads separately. This distinction is particularly valuable for researchers conducting diverse analyses, ranging from the exploration of characteristics associated with successfully mapped reads to the investigation of reasons behind read alignment failures.</p>
+<p>Furthermore, while BAM/SAM files do not store the original Fastq files directly, they contain the necessary information for the reconstruction of the original Fastq sequences</p>
+</section>
+</section>
+<section id="prepration-for-snp-calling" class="level3" data-number="10.2.2">
+<h3 data-number="10.2.2" class="anchored" data-anchor-id="prepration-for-snp-calling"><span class="header-section-number">10.2.2</span> Prepration for SNP Calling</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week10/prepping.png" class="img-fluid figure-img" width="209"></p>
+<p></p><figcaption class="figure-caption">Workflow for Preparing Reads for SNP Calling</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>When reads are initially obtained from a Fastq file, they are in random order, potentially scattered throughout the entire genome. To effectively call single nucleotide polymorphisms (SNPs) or conduct other genomic analyses, it is imperative to organize the reads based on their mapping coordinates.</p>
+<p><strong>Sorting</strong> the BAM file involves arranging the reads according to their genomic positions. This sorted order facilitates more straightforward and efficient access to specific genomic regions during subsequent analyses. For example, when calling SNPs, having reads in a sorted order allows the algorithm to navigate through the data in a coordinated manner, significantly improving the accuracy and speed of SNP identification.</p>
+<p><strong>Indexing</strong>, another essential step, involves creating an index file associated with the sorted BAM file. This index file serves as a roadmap, enabling faster searches for specific genomic regions. With an indexed BAM file, the computational tools used in genomics analyses can quickly locate and retrieve relevant information, reducing the computational burden and accelerating the overall analysis process.</p>
+<section id="adding-read-group-information-for-bam-file" class="level4" data-number="10.2.2.1">
+<h4 data-number="10.2.2.1" class="anchored" data-anchor-id="adding-read-group-information-for-bam-file"><span class="header-section-number">10.2.2.1</span> Adding Read Group Information for BAM File</h4>
+<p>In genomic data processing, augmenting BAM files with read group information is a valuable step that involves adding metadata associated with individual reads. Read group information encompasses details such as sample identification, library origin, and sequencing run or flowcell information. This additional metadata proves particularly useful in correcting for sequencing artifacts, particularly in the identification and removal of PCR duplicates.</p>
+<p>The inclusion of read group information in SAM/BAM files facilitates a more granular understanding of the sequencing data, allowing researchers to distinguish between reads originating from different samples, libraries, or sequencing runs. This level of detail becomes crucial when addressing potential biases introduced during the sequencing process, such as PCR duplicates.</p>
+<p>PCR duplicates, arising from the polymerase chain reaction amplification step, can distort downstream analyses if not appropriately handled. By incorporating read group information into the BAM file, researchers gain the ability to identify and mark PCR duplicates based on their distinct metadata. This, in turn, enables more accurate quality control and downstream analyses by mitigating the impact of duplicate reads.</p>
+</section>
+<section id="removing-duplicates" class="level4" data-number="10.2.2.2">
+<h4 data-number="10.2.2.2" class="anchored" data-anchor-id="removing-duplicates"><span class="header-section-number">10.2.2.2</span> Removing Duplicates</h4>
+<p>In Illumina sequencing, the PCR amplification step can generate duplicate reads, introducing artifacts that artificially inflate the coverage of certain genomic regions. To address this, it is essential to identify and manage these duplicate sequences to ensure the accuracy of downstream analyses.</p>
+<p>Marking duplicate sequences involves the addition of information to the BAM file, specifically flagging reads that are likely to be PCR duplicates. This information serves as a crucial indicator during subsequent analyses, allowing researchers to distinguish between genuine biological signals and artifacts introduced by PCR amplification.</p>
+<p>It’s important to note that the process of marking duplicates does not automatically remove them from the BAM file; instead, it adds a flag or annotation to identify these duplicates. The decision to actually remove them is typically left to the researcher, contingent upon specific analysis requirements. Removal of duplicates can be carried out by setting a specific command line option during the analysis, ensuring that these artifacts do not unduly influence downstream results.</p>
+</section>
+</section>
+<section id="estimating-genotype-likelihoods" class="level3" data-number="10.2.3">
+<h3 data-number="10.2.3" class="anchored" data-anchor-id="estimating-genotype-likelihoods"><span class="header-section-number">10.2.3</span> Estimating Genotype Likelihoods</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week10/calibration.png" class="img-fluid figure-img" width="444"></p>
+<p></p><figcaption class="figure-caption">BSQR Before and After Recalibration</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Base Quality Score Recalibration (BQSR)</strong> is a critical step in genomic data analysis, especially when using tools like the Genome Analysis Toolkit (GATK). BQSR is designed to identify and rectify systematic errors introduced by the sequencing machine, enhancing the accuracy of base quality scores associated with individual nucleotides.</p>
+<p>During BQSR, the tool examines mapped reads in the dataset and considers various factors to identify systematic errors. These factors include the read group to which the read belongs, the quality score associated with the base, the machine cycle producing the base (position in the read), and the context in which the base is found, including the current base and the preceding base (dinucleotide).</p>
+<p>Utilizing this information, BQSR calculates empirical quality scores, quantifying how many errors were detected for each sequence context and position in the read. These calculated error rates are then compared to the expected quality scores associated with the sequencing data. Based on this comparison, BQSR adjusts the quality scores, aiming to correct inaccuracies while preserving the original nucleotide calls in the data. Importantly, the recalibration process focuses on improving the reliability of the quality scores assigned to each base without altering the actual nucleotide sequence calls.</p>
+<section id="call-variants-per-sample" class="level4" data-number="10.2.3.1">
+<h4 data-number="10.2.3.1" class="anchored" data-anchor-id="call-variants-per-sample"><span class="header-section-number">10.2.3.1</span> Call Variants per Sample</h4>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week10/haplotype_caller.png" class="img-fluid figure-img" width="514"></p>
+<p></p><figcaption class="figure-caption">Workflow of Haplotype Caller</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>The <strong>HaplotypeCaller</strong> is a variant calling tool used in genomic data analysis, particularly for identifying both Single Nucleotide Polymorphisms (SNPs) and <strong>small insertions or deletions (indels)</strong> on a per-sample basis. This tool is characterized by several key features that contribute to its accuracy and versatility.</p>
+<p>One notable aspect is its ability to perform local reassembly, a process where it identifies haplotypes, or sets of closely linked genetic variations. This approach allows the HaplotypeCaller to consider the context of the genomic region, providing a more accurate and comprehensive understanding of the variations present. This local reassembly is particularly advantageous in regions with complex variation patterns.</p>
+<p>Unlike locus-based variant callers, the HaplotypeCaller’s methodology includes information from multiple reads and can handle situations where reads may be unmapped. This is crucial for maximizing the utility of sequencing data, especially in regions where traditional locus-based callers might face limitations.</p>
+<p>Furthermore, the HaplotypeCaller is designed to work with polyploid organisms and pooled samples. Its flexibility in accommodating different genetic scenarios makes it well-suited for analyzing complex genomic data, allowing researchers to confidently call variants in a variety of experimental setups.</p>
+<section id="calculating-genotype-likelihoods" class="level5" data-number="10.2.3.1.1">
+<h5 data-number="10.2.3.1.1" class="anchored" data-anchor-id="calculating-genotype-likelihoods"><span class="header-section-number">10.2.3.1.1</span> Calculating Genotype Likelihoods</h5>
+<p><span class="math display">\[\begin{equation}
+  p(b|A) =
+  \begin{cases}
+      \frac{e}{3} &amp;: b \not = A &amp;\text{(wrong call)} \\
+      1 - e &amp;: b = A &amp;\text{(correct call)}
+  \end{cases}
+\end{equation}\]</span></p>
+<p>For each nucleotide (that we’ll call “b”), the likelihood score is based on its phred quality score. This phred quality score is transformed to a <strong>likelihood score</strong> using the above formula (where <span class="math inline">\(A\)</span> is the true haplotype).</p>
+<p><span class="math display">\[\begin{equation}
+  p(b | G) = p(b | \{A_1, A_2\}) = \frac{1}{2} \cdot p(b|A_1) + \frac{1}{2} \cdot p(b|A_2)
+\end{equation}\]</span></p>
+<p>In the case where a genotype is said to be a certain diploid kind (i.e., the <span class="math inline">\(\{A_1, A_2\}\)</span>), the likelihood is pretty much the above.</p>
+<p><span class="math display">\[\begin{equation}
+  p(D|G) = \prod_i\left(\frac{p(b_i|A_1) + p(b_i|A_2)}{2}\right)
+\end{equation}\]</span></p>
+<p>Where we have multiple overlapping reads, a naive Bayes assumption is used (i.e., the reads are different from one another).</p>
+</section>
+</section>
+<section id="from-likelihoods-to-snps" class="level4" data-number="10.2.3.2">
+<h4 data-number="10.2.3.2" class="anchored" data-anchor-id="from-likelihoods-to-snps"><span class="header-section-number">10.2.3.2</span> From Likelihoods to SNPs</h4>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week10/likelihood.png" class="img-fluid figure-img" width="454"></p>
+<p></p><figcaption class="figure-caption">Going from Likelihoods to SNPs</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the first step, the sample is processed by itself so that variants can be called.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week10/joint_genotyping.png" class="img-fluid figure-img" width="476"></p>
+<p></p><figcaption class="figure-caption">Joint Genotyping</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>In the realm of genomic variant calling, *Joint SNP calling**, facilitated by tools like GenotypeGVCFs, represents a collaborative approach that harnesses the strength derived from analyzing multiple samples simultaneously.</p>
+<p>The fundamental concept behind joint genotyping is rooted in the idea that a Single Nucleotide Polymorphism (SNP) or insertion/deletion (indel) is most informative when it is shared across the entire population under investigation. The rationale behind this lies in the assumption that errors, particularly random ones, are less likely to occur in exactly the same manner in two independent samples. By jointly considering variants across multiple samples, the approach aims to distinguish true genetic variations from potential errors introduced during sequencing or analysis.</p>
+</section>
+</section>
+<section id="vcf-file-format" class="level3" data-number="10.2.4">
+<h3 data-number="10.2.4" class="anchored" data-anchor-id="vcf-file-format"><span class="header-section-number">10.2.4</span> VCF File Format</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week10/vcf_file.png" class="img-fluid figure-img" width="422"></p>
+<p></p><figcaption class="figure-caption">Meta-Information VCF File Format</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week10/vcf_header.png" class="img-fluid figure-img" width="476"></p>
+<p></p><figcaption class="figure-caption">Header in a VCF File</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>This is a file that contains meta-information (see above), header information (which is denoted using a single octothorpe “#”), and SNP or indel calls.</p>
+</section>
+</section>
+<section id="variant-and-hard-filtering" class="level2" data-number="10.3">
+<h2 data-number="10.3" class="anchored" data-anchor-id="variant-and-hard-filtering"><span class="header-section-number">10.3</span> Variant and Hard Filtering</h2>
+<section id="variant-filtering" class="level3" data-number="10.3.1">
+<h3 data-number="10.3.1" class="anchored" data-anchor-id="variant-filtering"><span class="header-section-number">10.3.1</span> Variant Filtering</h3>
+<p><strong>Variant filtering</strong> is a crucial step in genomic data analysis, aiming to distinguish true genetic variants from potential errors or artifacts introduced during the sequencing and variant calling processes. One sophisticated method for accurate variant filtering is the <strong>Variant Quality Score Recalibration (VQSR)</strong> method.</p>
+<p><strong>VQSR</strong> is considered one of the most accurate variant filtering techniques, but it comes with specific requirements. To effectively implement VQSR, a high-quality set of verified variants is needed to train the model. This verified set serves as a reference to teach the algorithm to discern between true variants and artifacts, enhancing the precision of variant calls. However, it’s important to note that VQSR is most applicable to model species, such as humans, where extensive validated variant datasets are available.</p>
+<p>In situations involving non-model organisms, where comprehensive verified variant sets may be lacking, an alternative approach is recommended. In such cases, hard filtering based on variant quality scores becomes a practical choice. This involves setting specific quality score thresholds to filter out variants that fall below the desired quality standards. While not as sophisticated as VQSR, hard filtering offers a pragmatic solution for non-model organisms, ensuring that variants meeting certain quality criteria are retained for downstream analyses.</p>
+<section id="hard-filtering" class="level4" data-number="10.3.1.1">
+<h4 data-number="10.3.1.1" class="anchored" data-anchor-id="hard-filtering"><span class="header-section-number">10.3.1.1</span> Hard Filtering</h4>
+<p>Hard filtering is a widely utilized method in genomic variant analysis to refine variant datasets by establishing specific criteria for filtering out variants that may signify errors or artifacts. Several common filtering parameters, along with their recommended criteria, contribute to this process.</p>
+<p><strong>QualByDepth (QD)</strong>, often set at a threshold of 2.0, calculates the ratio of variant quality (QUAL) to the unfiltered depth of non-reference samples. This criterion is applied to exclude variants with relatively low quality in relation to the depth of coverage.</p>
+<p><strong>FisherStrand (FS)</strong>, with a recommended threshold of 60.0, assesses strand bias through a Phred-scaled p-value. Variants exhibiting significant strand bias are filtered out, as this may indicate potential artifacts.</p>
+<p><strong>RMSMappingQuality (MQ)</strong>, set at a threshold of 40.0, represents the Root Mean Square of the mapping quality across all reads. Variants with poor mapping quality are filtered out to retain those with high mapping characteristics.</p>
+<p><strong>MappingQualityRankSumTest (MQRankSum)</strong>, with a threshold of -12.5, tests for differences in mapping qualities between reads with reference alleles and those with alternate alleles. Variants with significant differences are filtered out.</p>
+<p><strong>ReadPosRankSumTest (ReadPosRankSum)</strong>, often set at -8.0, evaluates whether the alternate allele is predominantly observed near the ends of reads. Variants with this positional bias are filtered out.</p>
+</section>
+</section>
+<section id="excluding-filtered-snps" class="level3" data-number="10.3.2">
+<h3 data-number="10.3.2" class="anchored" data-anchor-id="excluding-filtered-snps"><span class="header-section-number">10.3.2</span> Excluding Filtered SNPs</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week10/filtered.png" class="img-fluid figure-img" width="473"></p>
+<p></p><figcaption class="figure-caption">Examples of Filtered SNPs</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Following the application of filtering criteria to refine the dataset, the resulting VCF (Variant Call Format) file retains all Single Nucleotide Polymorphisms (SNPs), but their status is modified to indicate whether they passed or failed the applied filters. Specifically, SNPs are marked as either “filtered” or “PASS” based on whether they met the specified criteria during the filtering process.</p>
+<p>While these filtered SNPs remain present in the VCF file, users may choose to exclude or remove them from the dataset if desired. Various tools and software in the genomics toolkit provide functionality to extract specific subsets of variants based on their attributes, including their filtering status. By employing such tools, researchers can generate a VCF file that includes only the variants that passed the filtering criteria, omitting those marked as filtered.</p>
+</section>
+<section id="annotating-snps" class="level3" data-number="10.3.3">
+<h3 data-number="10.3.3" class="anchored" data-anchor-id="annotating-snps"><span class="header-section-number">10.3.3</span> Annotating SNPs</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week10/snp_annotation.png" class="img-fluid figure-img" width="440"></p>
+<p></p><figcaption class="figure-caption">Annotating SNPs</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>SNP annotation is a crucial step in genomic analysis, especially when categorizing SNPs into non-coding, synonymous, or non-synonymous variants. This annotation process helps researchers identify potential causative SNPs and gain insights into their functional implications. One tool commonly used for SNP annotation is <strong>SnpEff</strong>.</p>
+<p>SnpEff serves as a powerful tool for annotating SNPs, providing a comprehensive set of annotations based on genomic information. To utilize SnpEff, researchers need to provide it with specific input files, including the VCF file containing the variant information, the genome sequence in FASTA format, and the genome annotation in GFF3 file format. These files collectively guide SnpEff in accurately annotating the SNPs based on their locations and potential functional impact.</p>
+<p>SnpEff offers various annotations for different SNP types, including intergenic, synonymous, and non-synonymous variants. It enhances the VCF file by adding a tag, typically labeled as EFF, to the INFO field. This tag includes information about the SNP type, enabling researchers to easily identify and categorize the variants based on their potential effects.</p>
+
+
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const disableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'prefetch';
+    }
+  }
+  const enableStylesheet = (stylesheets) => {
+    for (let i=0; i < stylesheets.length; i++) {
+      const stylesheet = stylesheets[i];
+      stylesheet.rel = 'stylesheet';
+    }
+  }
+  const manageTransitions = (selector, allowTransitions) => {
+    const els = window.document.querySelectorAll(selector);
+    for (let i=0; i < els.length; i++) {
+      const el = els[i];
+      if (allowTransitions) {
+        el.classList.remove('notransition');
+      } else {
+        el.classList.add('notransition');
+      }
+    }
+  }
+  const toggleColorMode = (alternate) => {
+    // Switch the stylesheets
+    const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+    manageTransitions('#quarto-margin-sidebar .nav-link', false);
+    if (alternate) {
+      enableStylesheet(alternateStylesheets);
+      for (const sheetNode of alternateStylesheets) {
+        if (sheetNode.id === "quarto-bootstrap") {
+          toggleBodyColorMode(sheetNode);
+        }
+      }
+    } else {
+      disableStylesheet(alternateStylesheets);
+      toggleBodyColorPrimary();
+    }
+    manageTransitions('#quarto-margin-sidebar .nav-link', true);
+    // Switch the toggles
+    const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+    for (let i=0; i < toggles.length; i++) {
+      const toggle = toggles[i];
+      if (toggle) {
+        if (alternate) {
+          toggle.classList.add("alternate");     
+        } else {
+          toggle.classList.remove("alternate");
+        }
+      }
+    }
+    // Hack to workaround the fact that safari doesn't
+    // properly recolor the scrollbar when toggling (#1455)
+    if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+      manageTransitions("body", false);
+      window.scrollTo(0, 1);
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        manageTransitions("body", true);
+      }, 40);  
+    }
+  }
+  const isFileUrl = () => { 
+    return window.location.protocol === 'file:';
+  }
+  const hasAlternateSentinel = () => {  
+    let styleSentinel = getColorSchemeSentinel();
+    if (styleSentinel !== null) {
+      return styleSentinel === "alternate";
+    } else {
+      return false;
+    }
+  }
+  const setStyleSentinel = (alternate) => {
+    const value = alternate ? "alternate" : "default";
+    if (!isFileUrl()) {
+      window.localStorage.setItem("quarto-color-scheme", value);
+    } else {
+      localAlternateSentinel = value;
+    }
+  }
+  const getColorSchemeSentinel = () => {
+    if (!isFileUrl()) {
+      const storageValue = window.localStorage.getItem("quarto-color-scheme");
+      return storageValue != null ? storageValue : localAlternateSentinel;
+    } else {
+      return localAlternateSentinel;
+    }
+  }
+  let localAlternateSentinel = 'default';
+  // Dark / light mode switch
+  window.quartoToggleColorScheme = () => {
+    // Read the current dark / light value 
+    let toAlternate = !hasAlternateSentinel();
+    toggleColorMode(toAlternate);
+    setStyleSentinel(toAlternate);
+  };
+  // Ensure there is a toggle, if there isn't float one in the top right
+  if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+    const a = window.document.createElement('a');
+    a.classList.add('top-right');
+    a.classList.add('quarto-color-scheme-toggle');
+    a.href = "";
+    a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+    const i = window.document.createElement("i");
+    i.classList.add('bi');
+    a.appendChild(i);
+    window.document.body.appendChild(a);
+  }
+  // Switch to dark mode if need be
+  if (hasAlternateSentinel()) {
+    toggleColorMode(true);
+  } 
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../chapters/week9.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">SNPs, Structural Variations, and Pan-Genomes</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../chapters/week11.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
