@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>BS4017: High Throughput Bioinformatics - 12&nbsp; Transcriptomes: Network Analysis</title>
+<title>BS4017: High Throughput Bioinformatics - 12&nbsp; Comparative Genomics</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -72,7 +72,7 @@ ul.task-list li input[type="checkbox"] {
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
     <div class="container-fluid d-flex justify-content-between">
-      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></h1>
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Comparative Genomics</span></h1>
       <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
         <i class="bi bi-chevron-right"></i>
       </button>
@@ -184,12 +184,12 @@ ul.task-list li input[type="checkbox"] {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/week11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></a>
+  <a href="../chapters/week11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Population Analysis</span></a>
   </div>
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../chapters/week12.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></a>
+  <a href="../chapters/week12.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Comparative Genomics</span></a>
   </div>
 </li>
       </ul>
@@ -203,14 +203,9 @@ ul.task-list li input[type="checkbox"] {
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#ways-of-detecting-gene-function" id="toc-ways-of-detecting-gene-function" class="nav-link active" data-scroll-target="#ways-of-detecting-gene-function"><span class="toc-section-number">12.1</span>  Ways of Detecting Gene Function</a></li>
-  <li><a href="#co-expression-and-co-expression-networks" id="toc-co-expression-and-co-expression-networks" class="nav-link" data-scroll-target="#co-expression-and-co-expression-networks"><span class="toc-section-number">12.2</span>  Co-Expression and Co-Expression Networks</a>
+  <li><a href="#substitution-rates-and-molecular-clocks" id="toc-substitution-rates-and-molecular-clocks" class="nav-link active" data-scroll-target="#substitution-rates-and-molecular-clocks"><span class="toc-section-number">12.1</span>  Substitution Rates and Molecular Clocks</a>
   <ul class="collapse">
-  <li><a href="#k-means-clustering" id="toc-k-means-clustering" class="nav-link" data-scroll-target="#k-means-clustering"><span class="toc-section-number">12.2.1</span>  K-Means Clustering</a></li>
-  <li><a href="#hierarchical-clustering" id="toc-hierarchical-clustering" class="nav-link" data-scroll-target="#hierarchical-clustering"><span class="toc-section-number">12.2.2</span>  Hierarchical Clustering</a></li>
-  <li><a href="#interpreting-co-expression-networks" id="toc-interpreting-co-expression-networks" class="nav-link" data-scroll-target="#interpreting-co-expression-networks"><span class="toc-section-number">12.2.3</span>  Interpreting Co-Expression Networks</a></li>
-  <li><a href="#possible-workflow" id="toc-possible-workflow" class="nav-link" data-scroll-target="#possible-workflow"><span class="toc-section-number">12.2.4</span>  Possible Workflow</a></li>
-  <li><a href="#advanced-models-for-gene-regulation" id="toc-advanced-models-for-gene-regulation" class="nav-link" data-scroll-target="#advanced-models-for-gene-regulation"><span class="toc-section-number">12.2.5</span>  Advanced Models for Gene Regulation</a></li>
+  <li><a href="#comparing-sequences" id="toc-comparing-sequences" class="nav-link" data-scroll-target="#comparing-sequences"><span class="toc-section-number">12.1.1</span>  Comparing Sequences</a></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><div><i class="bi bi-github"></i></div><div class="action-links"><p><a href="https://github.com/kevfo/BS4017_Notes/edit/main/chapters/week12.qmd" class="toc-action">Edit this page</a></p><p><a href="https://github.com/kevfo/BS4017_Notes/issues/new" class="toc-action">Report an issue</a></p></div></div></nav>
@@ -220,7 +215,7 @@ ul.task-list li input[type="checkbox"] {
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title d-none d-lg-block"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></h1>
+<h1 class="title d-none d-lg-block"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Comparative Genomics</span></h1>
 </div>
 
 
@@ -234,149 +229,58 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<p>When examining genomes, the analysis occurs at different levels to understand both the variations within a species for adaptation and the evolutionary differences between species.</p>
+<p>Within a species, researchers focus on smaller-scale differences known as Single Nucleotide Polymorphisms (SNPs), which are tiny genetic variations at the single nucleotide level. These SNPs provide insights into population genetics, allowing scientists to study genetic diversity and adaptations within a population. On a larger scale, structural variants such as insertions, deletions, and rearrangements are explored. These structural variants are a part of pan-genome studies, which aim to uncover genetic diversity beyond the core genome of a species.</p>
+<p>When comparing genomes between different species, the emphasis is on evolutionary analysis. This involves investigating the evolution of genes or gene families across species to comprehend their divergence or conservation. Additionally, researchers construct phylogenies or evolutionary trees to illustrate the relationships between species based on genetic similarities and differences.</p>
+<p>Various methods are employed in comparing genomes. <strong>Synteny analysis</strong> focuses on examining the order and arrangement of genes along chromosomes, providing insights into how genetic material is conserved or rearranged across species. The study of gene content, involving gene families and their expansions or contractions, sheds light on the evolutionary changes in genetic functions. Moreover, genomic alignment is utilized to align entire genomes, revealing regions of high conservation (ultraconserved regions) or areas susceptible to recombination (recombination hotspots).</p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../imgs/week8/transcription_factor.png" class="img-fluid figure-img" width="281"></p>
-<p></p><figcaption class="figure-caption">Illustration of a Transcription Factor</figcaption><p></p>
+<p><img src="../imgs/week12/molecular_phylogeny.png" class="img-fluid figure-img" width="352"></p>
+<p></p><figcaption class="figure-caption">Illustration of Molecular Phylogeny</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
-<p>In genetics, there’s a fascinating puzzle to solve: how do our genes get turned on and off? Imagine your DNA as a book, and these genes are like chapters. There are two special areas in the DNA that play a big role in this story: promoters (P) and enhancers/silencers (E). Think of them as the “on” and “off” switches for a gene.</p>
-<p>Now, here’s where it gets interesting. Proteins, like tiny molecular superheroes called <strong>transcription factors (TFs)</strong>, come into play. These TFs can attach themselves to the promoter and enhancer areas. The magic happens when these proteins team up. The combination of TFs determines whether a gene is going to be “read” and turned into a protein.</p>
-<p>If a protein can attach itself to these promoter and enhancer areas, it means it has the power to control that gene. It’s like having control over a remote that decides whether the TV turns on or not. This protein becomes the boss of that gene.</p>
-<p>Now, things get a bit more abstract. Scientists talk about how changes in the boss’s mood can affect the story of the gene. If the boss protein gets more or less active, it can make the gene go from quiet to loud or vice versa. It’s like having a dimmer switch for the lights in a room – you can adjust how bright or dim they are.</p>
-<p>But here’s the tricky part: in the lab, scientists still need to verify whether a protein can actually attach itself to these promoter and enhancer areas. It’s like having a bunch of keys, but you’re not entirely sure if they fit the locks. This is a crucial step in understanding how our genes are controlled, and scientists are working hard to solve this genetic puzzle.</p>
-<section id="ways-of-detecting-gene-function" class="level2" data-number="12.1">
-<h2 data-number="12.1" class="anchored" data-anchor-id="ways-of-detecting-gene-function"><span class="header-section-number">12.1</span> Ways of Detecting Gene Function</h2>
-<p><strong>Forward genetics</strong> starts from the phenotype and goes back to the genome. <strong>Reverse genetics</strong> starts from the genome and works its way back to the phenotype.</p>
-</section>
-<section id="co-expression-and-co-expression-networks" class="level2" data-number="12.2">
-<h2 data-number="12.2" class="anchored" data-anchor-id="co-expression-and-co-expression-networks"><span class="header-section-number">12.2</span> Co-Expression and Co-Expression Networks</h2>
-<p>In genetics, there’s another interesting concept called <strong>co-expression</strong>. When scientists don’t know the exact regulatory network, they have to rely on a different approach. They can’t peek inside the genes’ instruction manual, so they start looking for patterns in how genes are turned on or off together, like a team of friends doing the same dance moves.</p>
-<p>The idea here is pretty simple. Imagine you’re in a big group of people trying to follow a dance routine. If you and your buddy are close to each other in the group, you’re more likely to do the same dance steps at the same time. In the genetic world, this means that when different experimental conditions are applied, genes that are “close” to each other in the way they’re controlled tend to act in a similar way. We say they “correlate.” These genes also tend to associate with one another during clustering (e.g., K-means clustering).</p>
-<section id="k-means-clustering" class="level3" data-number="12.2.1">
-<h3 data-number="12.2.1" class="anchored" data-anchor-id="k-means-clustering"><span class="header-section-number">12.2.1</span> K-Means Clustering</h3>
+<p><strong>Molecular phylogeny</strong> is a method used to infer taxonomic relationships among species by analyzing genomic data. It involves several steps, including multiple sequence alignment and the estimation of gene trees.</p>
+<p>Through multiple sequence alignment, researchers compare genetic sequences from different species to identify similarities and differences. This process helps in estimating gene trees, which illustrate the evolutionary relationships between different genes or genomic regions across species.</p>
+<p><strong>Species phylogeny</strong>, inferred from these gene trees, reflects mutations that have reached fixation in distinct species over evolutionary time. Fixed mutations are alterations in the genetic code that have become prevalent and stable within specific species populations, distinguishing them from other related species.</p>
+<p>In the context of identifying conserved regions in proteins, molecular phylogeny contributes to recognizing areas within proteins that remain highly conserved across species. These conserved regions are important because they often perform essential functions and have persisted throughout evolutionary history due to their significance.</p>
+<section id="substitution-rates-and-molecular-clocks" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="substitution-rates-and-molecular-clocks"><span class="header-section-number">12.1</span> Substitution Rates and Molecular Clocks</h2>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
 <div class="quarto-figure quarto-figure-center">
 <figure class="figure">
-<p><img src="../imgs/week8/kmeans_steps.png" class="img-fluid figure-img" width="268"></p>
-<p></p><figcaption class="figure-caption">Steps Involved in K-Means Clustering</figcaption><p></p>
+<p><img src="../imgs/week12/mutations.png" class="img-fluid figure-img" width="473"></p>
+<p></p><figcaption class="figure-caption">Mutations</figcaption><p></p>
 </figure>
 </div>
 </div>
 </div>
-<p>Imagine you have a big box of colorful marbles, and you want to sort them into different groups based on their colors. K-means is like a handy tool for this job. Here are some key things to know:</p>
+<p>When an organism has a mutation, it’s usually passed down from their generation to the next (assuming that they have offspring).</p>
+<section id="comparing-sequences" class="level3" data-number="12.1.1">
+<h3 data-number="12.1.1" class="anchored" data-anchor-id="comparing-sequences"><span class="header-section-number">12.1.1</span> Comparing Sequences</h3>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="../imgs/week12/sequences.png" class="img-fluid figure-img" width="292"></p>
+<p></p><figcaption class="figure-caption">Sequences</figcaption><p></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Dynamic programming algorithms, such as the Needleman-Wunsch algorithm, offer a global solution for pairwise sequence alignment, crucial in bioinformatics. Dotplots are graphical representations aiding in sequence alignments.</p>
+<p>In constructing a dotplot:</p>
 <ol type="1">
-<li><p><strong>Very Common:</strong> K-means is a popular method that many people use. It’s like a favorite tool in a craftsman’s toolbox because it’s useful in many situations.</p></li>
-<li><p><strong>Good for Large Data Sets:</strong> If you have a massive collection of marbles (or data), K-means can still do its job efficiently. It’s like having a super-fast sorting machine for your marbles.</p></li>
-<li><p><strong>Visualization Not Trivial:</strong> Sometimes, showing the results of K-means can be a bit tricky. However, if you have a bunch of marbles in many colors, you can represent them on a graph using something called <strong>principal components</strong>. It’s like making a cool chart that helps you understand how the marbles are grouped.</p></li>
-<li><p><strong>Fast and Low Memory Consumption:</strong> K-means doesn’t hog your computer’s memory, and it works pretty quickly. It’s like having a sorting machine that doesn’t slow down, even when you have lots of marbles to sort.</p></li>
+<li><p><strong>Grid Representation:</strong> Imagine a grid where sequences are placed on the X and Y axes. The grid starts in the upper left corner and concludes at the lower right corner.</p></li>
+<li><p><strong>Movement Options:</strong> The algorithm allows three possible moves: right, down, or diagonally down-right. These movements within the grid help build the alignment.</p></li>
+<li><p><strong>Scoring Matches and Gaps:</strong> Passing through a cell containing matching letters elevates the alignment score, contributing to the similarity of the sequences. Conversely, moving through an empty cell introduces a gap, incurring a penalty that impacts the alignment score.</p></li>
 </ol>
-<p>Let’s take a closer look at some challenges that come with using K-means, a handy tool for grouping things. Here are the key issues:</p>
-<p><strong>1. Choosing K:</strong> K-means requires us to decide how many groups (K) we want to create. This can be a bit tricky. Thankfully, there are some rules of thumb, like heuristics, to help us decide, but it’s not always easy. Think of it like trying to figure out how many boxes you need to sort your toys into – you don’t want too few or too many.</p>
-<p><strong>2. Avoiding Local Minima:</strong> When you use K-means, you might end up with different results depending on where you start. It’s like solving a maze where you could get stuck in a corner. To overcome this, you can run the K-means algorithm multiple times and pick the best result. It’s like trying different paths in the maze to find your way out.</p>
-<p><strong>3. Message Passing Algorithms:</strong> There’s another cool trick – K-means clustering algorithms that use something called “message passing.” This can help find better solutions. It’s like using a secret code or special clues to navigate the maze more effectively. For instance, there’s a method called “affinity propagation” developed by Frey and his team in 2007, which is like having a map to escape the maze.</p>
-</section>
-<section id="hierarchical-clustering" class="level3" data-number="12.2.2">
-<h3 data-number="12.2.2" class="anchored" data-anchor-id="hierarchical-clustering"><span class="header-section-number">12.2.2</span> Hierarchical Clustering</h3>
-<p>Hierarchical clustering is a way to group things together in a very organized manner, and it works like building a tree from the ground up. Here’s how it goes:</p>
-<p>In this approach, we always start by putting the two most similar things together into a new cluster. Imagine you have a bunch of marbles, and you want to organize them by color. You’d begin by pairing the two marbles that look the most alike.</p>
-<p>Now, when we’re making these clusters, there are a few ways we can decide which marble represents the whole group:</p>
-<ol type="1">
-<li>We can calculate the average of all the marbles in the cluster, like finding the average color.</li>
-<li>Or, we can pick the marble that looks the most similar to the others in the group.</li>
-<li>Alternatively, we could choose the marble that stands out the most, the one that’s least like the rest.</li>
-</ol>
-<p>Here’s where it gets interesting: depending on how we choose this representative and the method we use, we get different results. It’s like if we asked a few people to organize the marbles by color, they might come up with slightly different groups.</p>
-<section id="pros-and-cons-with-hierarchical-clustering" class="level4" data-number="12.2.2.1">
-<h4 data-number="12.2.2.1" class="anchored" data-anchor-id="pros-and-cons-with-hierarchical-clustering"><span class="header-section-number">12.2.2.1</span> Pros and Cons with Hierarchical Clustering</h4>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../imgs/week8/hierarchical_clustering.png" class="img-fluid figure-img" width="239"></p>
-<p></p><figcaption class="figure-caption">Example of Hierarchical Clustering Used in Literature</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Hierarchical clustering is a popular way to organize and show data, like putting things in order. It’s so commonly used because it’s not just about sorting data; it’s also a fundamental tool for creating visual representations. Think of it as arranging your toys neatly on a shelf.</p>
-<p>One cool thing about hierarchical clustering is that it can be used in a two-way fashion. It doesn’t just sort one type of thing; it can sort both experiments and genes. It’s like having a special shelf where you not only arrange your toys but also group your books together.</p>
-<p>But here’s the catch: while hierarchical clustering is super handy, it works best when you’re dealing with small amounts of data. If you have a massive collection of things to organize, it might not be the best choice. It’s like trying to fit too many toys on a tiny shelf – it gets a bit crowded. So, when you’ve got a smaller pile to sort, hierarchical clustering is your go-to tool for tidying things up and creating visual displays.</p>
-<p>But there’s a challenge with this approach: how do we decide when to stop making clusters? We have a tree of clusters, but we need to know where to cut it. It’s like having a tree with many branches and trying to figure out where to make the final cuts to create the groups we want. That’s the tricky part in hierarchical clustering.</p>
-</section>
-</section>
-<section id="interpreting-co-expression-networks" class="level3" data-number="12.2.3">
-<h3 data-number="12.2.3" class="anchored" data-anchor-id="interpreting-co-expression-networks"><span class="header-section-number">12.2.3</span> Interpreting Co-Expression Networks</h3>
-<p>When it comes to co-expression clusters, understanding what they mean can be like solving a puzzle. One way to look at it is through the *<strong>Guilt by Association</strong> principle. This means that if genes are co-expressed, they might be working together or at least involved in similar processes. It’s a bit like assuming that if you often see two friends together, they might be doing something fun or related, like playing the same video game.</p>
-<p>Now, if genes are co-expressed, it’s like they’re on the same team. They might be working together in the same biological pathway. Think of this as a group of friends joining forces to win a game or solve a big problem together.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../imgs/week8/distance_clusters.png" class="img-fluid figure-img" width="376"></p>
-<p></p><figcaption class="figure-caption">Example of a Distance Metric Used to Form Clusters</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<p>To understand co-expression clusters (i.e., related genes) better, we can also check for <strong>gene ontology enrichments</strong>. This is like checking if our group of friends shares common interests. It helps us figure out what kind of activities they enjoy together.</p>
-<p>Another thing to consider is <strong>tissue/condition specificity</strong>. It’s like looking at when and where our friends like to hang out the most. In this case, we examine the experiments where the cluster’s gene expression is at its peak, which can tell us where these genes are most active.</p>
-<p>Sometimes, we might also discover that co-expression clusters have something in common. This can be because they share <strong>enriched promoter motifs</strong>, which are like special symbols that tell us they belong to the same club. Additionally, if you find “transcription factors” in the same cluster, it’s like identifying key players or leaders in the group. These are the friends who organize the activities or call the shots in their little club of co-expressed genes.</p>
-<section id="problems-with-networks" class="level4" data-number="12.2.3.1">
-<h4 data-number="12.2.3.1" class="anchored" data-anchor-id="problems-with-networks"><span class="header-section-number">12.2.3.1</span> Problems with Networks</h4>
-<p>Exploring co-expression networks can be a bit like hunting for hidden treasures, but there are some challenges we need to tackle along the way. Here are some of the issues we encounter:</p>
-<p>First, the data can be noisy. This means there are lots of false alarms or “false positives.” It’s like searching for secret clues, but sometimes you find things that aren’t really connected to your treasure hunt. To deal with this, scientists use clever tricks like bootstrapping, randomization, or cross-validation. These methods help them estimate how often these false alarms happen and make their results more reliable.</p>
-<p>Another tricky thing is that co-expression networks can’t always tell us if the connection between genes is a direct one or if it’s indirect. It’s like figuring out if your friend’s friend is your friend too, or if they’re just a friendly acquaintance. This direct or indirect link can make a big difference in understanding how genes work together.</p>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../imgs/week8/expression_networks.png" class="img-fluid figure-img" width="239"></p>
-<p></p><figcaption class="figure-caption">Problems with Co-Expression Networks</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-<p>So, how do we uncover the secret codes that reveal the regulatory structure, like who’s in charge or who’s following whom? Well, scientists have a couple of strategies. In the “wet lab,” they carry out experiments by making changes, like knocking out a gene, to see how it affects the others. It’s like doing experiments in a chemistry lab to see what happens when you mix different ingredients.</p>
-<p>Alternatively, they use more advanced statistical models to find these hidden connections. Think of it as using a super detective’s magnifying glass to spot the subtle clues in the data. By overcoming these challenges, we can unlock the mysteries of co-expression networks and understand how genes influence each other.</p>
-</section>
-<section id="extra-information" class="level4" data-number="12.2.3.2">
-<h4 data-number="12.2.3.2" class="anchored" data-anchor-id="extra-information"><span class="header-section-number">12.2.3.2</span> Extra Information</h4>
-<p>When it comes to understanding genes and how they work, having some extra pieces of information can be incredibly helpful. Here are a few key things that come in handy:</p>
-<p><strong>1. Identity of Transcription Factors and Their Binding Motifs:</strong> Imagine transcription factors as the directors of the genetic orchestra. They control which genes play their music. Knowing which transcription factors are in action and what kind of musical notes (or binding motifs) they follow helps us understand how genes are orchestrated.</p>
-<p><strong>2. Knowledge About Functional and Structural Similarity of Genes:</strong> Genes are like puzzle pieces in a big genetic puzzle. If we know which pieces fit together because of their shape or function, it makes solving the puzzle easier. Understanding the similarities between genes – whether they perform similar functions or have similar structures – can reveal a lot about how they interact.</p>
-<p><strong>3. Sequence and Binding Sites in the Promoter:</strong> Genes have specific “instructions” in their promoter regions that help control when and how they are activated. Knowing these sequences and binding sites is like having the blueprint for building a particular gadget. It tells us how the gene functions and what can influence it.</p>
-<p><strong>4. Measurements About Protein-DNA Binding:</strong> Proteins, like transcription factors, often team up with DNA to make things happen. By measuring these protein-DNA interactions, it’s like capturing the moments when the genetic actors step onto the stage. This helps us understand who’s taking part in the genetic play and how they’re influencing the script.</p>
-</section>
-</section>
-<section id="possible-workflow" class="level3" data-number="12.2.4">
-<h3 data-number="12.2.4" class="anchored" data-anchor-id="possible-workflow"><span class="header-section-number">12.2.4</span> Possible Workflow</h3>
-<div class="cell" data-layout-align="center">
-<div class="cell-output-display">
-<div class="quarto-figure quarto-figure-center">
-<figure class="figure">
-<p><img src="../imgs/week8/segal_workflow.png" class="img-fluid figure-img" width="442"></p>
-<p></p><figcaption class="figure-caption">Possible Workflow for Network Analysis by Segal et. al</figcaption><p></p>
-</figure>
-</div>
-</div>
-</div>
-</section>
-<section id="advanced-models-for-gene-regulation" class="level3" data-number="12.2.5">
-<h3 data-number="12.2.5" class="anchored" data-anchor-id="advanced-models-for-gene-regulation"><span class="header-section-number">12.2.5</span> Advanced Models for Gene Regulation</h3>
-<p>In the fascinating world of gene regulation, there are some advanced models that scientists use to understand how genes are controlled. These models are like powerful tools in their toolkit. Here are a few of them:</p>
-<ol type="1">
-<li><p><strong>Graphical Gaussian Models:</strong> Think of these models as building a web of connections. Scientists create this web by testing how genes are related and whether they depend on each other. It’s like drawing lines between friends who influence each other in some way.</p></li>
-<li><p><strong>Regression-Based Models:</strong> These models are a bit like fortune-tellers. They try to predict a gene’s behavior by looking at other factors, like the expression of regulators or how often certain binding sites appear. It’s as if they’re reading the signs and signals to predict what the gene will do next.</p></li>
-<li><p><strong>Bayes Nets, Network Models, Data Fusion Methods:</strong> These are like building a grand map of gene interactions. Bayes nets are like road signs that show us the most likely paths genes will take. Network models are like a city’s layout, helping us understand how genes connect. Data fusion methods combine information from different sources, like puzzle pieces, to create a clearer picture.</p></li>
-<li><p><strong>More Advanced (Probabilistic) Models:</strong> These models are like master chefs who mix various ingredients to create a unique dish. They combine ideas from the models above and add even more background information. This helps scientists create a comprehensive understanding of gene regulation.</p></li>
-</ol>
-<p>All these models are tools that help scientists explore the intricate world of gene regulation, unraveling the complex relationships between genes and their controllers. It’s like being a detective, using different methods to solve the mystery of how our genes work and influence our lives.</p>
+<p>Dotplots visually demonstrate matches (dots) in the grid where sequences align. A <strong>dot</strong> is plotted when a cell in the grid signifies a match, indicating similar segments between the sequences. Dotplots assist in identifying regions of similarity, divergence, gaps, or duplications between sequences, aiding biologists in understanding genetic relationships and structural similarities between DNA or protein sequences.</p>
+<p>However, one key thing to note about this approach is that it is an NP-complete problem.</p>
 
 
 </section>
@@ -597,7 +501,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
       <a href="../chapters/week11.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Transcriptomes: Network Analysis</span></span>
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Population Analysis</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

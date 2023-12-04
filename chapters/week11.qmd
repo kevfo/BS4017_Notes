@@ -1,142 +1,283 @@
-# Transcriptomes: Network Analysis
+# Population Analysis
 
-```{r echo = F, fig.cap = 'Illustration of a Transcription Factor', fig.align = 'center'}
-knitr::include_graphics('../imgs/week8/transcription_factor.png')
+**SNPs**, or **Single Nucleotide Polymorphisms**, are changes that occur in our genetic code over long periods. Imagine them as tiny mutations that happen naturally in our DNA as time goes on. In humans, the mutation rate - the rate at which these changes happen - is around 0.5 to 1 mutation per 100 million base pairs in just one generation. This means about 70 to 80 mutations can occur in each person.
+
+These changes aren’t predictable and happen randomly, and they are quite uncommon. However, when we find the same SNPs shared among different individuals, it gives us clues about their shared ancestors. 
+
+Scientists use a theory called **coalescent theory** to understand this. This theory says that any two sets of genes or genomes will always have an ancestor they both come from.
+
+When two people share a lot of SNPs, it means they probably have similar ancestors in their family trees. On the other hand, if their SNPs are different, it shows that their genetic sequences have traveled a longer evolutionary distance apart.
+
+```{r echo = F, fig.cap = 'Illustration of a MRCA', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/mrca.png')
 ```
 
-In genetics, there's a fascinating puzzle to solve: how do our genes get turned on and off? Imagine your DNA as a book, and these genes are like chapters. There are two special areas in the DNA that play a big role in this story: promoters (P) and enhancers/silencers (E). Think of them as the "on" and "off" switches for a gene.
+Scientists can use this information to trace back and find the **most recent common ancestor (MRCA)** shared by two individuals or groups.
 
-Now, here's where it gets interesting. Proteins, like tiny molecular superheroes called **transcription factors (TFs)**, come into play. These TFs can attach themselves to the promoter and enhancer areas. The magic happens when these proteins team up. The combination of TFs determines whether a gene is going to be "read" and turned into a protein.
+The **neutral theory of evolution** suggests that a lot of the changes or mutations happening in our genetic code don't really affect how an organism survives or thrives. These mutations are considered neutral because they don't give any advantage or disadvantage in the environment. Imagine these changes as happening randomly, without impacting an individual's chances of survival.
 
-If a protein can attach itself to these promoter and enhancer areas, it means it has the power to control that gene. It's like having control over a remote that decides whether the TV turns on or not. This protein becomes the boss of that gene.
+**Drift**, another concept in genetics, is responsible for explaining most of the patterns we see in SNPs (those small genetic differences). Drift refers to random changes in the frequency of certain genetic traits within a population over time.
 
-Now, things get a bit more abstract. Scientists talk about how changes in the boss's mood can affect the story of the gene. If the boss protein gets more or less active, it can make the gene go from quiet to loud or vice versa. It's like having a dimmer switch for the lights in a room – you can adjust how bright or dim they are.
+Most of these SNP patterns we observe in populations are because of shared ancestry. This means that when we look at the differences and similarities in these small genetic differences among people, we can understand how different groups or populations are related to each other.
 
-But here's the tricky part: in the lab, scientists still need to verify whether a protein can actually attach itself to these promoter and enhancer areas. It's like having a bunch of keys, but you're not entirely sure if they fit the locks. This is a crucial step in understanding how our genes are controlled, and scientists are working hard to solve this genetic puzzle.
-
-## Ways of Detecting Gene Function
-
-**Forward genetics** starts from the phenotype and goes back to the genome.  **Reverse genetics** starts from the genome and works its way back to the phenotype.
-
-## Co-Expression and Co-Expression Networks
-
-In genetics, there's another interesting concept called **co-expression**. When scientists don't know the exact regulatory network, they have to rely on a different approach. They can't peek inside the genes' instruction manual, so they start looking for patterns in how genes are turned on or off together, like a team of friends doing the same dance moves.
-
-The idea here is pretty simple. Imagine you're in a big group of people trying to follow a dance routine. If you and your buddy are close to each other in the group, you're more likely to do the same dance steps at the same time. In the genetic world, this means that when different experimental conditions are applied, genes that are "close" to each other in the way they're controlled tend to act in a similar way. We say they "correlate."  These genes also tend to associate with one another during clustering (e.g., K-means clustering).
-
-### K-Means Clustering
-
-```{r echo = F, fig.cap = 'Steps Involved in K-Means Clustering', fig.align = 'center'}
-knitr::include_graphics('../imgs/week8/kmeans_steps.png')
+```{r echo = F, fig.cap = 'PCA Plot on Human Data', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/pca_plot.png')
 ```
 
-Imagine you have a big box of colorful marbles, and you want to sort them into different groups based on their colors. K-means is like a handy tool for this job. Here are some key things to know:
+To help visualize how populations are structured based on these SNPs, scientists use a method called **Principal Component Analysis (PCA)**. They organize the SNP data into a matrix where each SNP is represented by numbers: 0, 1, or 2 (showing the number of alternative forms of a particular gene). By analyzing this data, they can see that individuals who have similar patterns of these genetic differences are grouped closer together.
 
-1.  **Very Common:** K-means is a popular method that many people use. It's like a favorite tool in a craftsman's toolbox because it's useful in many situations.
+## Key Concepts and Terms 
 
-1.  **Good for Large Data Sets:** If you have a massive collection of marbles (or data), K-means can still do its job efficiently. It's like having a super-fast sorting machine for your marbles.
+### Admixture 
 
-1.  **Visualization Not Trivial:** Sometimes, showing the results of K-means can be a bit tricky. However, if you have a bunch of marbles in many colors, you can represent them on a graph using something called **principal components**. It's like making a cool chart that helps you understand how the marbles are grouped.
-
-1.  **Fast and Low Memory Consumption:** K-means doesn't hog your computer's memory, and it works pretty quickly. It's like having a sorting machine that doesn't slow down, even when you have lots of marbles to sort.
-
-Let's take a closer look at some challenges that come with using K-means, a handy tool for grouping things. Here are the key issues:
-
-**1. Choosing K:** K-means requires us to decide how many groups (K) we want to create. This can be a bit tricky. Thankfully, there are some rules of thumb, like heuristics, to help us decide, but it's not always easy. Think of it like trying to figure out how many boxes you need to sort your toys into – you don't want too few or too many.
-
-**2. Avoiding Local Minima:** When you use K-means, you might end up with different results depending on where you start. It's like solving a maze where you could get stuck in a corner. To overcome this, you can run the K-means algorithm multiple times and pick the best result. It's like trying different paths in the maze to find your way out.
-
-**3. Message Passing Algorithms:** There's another cool trick – K-means clustering algorithms that use something called "message passing." This can help find better solutions. It's like using a secret code or special clues to navigate the maze more effectively. For instance, there's a method called "affinity propagation" developed by Frey and his team in 2007, which is like having a map to escape the maze.
-
-### Hierarchical Clustering 
-
-Hierarchical clustering is a way to group things together in a very organized manner, and it works like building a tree from the ground up. Here's how it goes:
-
-In this approach, we always start by putting the two most similar things together into a new cluster. Imagine you have a bunch of marbles, and you want to organize them by color. You'd begin by pairing the two marbles that look the most alike.
-
-Now, when we're making these clusters, there are a few ways we can decide which marble represents the whole group:
-
-1.  We can calculate the average of all the marbles in the cluster, like finding the average color.
-2.  Or, we can pick the marble that looks the most similar to the others in the group.
-3.  Alternatively, we could choose the marble that stands out the most, the one that's least like the rest.
-
-Here's where it gets interesting: depending on how we choose this representative and the method we use, we get different results. It's like if we asked a few people to organize the marbles by color, they might come up with slightly different groups.
-
-#### Pros and Cons with Hierarchical Clustering
-
-```{r echo = F, fig.cap = 'Example of Hierarchical Clustering Used in Literature', fig.align = 'center'}
-knitr::include_graphics('../imgs/week8/hierarchical_clustering.png')
+```{r echo = F, fig.cap = 'Illustration of an Admixture', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/admixture.png')
 ```
 
-Hierarchical clustering is a popular way to organize and show data, like putting things in order. It's so commonly used because it's not just about sorting data; it's also a fundamental tool for creating visual representations. Think of it as arranging your toys neatly on a shelf.
+**Admixture** is a concept that helps scientists divide or separate genetic data into groups that represent different ancestral populations. These groups have variations in the frequencies of certain forms of genes (alleles) across their genomes.
 
-One cool thing about hierarchical clustering is that it can be used in a two-way fashion. It doesn't just sort one type of thing; it can sort both experiments and genes. It's like having a special shelf where you not only arrange your toys but also group your books together.
-
-But here's the catch: while hierarchical clustering is super handy, it works best when you're dealing with small amounts of data. If you have a massive collection of things to organize, it might not be the best choice. It's like trying to fit too many toys on a tiny shelf – it gets a bit crowded. So, when you've got a smaller pile to sort, hierarchical clustering is your go-to tool for tidying things up and creating visual displays.
-
-But there's a challenge with this approach: how do we decide when to stop making clusters? We have a tree of clusters, but we need to know where to cut it. It's like having a tree with many branches and trying to figure out where to make the final cuts to create the groups we want. That's the tricky part in hierarchical clustering.
-
-### Interpreting Co-Expression Networks
-
-When it comes to co-expression clusters, understanding what they mean can be like solving a puzzle. One way to look at it is through the ***Guilt by Association** principle. This means that if genes are co-expressed, they might be working together or at least involved in similar processes. It's a bit like assuming that if you often see two friends together, they might be doing something fun or related, like playing the same video game.
-
-Now, if genes are co-expressed, it's like they're on the same team. They might be working together in the same biological pathway. Think of this as a group of friends joining forces to win a game or solve a big problem together.
-
-```{r echo = F, fig.cap = 'Example of a Distance Metric Used to Form Clusters', fig.align = 'center'}
-knitr::include_graphics('../imgs/week8/distance_clusters.png')
+```{r echo = F, fig.cap = 'More on Admixtures', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/admixture_task.png')
 ```
 
-To understand co-expression clusters (i.e., related genes) better, we can also check for **gene ontology enrichments**. This is like checking if our group of friends shares common interests. It helps us figure out what kind of activities they enjoy together.
+In this process, scientists aim to categorize the data into k groups, each representing a population with its unique allele frequencies. This method helps to understand how various genetic variations are distributed among different populations.
 
-Another thing to consider is **tissue/condition specificity**. It's like looking at when and where our friends like to hang out the most. In this case, we examine the experiments where the cluster's gene expression is at its peak, which can tell us where these genes are most active.
+Admixture can be thought of as a specific type of Principal Component Analysis (PCA), a statistical technique used to simplify complex data.
 
-Sometimes, we might also discover that co-expression clusters have something in common. This can be because they share **enriched promoter motifs**, which are like special symbols that tell us they belong to the same club. Additionally, if you find "transcription factors" in the same cluster, it's like identifying key players or leaders in the group. These are the friends who organize the activities or call the shots in their little club of co-expressed genes.
+### Deep Coalesence
 
-#### Problems with Networks
-
-Exploring co-expression networks can be a bit like hunting for hidden treasures, but there are some challenges we need to tackle along the way. Here are some of the issues we encounter:
-
-First, the data can be noisy. This means there are lots of false alarms or "false positives." It's like searching for secret clues, but sometimes you find things that aren't really connected to your treasure hunt. To deal with this, scientists use clever tricks like bootstrapping, randomization, or cross-validation. These methods help them estimate how often these false alarms happen and make their results more reliable.
-
-Another tricky thing is that co-expression networks can't always tell us if the connection between genes is a direct one or if it's indirect. It's like figuring out if your friend's friend is your friend too, or if they're just a friendly acquaintance. This direct or indirect link can make a big difference in understanding how genes work together.
-
-```{r echo = F, fig.cap = 'Problems with Co-Expression Networks', fig.align = 'center'}
-knitr::include_graphics('../imgs/week8/expression_networks.png')
+```{r echo = F, fig.cap = 'Grpahic Illustrating Deep Coalesence', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/deep.png')
 ```
 
-So, how do we uncover the secret codes that reveal the regulatory structure, like who's in charge or who's following whom? Well, scientists have a couple of strategies. In the "wet lab," they carry out experiments by making changes, like knocking out a gene, to see how it affects the others. It's like doing experiments in a chemistry lab to see what happens when you mix different ingredients.
+**Deep coalescence** refers to a situation where a specific genetic variation, like a SNP (Single Nucleotide Polymorphism), existed in a common ancestor of two different species. This means that this genetic difference, represented by the SNP, was present before these species branched off and became distinct from each other.
 
-Alternatively, they use more advanced statistical models to find these hidden connections. Think of it as using a super detective's magnifying glass to spot the subtle clues in the data. By overcoming these challenges, we can unlock the mysteries of co-expression networks and understand how genes influence each other.
+When scientists identify a SNP that is shared between two different species, it suggests that this particular genetic variation dates back to a time before these species evolved separately. The "deep" aspect refers to the fact that this genetic variation's origin predates the actual separation of these species into distinct evolutionary paths.
 
-#### Extra Information
+**Incomplete lineage** sorting occurs when genetic variations, including SNPs, are inherited from a common ancestor but don't align neatly with the species' evolutionary tree. This happens because, over generations, genetic diversity is maintained within a population due to both ancestral genetic differences and random genetic drift. When these variations persist and get passed on to subsequent generations, they might not conform to the species tree we construct based on other evidence, like fossils or morphological features.
 
-When it comes to understanding genes and how they work, having some extra pieces of information can be incredibly helpful. Here are a few key things that come in handy:
+Both these phenomena—ancestral polymorphism (genetic differences in a common ancestor) and genetic drift (random changes in genetic frequency)—can cause incomplete lineage sorting. This results in the SNP pattern not following the expected species evolutionary tree because some genetic variations persist across lineages despite the species branching out from a common ancestor.
 
-**1. Identity of Transcription Factors and Their Binding Motifs:** Imagine transcription factors as the directors of the genetic orchestra. They control which genes play their music. Knowing which transcription factors are in action and what kind of musical notes (or binding motifs) they follow helps us understand how genes are orchestrated.
+## Genetic Distances
 
-**2. Knowledge About Functional and Structural Similarity of Genes:** Genes are like puzzle pieces in a big genetic puzzle. If we know which pieces fit together because of their shape or function, it makes solving the puzzle easier. Understanding the similarities between genes – whether they perform similar functions or have similar structures – can reveal a lot about how they interact.
-
-**3. Sequence and Binding Sites in the Promoter:** Genes have specific "instructions" in their promoter regions that help control when and how they are activated. Knowing these sequences and binding sites is like having the blueprint for building a particular gadget. It tells us how the gene functions and what can influence it.
-
-**4. Measurements About Protein-DNA Binding:** Proteins, like transcription factors, often team up with DNA to make things happen. By measuring these protein-DNA interactions, it's like capturing the moments when the genetic actors step onto the stage. This helps us understand who's taking part in the genetic play and how they're influencing the script.
-
-### Possible Workflow
-
-```{r echo = F, fig.cap = 'Possible Workflow for Network Analysis by Segal et. al', fig.align = 'center'}
-knitr::include_graphics('../imgs/week8/segal_workflow.png')
+```{r echo = F, fig.cap = 'Illustration of Recombination', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/recombination.png')
 ```
 
-### Advanced Models for Gene Regulation
+**Recombination** is a genetic process where sections of DNA, including SNPs (Single Nucleotide Polymorphisms), are shuffled or exchanged between chromosomes during cell division. This process results in new combinations of genetic variations.
 
-In the fascinating world of gene regulation, there are some advanced models that scientists use to understand how genes are controlled. These models are like powerful tools in their toolkit. Here are a few of them:
+One important aspect related to SNPs and recombination is linkage disequilibrium. **Linkage disequilibrium** refers to the non-random association or correlation of specific alleles at two different locations in the genome within a general population. This means that certain alleles at different locations tend to occur together more frequently than would be expected by chance.
 
-1. **Graphical Gaussian Models:** Think of these models as building a web of connections. Scientists create this web by testing how genes are related and whether they depend on each other. It's like drawing lines between friends who influence each other in some way.
+SNPs that are physically close to each other on the genome tend to exhibit higher linkage disequilibrium, meaning they are more likely to be inherited together. However, as the distance between SNPs increases along the genome, the degree of correlation or linkage disequilibrium between them decreases.
 
-2. **Regression-Based Models:** These models are a bit like fortune-tellers. They try to predict a gene's behavior by looking at other factors, like the expression of regulators or how often certain binding sites appear. It's as if they're reading the signs and signals to predict what the gene will do next.
+The concept of a haplotype block is related to linkage disequilibrium and recombination. A **haplotype block** refers to a region in the genome where specific sets of alleles are inherited together as a result of limited or no history of recombination. In these blocks, certain combinations of genetic variations tend to stay together across generations because they are less likely to be broken apart by the recombination process.
 
-3. **Bayes Nets, Network Models, Data Fusion Methods:** These are like building a grand map of gene interactions. Bayes nets are like road signs that show us the most likely paths genes will take. Network models are like a city's layout, helping us understand how genes connect. Data fusion methods combine information from different sources, like puzzle pieces, to create a clearer picture.
+### Calculating Genetic Distances
 
-4. **More Advanced (Probabilistic) Models:** These models are like master chefs who mix various ingredients to create a unique dish. They combine ideas from the models above and add even more background information. This helps scientists create a comprehensive understanding of gene regulation.
+**Genetic distance** refers to a measure used to understand how closely related two individuals are based on their genetic information, particularly Single Nucleotide Polymorphisms (SNPs).
 
-All these models are tools that help scientists explore the intricate world of gene regulation, unraveling the complex relationships between genes and their controllers. It's like being a detective, using different methods to solve the mystery of how our genes work and influence our lives.
+One way to calculate this relatedness is through the concept of **Identity by State (IBS) distance**. IBS distance looks at long stretches of the genome where two individuals share at least one allele (or genetic variant) at each location. By identifying these continuous regions where the genetic information matches between two individuals, scientists can gauge their genetic relatedness.
 
+Ideally, the best method to determine genetic distance would involve identifying haplotype blocks, which are regions of the genome where specific combinations of alleles tend to be inherited together. Comparing these blocks between two individuals' genomes would give a precise measure of relatedness. However, this method requires information about the complete sequences of these blocks, which is often not available from standard sequencing data. This limitation arises because the individual reads obtained from sequencing are usually too short to cover entire haplotypes.
+
+As a result, IBS distance calculates relatedness by considering scenarios where at least one of the underlying haplotypes could be shared between two individuals. The longer the matching regions of genetic information (indicating the potential sharing of a common haplotype block), the closer the genetic relatedness between the individuals.
+
+### IBS Distances
+
+```{r echo = F, fig.cap = 'Illustration of how IBS Distances Work', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/IBS.png')
+```
+
+**Identity by State (IBS) distance** is a method used to measure genetic relatedness between individuals by examining long shared segments of their DNA known as haplotype blocks. These haplotype blocks are regions in the genome where certain combinations of genetic variants tend to be inherited together.
+
+One key characteristic of IBS distance is that as the genetic distance between individuals increases, the length of these shared haplotype blocks tends to decrease. In other words, when two individuals are more distantly related, they are less likely to share long stretches of identical genetic information.
+
+While IBS distance provides a useful measure of genetic relatedness based on these shared haplotype blocks, for a more accurate and detailed understanding of exact relationships between individuals, a closer analysis of these haplotype blocks becomes necessary.
+
+### Tracking Genealogy 
+
+Public companies specializing in genetic testing, like 23andMe, circleDNA, and Nebula Genomics, use various technologies to analyze Single Nucleotide Polymorphisms (SNPs) in individuals' DNA.
+
+These companies employ different methods such as SNP chips (used by 23andMe), whole exome sequencing (used by circleDNA), and whole-genome sequencing (used by Nebula Genomics) to decode and interpret genetic information. They have amassed a substantial database, collectively having over 25 million people enrolled.
+
+When individuals send in their DNA samples, these companies compare the genetic information in these samples to others in their databases. By doing so, they can identify long segments of shared genetic information known as Identity by State (IBS) stretches, helping to trace relatedness and ancestry among different individuals.
+
+This analysis enables these companies to determine potential relatives by identifying shared genetic markers. Moreover, they can provide insights into an individual's ethnic background based on the genetic information obtained.
+
+Additionally, these genetic testing services compare an individual's DNA to known genetic markers associated with certain diseases or specific traits. This helps users understand their potential genetic predispositions to certain health conditions or their likelihood of expressing particular characteristics.
+
+However, it's essential to note that while these associations between genetic markers and traits exist, they often have relatively weak correlations. This is sometimes referred to as "missing heritability," where the identified genetic markers do not fully explain the inheritance or development of certain traits or diseases. There are likely other genetic or environmental factors that play significant roles, beyond what is currently identified through these associations
+
+#### Security Issues?
+
+The convenience of genetic testing and tracking genealogy comes with potential security and privacy concerns:
+
+Firstly, when you submit your DNA to a company, your genetic information becomes part of their database. This information, including your SNPs (Single Nucleotide Polymorphisms), can be used to find new connections between your genetic makeup and certain traits or conditions. Big medical companies find large SNP databases incredibly valuable for their research purposes.
+
+There's a particular interest in identifying "natural gene knock-outs," which are genetic variations that eliminate the function of a certain gene. Understanding these can shed light on how genes influence traits or diseases.
+
+Moreover, several companies like GEDmatch, MyHeritage, FamilyTreeDNA, and LivingDNA allow individuals to deposit their genetic data and compare it against their databases. This exchange of information can reveal extensive details about an individual's genetic makeup.
+
+Unfortunately, these databases are susceptible to potential breaches in genetic privacy. Tailor-made data queries can exploit these databases, revealing more information than intended or agreed upon.
+
+As legislation struggles to keep pace with this rapidly evolving field, there's a concerning gap in regulation to protect individuals' genetic privacy. The novelty of genetic testing and genealogical tracking means that the legal framework is not yet comprehensive enough to address the risks adequately.
+
+## Species versus Populations
+
+**Species** are distinct groups of organisms that are capable of interbreeding and producing fertile offspring. They are characterized by significant differences in their genetic makeup, physical characteristics, and behaviors. The variation observed between different species tends to be greater than the variation seen within populations of the same species.
+
+The divergence between species arises from evolutionary processes over extended periods. A common ancestor shared by two different species existed far back in time, often millions of years ago. This prolonged separation allowed for substantial genetic and phenotypic differences to accumulate, leading to the development of reproductive barriers.
+
+**Reproductive barriers** are mechanisms or traits that prevent two different species from interbreeding successfully or producing fertile offspring. Over time, these barriers become established and can include differences in mating behaviors, genetic incompatibility, physical barriers, or ecological factors.
+
+One way of defining a species is by assessing the presence of reproductive barriers. When enough time has passed for these barriers to evolve and prevent gene flow between populations, scientists consider these populations as distinct species. In simpler terms, if groups of organisms have been separated long enough to develop mechanisms that prevent them from successfully interbreeding, they are typically classified as different species.
+
+```{r echo = F, fig.cap = 'Introgression Illustration', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/introgression.png')
+```
+
+When individuals from two different species mate before the complete formation of reproductive barriers, a process called "**introgression**" can occur.
+
+Introgression involves the transfer of genetic material between two distinct species through hybridization, where individuals from different species interbreed and produce offspring. In these cases, the genetic material from one species crosses into the gene pool of the other species.
+
+This exchange of genetic material can lead to the incorporation of genes from one species into the genome of the other. Sometimes, this can result in hybrids that possess a mixture of characteristics from both parent species.
+
+The extent and impact of introgression can vary. In some cases, if the hybrid offspring are not reproductively isolated from either parent species, they might continue to breed with one or both parent species. Over time, this process can lead to the spread of genetic material across the species boundary.
+
+Introgression can have significant effects on the genetic diversity and evolutionary trajectories of species. It can potentially influence the adaptation and evolution of species by introducing new genetic variations into their gene pools. Additionally, introgression can blur the lines between distinct species, making it more challenging to delineate boundaries between them based solely on genetic markers
+
+### Tests for Introgression?
+
+Do look at the slides to know more about this (i.e., prof. Jarkko talks about how the F3 introgression test works in more detail on that slide)!
+
+#### F3 Introgression Test
+
+```{r echo = F, fig.cap = 'F3 Introgression Test', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/f3.png')
+```
+
+Positive evidence of introgression can be identified through statistical analyses that assess the patterns of genetic variation within genomes.
+
+When there's no introgression between two populations or species, the genetic variations such as positive and negative values occur randomly throughout the genome. However, when introgression has taken place, certain statistical methods can reveal a skewed pattern in these genetic variations.
+
+One such method involves calculating a statistic known as the **F3 statistic** and comparing it to an expected score based on the null hypothesis, which assumes random genetic variation. The distribution of this statistic under the null hypothesis can be determined by simulations or random sequences.
+
+In cases where introgression has occurred, there tends to be an excess of negative values compared to positive values when calculating the F3 statistic across the genome. This skewed distribution with a prevalence of highly negative values indicates a signal of introgression.
+
+To further evaluate the significance of this signal, statistical techniques can be applied to assess the likelihood of observing such a pattern under the null hypothesis. This evaluation can yield a p-value, indicating the probability of obtaining the observed pattern if there were no introgression. A low p-value suggests strong evidence against the null hypothesis and supports the presence of introgression.
+
+To determine the direction of gene flow or introgression between two test populations, an additional species, typically an outgroup species (O), is introduced to serve as a reference point for ancestral allele states. This outgroup species is evolutionarily distant from the populations being studied and provides a baseline for understanding genetic changes that occurred before divergence.
+
+```{r echo = F, fig.cap = 'Setup for an Introgression Test', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/outgroup.png')
+```
+
+The setup involves several components:
+
+1.  **Outgroup species (O)**: This species, like chimpanzees for humans, serves as a reference to identify ancestral allele states. By comparing the genetic sequences of the outgroup species with those of the test populations, scientists can infer the ancestral alleles shared between the outgroup and the test populations before any introgression events.
+
+1.  **Second species (W)**: This species is considered a possible source of introgression. By comparing the genetic sequences of the second species with the test populations, scientists can identify genetic variations that may have been introduced via introgression.
+
+1.  **Test populations (A and B)**: These are the populations being studied for introgression. By comparing their genetic sequences with the outgroup species and the second species, scientists can assess which genetic variations are shared with the outgroup (ancestral) and which are specific to the second species (potential introgression).
+
+By analyzing the genetic variations shared between the outgroup species, the second species, and the test populations, researchers can deduce the direction of gene flow. If specific genetic variations are present in the second species (W) and also found in test population A but not in test population B, it suggests that gene flow occurred from species W into population A. Conversely, if these variations are found in population B but not in A, it indicates gene flow in the opposite direction.
+
+### Tests for Directionality
+
+```{r echo = F, fig.cap = 'Testing for Directionality', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/directionality.png') 
+knitr::include_graphics('../imgs/week11/directionality2.png') 
+knitr::include_graphics('../imgs/week11/directionality3.png') 
+```
+
+To test for the directionality of introgression or gene flow between populations, scientists often search for Single Nucleotide Polymorphisms (SNPs) that exhibit two derived alleles.
+
+**Derived alleles** refer to genetic variants that are not present in the ancestral population or outgroup. When examining SNPs in test populations A and B and comparing them with an outgroup species, if a particular SNP shows two derived alleles (meaning both populations have a unique allele not found in the outgroup), it suggests a potential introgression event.
+
+The key aspect scientists focus on is asymmetry in the distribution of these derived alleles between the two test populations. If, for example, the SNP has derived alleles that are present predominantly or exclusively in population A and not in population B, it indicates a higher likelihood of gene flow or introgression from another source into population A.
+
+```{r echo = F, fig.cap = 'Testing for Directionality via the ABBA-BABA Test', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/testing.png')
+```
+
+The **ABBA-BABA** test, also known as the **D-statistic** or **Patterson's D**, is a method used in population genetics to detect introgression or gene flow between populations.
+
+The test involves counting the occurrences of different allele configurations across multiple loci or genomic regions within four different populations or groups (A, B, W, and O). Specifically, researchers count how many times the pattern ABBA occurs versus the pattern BABA across these populations at various genetic loci.
+
+In scenarios where genetic variations are randomly distributed or shaped only by drift (i.e., no gene flow between populations), the difference between the occurrences of ABBA and BABA should be close to zero when calculated across the entire genome.
+
+However, when there's introgression or shared ancestry between populations, the ABBA and BABA counts will differ significantly from zero. A non-zero or highly non-zero value indicates a deviation from the expected pattern, suggesting potential gene flow or introgression between the studied populations.
+
+## Population History
+
+The **coalescent theory** is a mathematical model used in population genetics to understand how gene variants sampled from a population trace back to a common ancestor. This theory helps us examine the historical patterns of genetic variation within populations.
+
+Imagine looking backward in time, tracing the ancestry of gene variants present in a population. The coalescent theory explores this genetic history by simulating the merging of alleles, or gene variants, into a single common ancestral copy through a series of random coalescence events.
+
+These coalescence events represent moments when gene variants from different individuals in a population merge into a single common ancestor. The model calculates the time or number of generations it takes for these variants to converge and share a common ancestral copy.
+
+```{r echo = F, fig.cap = 'Illustration of Coalesence Theory', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/path.png')
+```
+
+One method involves segmenting the individual's genome into regions with varying levels of **heterozygosity**, which refers to having different versions of a gene in an individual's genome. Higher heterozygosity indicates regions where the genetic material originated from a more distant common ancestor, representing deeper coalescence events. In contrast, lower heterozygosity regions suggest genetic material that traces back to a more recent common ancestor.
+
+These different segments or regions of varying heterozygosity provide insights into the historical recombination events that occurred in the population's past. Recombination refers to the shuffling of genetic material during reproduction, resulting in new combinations of genetic variants.
+
+Regions with many splits or changes in heterozygosity levels signify past ancestral recombination events. The number of these recombination events is often linked to the historical population size. Larger populations tend to have more recombination events due to increased genetic diversity and more opportunities for genetic material to mix during reproduction.
+
+### Site Frequency Spectrum
+
+The **site frequency spectrum (SFS)** is an alternative method in population genetics used to analyze genetic variation within a population. It involves creating a histogram that shows the frequency of a particular allele (often a derived allele) across the population.
+
+```{r echo = F, fig.cap = 'Site Frequency Spectrum', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/sfs.png')
+```
+
+Ideally, the SFS is created by comparing the frequencies of alleles in the studied population with the ancestral genome. However, if the ancestral genome is not available, the "folded" spectrum is used. The folded spectrum combines the frequencies of derived alleles with their complementary ancestral alleles, which means fixated alleles (those that have completely replaced the ancestral form) and rare SNPs can't be distinguished. This leads to a reduction in resolution as information about these alleles becomes limited.
+
+Different population histories result in distinct site frequency spectra. The goal with this method is to identify the historical scenario that is most likely to have produced the observed spectrum.
+
+## Causative Mutations
+
+**Causative mutations** refer to genetic alterations that directly impact the function or structure of proteins encoded by specific genes. These mutations can lead to changes in the amino acid sequence of a protein, which might affect its normal function or activity.
+
+When a mutation alters the sequence of amino acids in a protein, it can result in various outcomes. For instance, it might modify the protein's shape or ability to interact with other molecules, affecting its function. In the most extreme cases, a mutation can introduce a premature STOP codon in the genetic code, causing the protein to be shorter than normal or non-functional.
+
+These mutations that cause changes in protein structure or function are often referred to as "**natural mutants**." However, it's important to note that most of these mutations tend to reduce the fitness or health of an organism rather than improve it. In other words, they usually have negative effects on the organism's ability to survive, reproduce, or function optimally within its environment.
+
+While some mutations might have neutral or even beneficial effects under certain conditions, many causative mutations are associated with detrimental outcomes. They can lead to various genetic disorders, diseases, or functional impairments in organisms by disrupting normal biological processes or cellular functions.
+
+### Beneficial Mutations
+
+**Beneficial mutations** are genetic changes that confer advantages to an organism, increasing its fitness or survival in a particular environment. Unlike deleterious mutations that decrease fitness, beneficial mutations lead to positive selection, causing their allele frequencies to rise rapidly over successive generations within a population.
+
+Imagine if "LAZY" were a beneficial mutation instead of a slightly deleterious one. In this case, individuals carrying the beneficial mutation would have a higher chance of surviving, reproducing, or thriving in their environment compared to others without the mutation. This advantage would lead to the rapid increase in the frequency of the mutated allele in the population.
+
+As this advantageous allele becomes more prevalent, it undergoes a process known as **genomic hitchhiking**. Alleles that are physically close to the beneficial mutation on the chromosome also experience an increase in frequency because they are in linkage disequilibrium with the advantageous allele. Linkage disequilibrium refers to the non-random association of alleles at different loci.
+
+The phenomenon of genomic sweeps occurs as a result of this process. Genomic sweeps involve regions in the genome with fewer genetic variations or Single Nucleotide Polymorphisms (SNPs) due to the fixation of alleles associated with the beneficial mutation. Essentially, all the alleles in that region have reached fixation, resulting in reduced genetic diversity in those specific genomic regions across the population.
+
+### Sweep Analysis
+
+```{r echo = F, fig.cap = 'Sweep Analysis', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/sweep.png')
+```
+
+During a selective sweep, a beneficial mutation increases in frequency and leads to a reduction in genetic diversity in the surrounding genomic area. One consequence is a decrease in the number of intermediate-frequency alleles in the region affected by the sweep.
+
+Linked genetic variations, particularly those associated with the beneficial allele, experience an increase in frequency due to the selective sweep. These intermediate alleles linked to the advantageous mutation tend to shift toward higher frequencies, transforming into high-frequency Single Nucleotide Polymorphisms (SNPs) within the affected region.
+
+As the sweep progresses and the advantageous allele reaches fixation or near-fixation in the population, a new scenario emerges. Following the sweep, new mutations begin to accumulate in the region previously impacted by the selective sweep.
+
+#### One Possible Approach
+
+```{r echo = F, fig.cap = 'One Method for Sweep Analysis', fig.align = 'center'}
+knitr::include_graphics('../imgs/week11/method1.png')
+```
+
+This method involves assessing the frequency of derived alleles—genetic variants that differ from the ancestral form—near the SNP subjected to selection. When a beneficial mutation undergoes a selective sweep, a notable increase in high-frequency derived alleles is observed, signifying that these SNPs have reached fixation in the population due to positive selection.
+
+Conversely, the presence of low-frequency derived alleles indicates the emergence of new genetic variations subsequent to the selective sweep. During this process, the number of intermediate-frequency alleles typically decreases due to the impact of the sweep.
+
+To perform this analysis, researchers calculate the site frequency spectrum (SFS) locally around the SNP of interest. The SFS represents the distribution of allele frequencies in a specific genomic region. By comparing this local SFS to the average SFS across the entire genome, scientists can identify deviations or shifts in allele frequencies caused by the selective sweep.
